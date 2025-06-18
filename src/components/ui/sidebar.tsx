@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -543,51 +544,58 @@ const SidebarMenuButton = React.forwardRef<
 >(
   (
     {
-      asChild = false,
+      asChild: isSlotComponent,
       isActive = false,
       variant = "default",
       size = "default",
       tooltip,
       className,
-      ...props
+      children,
+      ...restProps
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button"
-    const { isMobile, state } = useSidebar()
+    const { isMobile, state } = useSidebar();
+    const Comp = isSlotComponent ? Slot : "button";
 
-    const button = (
+    // Remove 'asChild' from restProps if it exists.
+    // This is to prevent it from being passed to the underlying Comp if it's a DOM element,
+    // or to Slot if Slot would then pass it to a DOM child.
+    const { asChild: _forwardedAsChild, ...finalProps } = restProps;
+
+    const buttonElement = (
       <Comp
         ref={ref}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props}
-      />
-    )
+        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
+        {...finalProps}
+      >
+        {children}
+      </Comp>
+    );
 
     if (!tooltip) {
-      return button
+      return buttonElement;
     }
 
-    if (typeof tooltip === "string") {
-      tooltip = {
-        children: tooltip,
-      }
-    }
-
+    // Ensure tooltipContentProps always has a children prop if tooltip is a string
+    const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null 
+                                ? tooltip 
+                                : { children: tooltip };
+    
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
           hidden={state !== "collapsed" || isMobile}
-          {...tooltip}
+          {...tooltipContentProps}
         />
       </Tooltip>
-    )
+    );
   }
 )
 SidebarMenuButton.displayName = "SidebarMenuButton"
