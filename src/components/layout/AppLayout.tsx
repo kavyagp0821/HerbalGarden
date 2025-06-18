@@ -1,14 +1,24 @@
-import type React from 'react';
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
 import { Leaf } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  const [currentYear, setCurrentYear] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear().toString());
+  }, []);
+
   return (
     <SidebarProvider defaultOpen>
       <div className="flex min-h-screen">
@@ -23,7 +33,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <SidebarNav />
           </SidebarContent>
           <SidebarFooter className="p-4 group-data-[collapsible=icon]:hidden">
-            <p className="text-xs text-sidebar-foreground/70">&copy; {new Date().getFullYear()} AYUSH Virtual Garden</p>
+            <p className="text-xs text-sidebar-foreground/70">
+              &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} AYUSH Virtual Garden
+            </p>
           </SidebarFooter>
         </Sidebar>
         <SidebarRail/>
