@@ -558,9 +558,9 @@ const SidebarMenuButton = React.forwardRef<
     const { isMobile, state } = useSidebar();
     const Comp = isSlotComponent ? Slot : "button";
 
-    // Remove 'asChild' from restProps if it exists.
-    // This is to prevent it from being passed to the underlying Comp if it's a DOM element,
-    // or to Slot if Slot would then pass it to a DOM child.
+    // Destructure 'asChild' from restProps to prevent it from being passed to the DOM element.
+    // '_forwardedAsChild' captures the value if 'asChild' exists in restProps.
+    // 'finalProps' will contain all other properties from restProps.
     const { asChild: _forwardedAsChild, ...finalProps } = restProps;
 
     const buttonElement = (
@@ -570,7 +570,7 @@ const SidebarMenuButton = React.forwardRef<
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
-        {...finalProps}
+        {...finalProps} // Spread finalProps, which no longer includes 'asChild' from parent
       >
         {children}
       </Comp>
@@ -579,8 +579,7 @@ const SidebarMenuButton = React.forwardRef<
     if (!tooltip) {
       return buttonElement;
     }
-
-    // Ensure tooltipContentProps always has a children prop if tooltip is a string
+    
     const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null 
                                 ? tooltip 
                                 : { children: tooltip };
