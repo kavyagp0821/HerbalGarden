@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -32,18 +33,15 @@ export default function SidebarNav() {
     <SidebarMenu>
       {navItems.map((item) => (
         <SidebarMenuItem key={item.label}>
-          <Link href={item.href} passHref legacyBehavior>
+          <Link href={item.href} asChild>
             <SidebarMenuButton
-              asChild
               isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
               tooltip={item.label}
               aria-disabled={item.disabled}
               className={item.disabled ? "cursor-not-allowed opacity-50" : ""}
             >
-              <a>
-                <item.icon />
-                <span>{item.label}</span>
-              </a>
+              <item.icon />
+              <span>{item.label}</span>
             </SidebarMenuButton>
           </Link>
         </SidebarMenuItem>

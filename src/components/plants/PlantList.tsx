@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -11,6 +12,8 @@ import { Button } from '../ui/button';
 interface PlantListProps {
   plants: Plant[];
 }
+
+const ALL_ITEMS_FILTER_VALUE = "__ALL_ITEMS__";
 
 export default function PlantList({ plants: initialPlants }: PlantListProps) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,8 +41,15 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
     return initialPlants.filter(plant => {
       const matchesSearchTerm = plant.commonName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                 plant.latinName.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesTherapeuticUse = selectedTherapeuticUse ? plant.therapeuticUses.includes(selectedTherapeuticUse) : true;
-      const matchesRegion = selectedRegion ? plant.region === selectedRegion : true;
+      
+      const matchesTherapeuticUse = (!selectedTherapeuticUse || selectedTherapeuticUse === ALL_ITEMS_FILTER_VALUE) 
+                                    ? true 
+                                    : plant.therapeuticUses.includes(selectedTherapeuticUse);
+      
+      const matchesRegion = (!selectedRegion || selectedRegion === ALL_ITEMS_FILTER_VALUE)
+                            ? true
+                            : plant.region === selectedRegion;
+
       return matchesSearchTerm && matchesTherapeuticUse && matchesRegion;
     });
   }, [initialPlants, searchTerm, selectedTherapeuticUse, selectedRegion]);
@@ -97,7 +107,7 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
                 <SelectValue placeholder="All Uses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Uses</SelectItem>
+                <SelectItem value={ALL_ITEMS_FILTER_VALUE}>All Uses</SelectItem>
                 {therapeuticUses.map(use => (
                   <SelectItem key={use} value={use}>{use}</SelectItem>
                 ))}
@@ -113,7 +123,7 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
                 <SelectValue placeholder="All Regions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Regions</SelectItem>
+                <SelectItem value={ALL_ITEMS_FILTER_VALUE}>All Regions</SelectItem>
                 {regions.map(region => (
                   <SelectItem key={region} value={region}>{region}</SelectItem>
                 ))}
