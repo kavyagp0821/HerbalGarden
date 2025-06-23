@@ -1,7 +1,4 @@
 
-import { config } from 'dotenv';
-config(); // Ensure .env variables are loaded before anything else in this file.
-
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 
