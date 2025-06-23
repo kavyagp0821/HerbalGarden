@@ -535,6 +535,15 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+// Internal component to strip the asChild prop before it reaches the DOM element.
+const ButtonImpl = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<"button">
+>(({ asChild, ...props }, ref) => {
+  return <button ref={ref} {...props} />
+})
+ButtonImpl.displayName = "ButtonImpl"
+
 const SidebarMenuButton = React.forwardRef<
   HTMLElement,
   React.ComponentProps<"button"> & {
@@ -559,7 +568,7 @@ const SidebarMenuButton = React.forwardRef<
     ref
   ) => {
     const { isMobile, state } = useSidebar();
-    const Comp = isSlotComponent ? Slot : "button";
+    const Comp = isSlotComponent ? Slot : ButtonImpl;
 
     const coreElement = (
       <Comp
