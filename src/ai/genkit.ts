@@ -4,16 +4,24 @@ import {googleAI} from '@genkit-ai/googleai';
 
 const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
-if (!apiKey && process.env.NODE_ENV !== 'test') {
-  console.warn(
-    '\n🔴🔴🔴 WARNING: Gemini API Key is missing! 🔴🔴🔴\n' +
-    'The AYUSH Virtual Garden plant recognition feature will likely fail.\n' +
-    'Please ensure you have a .env file in the root of your project containing:\n\n' +
-    '  GEMINI_API_KEY=YOUR_ACTUAL_API_KEY_HERE\n\n' +
-    'You can obtain a key from Google AI Studio: https://aistudio.google.com/app/apikey\n' +
-    'After adding the key to your .env file, you MUST restart your development server.\n'
-  );
+if (process.env.NODE_ENV !== 'test') {
+  // Enhanced logging for debugging purposes
+  console.log('======================================================================');
+  console.log('  Checking for Gemini API Key...');
+  if (apiKey) {
+    console.log('  ✅ API Key found successfully.');
+  } else {
+    console.warn('\n  🔴🔴🔴 WARNING: Gemini API Key is NOT configured! 🔴🔴🔴\n');
+    console.warn('  The AYUSH Virtual Garden plant recognition feature will fail.');
+    console.warn('  To fix this, please follow these steps carefully:');
+    console.warn('  1. In the project root directory, create a file named exactly .env');
+    console.warn('  2. Add this line to it: GEMINI_API_KEY=YOUR_ACTUAL_API_KEY');
+    console.warn('  3. Get a key from Google AI Studio: https://aistudio.google.com/app/apikey');
+    console.warn('  4. IMPORTANT: You MUST restart your development server after editing the .env file.\n');
+  }
+  console.log('======================================================================');
 }
+
 
 export const ai = genkit({
   plugins: [
