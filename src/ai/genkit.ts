@@ -19,6 +19,10 @@ if (!apiKey && process.env.NODE_ENV !== 'test') {
 }
 
 export const ai = genkit({
-  plugins: [googleAI()], // The plugin will attempt to load the API key from environment variables.
+  plugins: [
+    googleAI({
+      apiKey: apiKey, // Explicitly pass the API key
+    }),
+  ],
   model: 'googleai/gemini-2.0-flash',
 });
