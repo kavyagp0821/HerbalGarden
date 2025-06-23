@@ -12,12 +12,12 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import { plants } from '@/lib/plant-data';
 
-export const RecommendPlantsInputSchema = z.object({
+const RecommendPlantsInputSchema = z.object({
   healthInterest: z.string().describe('A health interest or wellness goal provided by the user, e.g., "better sleep", "stress relief", "improving digestion".'),
 });
 export type RecommendPlantsInput = z.infer<typeof RecommendPlantsInputSchema>;
 
-export const RecommendPlantsOutputSchema = z.object({
+const RecommendPlantsOutputSchema = z.object({
   recommendations: z.array(z.object({
     id: z.string().describe("The unique ID of the plant, matching the one from the provided list."),
     commonName: z.string().describe('The common name of the recommended plant.'),
