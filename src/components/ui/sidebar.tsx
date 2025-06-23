@@ -535,21 +535,22 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
-// Internal component to strip the asChild prop before it reaches the DOM element.
+// This helper component is the key to the fix.
+// It catches the `asChild` prop and prevents it from reaching the underlying <button> DOM element.
 const ButtonImpl = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button">
+  React.ComponentProps<"button"> & { asChild?: boolean }
 >(({ asChild, ...props }, ref) => {
-  return <button ref={ref} {...props} />
-})
-ButtonImpl.displayName = "ButtonImpl"
+  return <button ref={ref} {...props} />;
+});
+ButtonImpl.displayName = "ButtonImpl";
 
 const SidebarMenuButton = React.forwardRef<
   HTMLElement,
   React.ComponentProps<"button"> & {
-    asChild?: boolean
-    isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    asChild?: boolean;
+    isActive?: boolean;
+    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
     href?: string;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
@@ -568,40 +569,39 @@ const SidebarMenuButton = React.forwardRef<
     ref
   ) => {
     const { isMobile, state } = useSidebar();
+
+    // Determine the component to render. Use ButtonImpl to strip the `asChild` prop.
     const Comp = isSlotComponent ? Slot : ButtonImpl;
 
-    const coreElement = (
-      <Comp
-        ref={ref}
-        data-sidebar="menu-button"
-        data-size={size}
-        data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
-        {...restProps}
-      >
-        {children}
-      </Comp>
-    );
+    const buttonProps = {
+      ref,
+      "data-sidebar": "menu-button",
+      "data-size": size,
+      "data-active": isActive,
+      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
+      ...restProps,
+    };
 
-    const interactiveElement = href ? (
-      <Link href={href} asChild>
-        {coreElement}
+    const triggerElement = href ? (
+      <Link href={href} legacyBehavior={false} asChild>
+        <Comp {...buttonProps}>{children}</Comp>
       </Link>
     ) : (
-      coreElement
+      <Comp {...buttonProps}>{children}</Comp>
     );
 
     if (!tooltip) {
-      return interactiveElement;
+      return triggerElement;
     }
-    
-    const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null 
-                                ? tooltip 
-                                : { children: tooltip };
-    
+
+    const tooltipContentProps =
+      typeof tooltip === "object" && tooltip !== null
+        ? tooltip
+        : { children: tooltip };
+
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{interactiveElement}</TooltipTrigger>
+        <TooltipTrigger asChild>{triggerElement}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
@@ -611,7 +611,7 @@ const SidebarMenuButton = React.forwardRef<
       </Tooltip>
     );
   }
-)
+);
 SidebarMenuButton.displayName = "SidebarMenuButton"
 
 const SidebarMenuAction = React.forwardRef<
