@@ -7,6 +7,7 @@ import SidebarNav from './SidebarNav';
 import Link from 'next/link';
 import { Leaf } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import Chatbot from '../chatbot/Chatbot';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -50,6 +51,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             {children}
           </main>
         </SidebarInset>
+        <Chatbot />
       </div>
     </SidebarProvider>
   );

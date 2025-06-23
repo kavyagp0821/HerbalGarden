@@ -1,5 +1,7 @@
 
-// dotenv configuration is now handled in src/ai/genkit.ts to ensure it runs
-// for both Next.js app and direct Genkit script execution.
+// This file is used to register all your Genkit flows for development.
+// It is not used in production.
 
 import '@/ai/flows/recognize-plant.ts';
+import '@/ai/flows/recommend-plants-flow.ts';
+import '@/ai/flows/chatbot-flow.ts';

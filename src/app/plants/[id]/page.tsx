@@ -1,6 +1,10 @@
+
+'use client';
+
+import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { plants } from '@/lib/plant-data';
-import type { Plant } from '@/types';
+import type { Plant, UserProgress } from '@/types';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,25 +19,39 @@ interface PlantPageProps {
   params: { id: string };
 }
 
+// Re-exporting generateStaticParams for build-time generation
 export async function generateStaticParams() {
-  return plants.map((plant) => ({
-    id: plant.id,
-  }));
-}
-
-export async function generateMetadata({ params }: PlantPageProps) {
-  const plant = plants.find(p => p.id === params.id);
-  if (!plant) {
-    return { title: 'Plant Not Found' };
-  }
-  return {
-    title: `${plant.commonName} | AYUSH Virtual Garden`,
-    description: `Learn about ${plant.commonName} (${plant.latinName}): its uses, properties, and more.`,
-  };
+    return plants.map((plant) => ({
+      id: plant.id,
+    }));
 }
 
 export default function PlantPage({ params }: PlantPageProps) {
-  const plant = plants.find(p => p.id === params.id);
+  const [plant, setPlant] = useState<Plant | undefined>(undefined);
+
+  useEffect(() => {
+    const foundPlant = plants.find(p => p.id === params.id);
+    setPlant(foundPlant);
+
+    if (foundPlant) {
+      document.title = `${foundPlant.commonName} | AYUSH Virtual Garden`;
+      
+      // Update user progress in localStorage
+      try {
+        const progress: UserProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+        const viewedPlants = progress.viewedPlants || {};
+        if (!viewedPlants[foundPlant.id]) {
+            viewedPlants[foundPlant.id] = foundPlant.commonName;
+            progress.viewedPlants = viewedPlants;
+            localStorage.setItem('userProgress', JSON.stringify(progress));
+        }
+      } catch (error) {
+        console.error("Failed to update user progress in localStorage", error);
+      }
+    } else {
+        document.title = 'Plant Not Found';
+    }
+  }, [params.id]);
 
   if (!plant) {
     return (

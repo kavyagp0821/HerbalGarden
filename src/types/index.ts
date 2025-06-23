@@ -17,7 +17,7 @@ export interface Plant {
 }
 
 export interface TourCategory {
-  id: string;
+  id:string;
   name: string;
   description: string;
   icon?: LucideIcon;
@@ -39,4 +39,28 @@ export interface NavItem {
   label: string;
   icon: LucideIcon;
   disabled?: boolean;
+}
+
+export interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  achieved: boolean;
+}
+
+export interface QuizResult {
+    score: number;
+    total: number;
+    date: string;
+}
+
+export interface UserProgress {
+    viewedPlants?: Record<string, string>;
+    quizHistory?: QuizResult[];
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  content: string;
 }

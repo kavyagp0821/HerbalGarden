@@ -1,5 +1,5 @@
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
-import { Leaf, ShieldHalf, Activity, Brain, Users, Sparkles, Filter, Wind, Sun } from 'lucide-react';
+import { Leaf, ShieldHalf, Activity, Brain, Users, Sparkles, Filter, Wind, Sun, HeartPulse, Soup } from 'lucide-react';
 
 export const plants: Plant[] = [
   {
@@ -64,6 +64,30 @@ export const plants: Plant[] = [
     imageHint: 'brahmi plant',
     ayushUses: 'Known as a brain tonic in Ayurveda, it supports memory, learning, and concentration. Also used to calm the nerves.',
   },
+  {
+    id: 'amla',
+    commonName: 'Amla (Indian Gooseberry)',
+    latinName: 'Phyllanthus emblica',
+    description: 'Amla is a small, green fruit renowned for its extremely high vitamin C content and potent antioxidant properties.',
+    therapeuticUses: ['Immunity Booster', 'Antioxidant', 'Hair Health'],
+    region: 'India and Southeast Asia',
+    classification: 'Fruit Tree',
+    imageSrc: 'https://placehold.co/600x400.png',
+    imageHint: 'amla fruit',
+    ayushUses: 'A cornerstone of Ayurvedic medicine, used in preparations like Chyawanprash to rejuvenate the body, boost immunity, and improve hair and skin.',
+  },
+  {
+    id: 'ginger',
+    commonName: 'Ginger (Adrak)',
+    latinName: 'Zingiber officinale',
+    description: 'Ginger is a flowering plant whose rhizome, ginger root, is widely used as a spice and a folk medicine.',
+    therapeuticUses: ['Digestive Health', 'Anti-inflammatory', 'Nausea Relief'],
+    region: 'Southeast Asia',
+    classification: 'Rhizome',
+    imageSrc: 'https://placehold.co/600x400.png',
+    imageHint: 'ginger root',
+    ayushUses: 'In Ayurveda, ginger is known as a universal medicine. It is used to aid digestion, reduce inflammation, and treat colds and nausea.',
+  },
 ];
 
 export const tourCategories: TourCategory[] = [
@@ -72,7 +96,7 @@ export const tourCategories: TourCategory[] = [
     name: 'Immunity Boosters',
     description: 'Explore plants renowned for strengthening the immune system.',
     icon: ShieldHalf,
-    plantIds: ['tulsi', 'ashwagandha', 'turmeric'],
+    plantIds: ['tulsi', 'ashwagandha', 'turmeric', 'amla'],
     imageSrc: 'https://placehold.co/400x300.png',
     imageHint: 'immune system'
   },
@@ -95,13 +119,13 @@ export const tourCategories: TourCategory[] = [
     imageHint: 'brain function'
   },
   {
-    id: 'skin-health',
-    name: 'Skin Health',
-    description: 'Plants that promote healthy and radiant skin.',
-    icon: Sparkles,
-    plantIds: ['neem', 'turmeric'],
+    id: 'digestive-health',
+    name: 'Digestive Health',
+    description: 'Find plants that aid digestion and soothe the stomach.',
+    icon: Soup,
+    plantIds: ['turmeric', 'ginger'],
     imageSrc: 'https://placehold.co/400x300.png',
-    imageHint: 'healthy skin'
+    imageHint: 'herbal tea'
   },
 ];
 
@@ -129,9 +153,9 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 'q4',
-    question: 'Which part of the Neem tree is NOT commonly used for medicinal purposes?',
-    options: ['Leaves', 'Bark', 'Flowers', 'Seeds'], // All are used, this is a trickier one, let's assume one is less common or for a specific quiz this may be refined.
-    correctAnswer: 'Flowers', // For simplicity, let's pick one. In reality, flowers are also used.
+    question: 'Which of these plants is known for its purifying properties for skin and dental health?',
+    options: ['Brahmi', 'Neem', 'Tulsi', 'Amla'],
+    correctAnswer: 'Neem',
     plantId: 'neem',
   },
   {
@@ -140,5 +164,19 @@ export const quizQuestions: QuizQuestion[] = [
     options: ['Physical Strength', 'Immune Response', 'Cognitive Function', 'Digestive Speed'],
     correctAnswer: 'Cognitive Function',
     plantId: 'brahmi',
+  },
+  {
+    id: 'q6',
+    question: 'Which fruit is a very potent source of Vitamin C and used in Chyawanprash?',
+    options: ['Ginger', 'Amla', 'Neem', 'Brahmi'],
+    correctAnswer: 'Amla',
+    plantId: 'amla',
+  },
+  {
+    id: 'q7',
+    question: 'Which rhizome is famous for aiding digestion and relieving nausea?',
+    options: ['Turmeric', 'Ashwagandha', 'Ginger', 'Tulsi'],
+    correctAnswer: 'Ginger',
+    plantId: 'ginger',
   },
 ];

@@ -1,7 +1,7 @@
 import AppLayout from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, Waypoints, ScanSearch, ClipboardCheck } from 'lucide-react';
+import { Leaf, User, ScanSearch, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -40,17 +40,17 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard
               icon={<Leaf className="w-10 h-10 text-primary" />}
-              title="3D Plant Viewer"
-              description="Explore detailed 3D models of medicinal plants. Zoom, rotate, and learn about their unique structures."
+              title="Explore Plants"
+              description="Explore detailed information and 3D models of medicinal plants. Learn about their unique structures."
               link="/plants"
-              linkText="View Plants"
+              linkText="View Collection"
             />
-            <FeatureCard
-              icon={<Waypoints className="w-10 h-10 text-primary" />}
-              title="Guided Virtual Tours"
-              description="Take curated tours based on health benefits like immunity, digestion, and stress relief."
-              link="/tours"
-              linkText="Start a Tour"
+             <FeatureCard
+              icon={<Sparkles className="w-10 h-10 text-primary" />}
+              title="AI Recommendations"
+              description="Get personalized plant suggestions from our AI based on your health interests and wellness goals."
+              link="/recommendations"
+              linkText="Get Suggestions"
             />
             <FeatureCard
               icon={<ScanSearch className="w-10 h-10 text-primary" />}
@@ -59,12 +59,12 @@ export default function HomePage() {
               link="/recognize"
               linkText="Identify a Plant"
             />
-            <FeatureCard
-              icon={<ClipboardCheck className="w-10 h-10 text-primary" />}
-              title="Interactive Quizzes"
-              description="Test your knowledge about AYUSH plants with our engaging quizzes and track your learning."
-              link="/quizzes"
-              linkText="Take a Quiz"
+             <FeatureCard
+              icon={<User className="w-10 h-10 text-primary" />}
+              title="Your Progress"
+              description="Track your learning, take quizzes to test your knowledge, and earn badges for your achievements."
+              link="/profile"
+              linkText="View My Progress"
             />
           </div>
         </section>

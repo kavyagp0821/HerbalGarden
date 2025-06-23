@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import type { QuizQuestion } from '@/types';
+import { useState, useMemo, useEffect } from 'react';
+import type { QuizQuestion, UserProgress } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -9,20 +9,28 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle, XCircle, RotateCcw, Lightbulb } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import Link from 'next/link';
 
 interface QuizClientProps {
   questions: QuizQuestion[];
 }
 
 export default function QuizClient({ questions: initialQuestions }: QuizClientProps) {
-  const [shuffledQuestions, setShuffledQuestions] = useState(() => 
-    [...initialQuestions].sort(() => Math.random() - 0.5)
-  );
+  const [shuffledQuestions, setShuffledQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [quizFinished, setQuizFinished] = useState(false);
+
+  const shuffleQuestions = () => {
+     setShuffledQuestions([...initialQuestions].sort(() => Math.random() - 0.5));
+  }
+
+  useEffect(() => {
+    shuffleQuestions();
+  }, [initialQuestions]);
+
 
   const currentQuestion = useMemo(() => shuffledQuestions[currentQuestionIndex], [shuffledQuestions, currentQuestionIndex]);
   const currentOptions = useMemo(() => {
@@ -46,11 +54,23 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
       setCurrentQuestionIndex(prevIndex => prevIndex + 1);
     } else {
       setQuizFinished(true);
+      // Save score to localStorage when quiz is finished
+      try {
+        const progress: UserProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+        const quizHistory = progress.quizHistory || [];
+        // Add score from this session. Note: score state might not be updated yet.
+        const finalScore = (selectedAnswer === currentQuestion.correctAnswer ? score + 1 : score);
+        quizHistory.push({ score: finalScore, total: shuffledQuestions.length, date: new Date().toISOString() });
+        progress.quizHistory = quizHistory;
+        localStorage.setItem('userProgress', JSON.stringify(progress));
+      } catch (error) {
+        console.error("Failed to save quiz progress", error);
+      }
     }
   };
 
   const restartQuiz = () => {
-    setShuffledQuestions([...initialQuestions].sort(() => Math.random() - 0.5));
+    shuffleQuestions();
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
     setScore(0);
@@ -59,27 +79,32 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
   };
 
   if (quizFinished) {
+    const finalScore = score;
+    const percentage = (finalScore / shuffledQuestions.length) * 100;
     return (
       <Card className="max-w-xl mx-auto shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Quiz Completed!</CardTitle>
           <CardDescription className="text-lg">
-            You scored {score} out of {shuffledQuestions.length}.
+            You scored {finalScore} out of {shuffledQuestions.length} ({percentage.toFixed(0)}%).
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center">
-          {score / shuffledQuestions.length >= 0.7 ? (
+          {percentage >= 70 ? (
             <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
           ) : (
             <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4" />
           )}
           <p className="text-xl mb-6">
-            {score / shuffledQuestions.length >= 0.7 ? "Excellent work!" : "Keep learning and try again!"}
+            {percentage >= 70 ? "Excellent work!" : "Keep learning and try again!"}
           </p>
+          <Link href="/profile">
+            <Button variant="outline">View My Progress</Button>
+          </Link>
         </CardContent>
         <CardFooter>
           <Button onClick={restartQuiz} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-3">
-            <RotateCcw className="mr-2 h-5 w-5" /> Restart Quiz
+            <RotateCcw className="mr-2 h-5 w-5" /> Play Again
           </Button>
         </CardFooter>
       </Card>
@@ -90,7 +115,7 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
     return <p>Loading quiz...</p>; // Or some other loading state
   }
   
-  const progressValue = ((currentQuestionIndex +1) / shuffledQuestions.length) * 100;
+  const progressValue = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
   return (
     <Card className="max-w-xl mx-auto shadow-xl">

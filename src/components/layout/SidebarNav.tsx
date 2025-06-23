@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Leaf,
-  Waypoints,
   ScanSearch,
   ClipboardCheck,
+  User,
+  Sparkles,
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -19,9 +20,10 @@ import type { NavItem } from '@/types';
 const navItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
-  { href: '/tours', label: 'Virtual Tours', icon: Waypoints },
+  { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
+  { href: '/profile', label: 'My Progress', icon: User },
 ];
 
 export default function SidebarNav() {
