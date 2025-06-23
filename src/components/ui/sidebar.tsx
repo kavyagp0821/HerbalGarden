@@ -5,6 +5,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
+import Link from 'next/link';
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -440,7 +441,7 @@ const SidebarGroupLabel = React.forwardRef<
       ref={ref}
       data-sidebar="group-label"
       className={cn(
-        "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
@@ -535,11 +536,12 @@ const sidebarMenuButtonVariants = cva(
 )
 
 const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement,
+  HTMLElement,
   React.ComponentProps<"button"> & {
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    href?: string;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -551,6 +553,7 @@ const SidebarMenuButton = React.forwardRef<
       tooltip,
       className,
       children,
+      href,
       ...restProps
     },
     ref
@@ -558,26 +561,29 @@ const SidebarMenuButton = React.forwardRef<
     const { isMobile, state } = useSidebar();
     const Comp = isSlotComponent ? Slot : "button";
 
-    // Destructure 'asChild' from restProps to prevent it from being passed to the DOM element.
-    // '_forwardedAsChild' captures the value if 'asChild' exists in restProps.
-    // 'finalProps' will contain all other properties from restProps.
-    const { asChild: _forwardedAsChild, ...finalProps } = restProps;
-
-    const buttonElement = (
+    const coreElement = (
       <Comp
         ref={ref}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
-        {...finalProps} // Spread finalProps, which no longer includes 'asChild' from parent
+        {...restProps}
       >
         {children}
       </Comp>
     );
 
+    const interactiveElement = href ? (
+      <Link href={href} asChild>
+        {coreElement}
+      </Link>
+    ) : (
+      coreElement
+    );
+
     if (!tooltip) {
-      return buttonElement;
+      return interactiveElement;
     }
     
     const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null 
@@ -586,7 +592,7 @@ const SidebarMenuButton = React.forwardRef<
     
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
+        <TooltipTrigger asChild>{interactiveElement}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
