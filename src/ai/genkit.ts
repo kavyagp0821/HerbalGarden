@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'test') {
     console.log('  ✅ API Key found successfully.');
   } else {
     console.warn('\n  🔴🔴🔴 WARNING: Gemini API Key is NOT configured! 🔴🔴🔴\n');
-    console.warn('  The AYUSH Virtual Garden plant recognition feature will fail.');
+    console.warn('  The AYUSH Virtual Garden AI features will fail.');
     console.warn('  To fix this, please follow these steps carefully:');
     console.warn('  1. In the project root directory, create a file named exactly .env');
     console.warn('  2. Add this line to it: GEMINI_API_KEY=YOUR_ACTUAL_API_KEY');
