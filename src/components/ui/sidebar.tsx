@@ -570,7 +570,7 @@ const SidebarMenuButton = React.forwardRef<
   ) => {
     const { isMobile, state } = useSidebar();
 
-    // Determine the component to render. Use ButtonImpl to strip the `asChild` prop.
+    // The component to render. Use our helper to strip `asChild` if not using Slot.
     const Comp = isSlotComponent ? Slot : ButtonImpl;
 
     const buttonProps = {
@@ -582,26 +582,25 @@ const SidebarMenuButton = React.forwardRef<
       ...restProps,
     };
 
-    const triggerElement = href ? (
-      <Link href={href} legacyBehavior={false} asChild>
-        <Comp {...buttonProps}>{children}</Comp>
+    const coreElement = <Comp {...buttonProps}>{children}</Comp>;
+    
+    const interactiveElement = href ? (
+      <Link href={href} asChild>
+        {coreElement}
       </Link>
     ) : (
-      <Comp {...buttonProps}>{children}</Comp>
+      coreElement
     );
-
+    
     if (!tooltip) {
-      return triggerElement;
+      return interactiveElement;
     }
-
-    const tooltipContentProps =
-      typeof tooltip === "object" && tooltip !== null
-        ? tooltip
-        : { children: tooltip };
+    
+    const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null ? tooltip : { children: tooltip };
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{triggerElement}</TooltipTrigger>
+        <TooltipTrigger asChild>{interactiveElement}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
