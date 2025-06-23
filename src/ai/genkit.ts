@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'test') {
     console.warn('\n  🔴🔴🔴 WARNING: Gemini API Key is NOT configured! 🔴🔴🔴\n');
     console.warn('  The AYUSH Virtual Garden AI features will fail.');
     console.warn('  To fix this, please follow these steps carefully:');
-    console.warn('  1. In the project root directory, create a file named exactly .env');
+    console.warn('  1. In the project root directory, find the file named exactly .env');
     console.warn('  2. Add this line to it: GEMINI_API_KEY=YOUR_ACTUAL_API_KEY');
     console.warn('  3. Get a key from Google AI Studio: https://aistudio.google.com/app/apikey');
     console.warn('  4. IMPORTANT: You MUST restart your development server after editing the .env file.\n');
