@@ -535,8 +535,6 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
-// This helper component is the key to the fix.
-// It catches the `asChild` prop and prevents it from reaching the underlying <button> DOM element.
 const ButtonImpl = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & { asChild?: boolean }
@@ -570,7 +568,6 @@ const SidebarMenuButton = React.forwardRef<
   ) => {
     const { isMobile, state } = useSidebar();
 
-    // The component to render. Use our helper to strip `asChild` if not using Slot.
     const Comp = isSlotComponent ? Slot : ButtonImpl;
 
     const buttonProps = {
