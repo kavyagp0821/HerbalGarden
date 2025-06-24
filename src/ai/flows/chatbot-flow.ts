@@ -9,7 +9,6 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import { plants } from '@/lib/plant-data';
-import { geminiPro } from '@genkit-ai/googleai';
 
 // Construct a summary of plants for the chatbot's context
 const plantSummary = plants.map(p => `${p.commonName} (${p.latinName}): Used for ${p.therapeuticUses.join(', ')}.`).join('\n');
@@ -24,12 +23,13 @@ const ChatbotInputSchema = z.object({
 
 export async function chatbotFlow(input: z.infer<typeof ChatbotInputSchema>): Promise<string> {
 
-    const prompt = `You are a friendly and helpful virtual guide for the "AYUSH Virtual Garden" web application.
-Your goal is to assist users and answer their questions about the app and the medicinal plants it features.
+    const systemPrompt = `You are a friendly and helpful virtual guide for the "AYUSH Virtual Garden" web application.
+Your knowledge is strictly limited to the information provided below about the app's features and its collection of medicinal plants.
+If a user asks about any topic outside of this scope (e.g., politics, science, personal opinions, other apps), you MUST politely decline to answer and gently guide them back to discussing the AYUSH Virtual Garden.
 
-Keep your answers concise and helpful.
+Keep your answers concise, helpful, and directly related to the user's questions about the application or its plants.
 
-The app has the following features:
+## APP FEATURES ##
 - Dashboard: The main landing page.
 - Explore Plants: A gallery of all medicinal plants in the virtual garden.
 - AI Recommendations: Users can get personalized plant suggestions based on their health goals.
@@ -37,15 +37,13 @@ The app has the following features:
 - Quizzes: Users can test their knowledge about the plants.
 - My Progress: A page where users can see their quiz history, viewed plants, and earned badges.
 
-Here is a list of plants available in the garden:
+## AVAILABLE PLANTS ##
 ${plantSummary}
 
 Now, please respond to the user's message.`;
     
-    const llm = ai.model('googleai/gemini-1.5-flash-latest');
-
-    const result = await llm.generate({
-        system: prompt,
+    const result = await ai.generate({
+        system: systemPrompt,
         history: input.history,
         prompt: input.message,
     });
