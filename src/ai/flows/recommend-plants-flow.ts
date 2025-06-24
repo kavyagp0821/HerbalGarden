@@ -10,7 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { plants } from '@/lib/plant-data';
+import { plantService } from '@/services/plant.service';
 
 const RecommendPlantsInputSchema = z.object({
   healthInterest: z.string().describe('A health interest or wellness goal provided by the user, e.g., "better sleep", "stress relief", "improving digestion".'),
@@ -31,34 +31,6 @@ export async function recommendPlants(input: RecommendPlantsInput): Promise<Reco
   return recommendPlantsFlow(input);
 }
 
-// Convert the plant data to a simplified JSON string for the prompt
-const plantInfoForPrompt = JSON.stringify(plants.map(p => ({
-    id: p.id,
-    commonName: p.commonName,
-    latinName: p.latinName,
-    therapeuticUses: p.therapeuticUses,
-    ayushUses: p.ayushUses
-})));
-
-const recommendationPrompt = ai.definePrompt({
-  name: 'plantRecommendationPrompt',
-  input: {schema: RecommendPlantsInputSchema},
-  output: {schema: RecommendPlantsOutputSchema},
-  prompt: `You are an expert in AYUSH medicinal plants. A user is looking for plants related to a specific health interest.
-Based on the user's interest, recommend up to 3 plants from the list provided below.
-
-For each recommendation, you MUST provide the plant's id, commonName, and latinName exactly as they appear in the list.
-Also, provide a concise, user-friendly reason explaining why the plant is a good match for their interest, based on its therapeutic uses.
-
-User's health interest: {{{healthInterest}}}
-
-List of available plants:
-${plantInfoForPrompt}
-
-Format your response as a JSON object matching the output schema.
-`,
-});
-
 const recommendPlantsFlow = ai.defineFlow(
   {
     name: 'recommendPlantsFlow',
@@ -66,6 +38,37 @@ const recommendPlantsFlow = ai.defineFlow(
     outputSchema: RecommendPlantsOutputSchema,
   },
   async (input) => {
+    // Fetch live plant data from the database
+    const plants = await plantService.getPlants();
+
+    const plantInfoForPrompt = JSON.stringify(plants.map(p => ({
+        id: p.id,
+        commonName: p.commonName,
+        latinName: p.latinName,
+        therapeuticUses: p.therapeuticUses,
+        ayushUses: p.ayushUses
+    })));
+
+    const recommendationPrompt = ai.definePrompt({
+      name: 'plantRecommendationPrompt',
+      input: {schema: RecommendPlantsInputSchema},
+      output: {schema: RecommendPlantsOutputSchema},
+      prompt: `You are an expert in AYUSH medicinal plants. A user is looking for plants related to a specific health interest.
+    Based on the user's interest, recommend up to 3 plants from the list provided below.
+
+    For each recommendation, you MUST provide the plant's id, commonName, and latinName exactly as they appear in the list.
+    Also, provide a concise, user-friendly reason explaining why the plant is a good match for their interest, based on its therapeutic uses.
+
+    User's health interest: {{{healthInterest}}}
+
+    List of available plants:
+    ${plantInfoForPrompt}
+
+    Format your response as a JSON object matching the output schema.
+    `,
+    });
+
+
     const {output} = await recommendationPrompt(input);
     return output!;
   }

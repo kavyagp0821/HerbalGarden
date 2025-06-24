@@ -1,13 +1,17 @@
 import AppLayout from '@/components/layout/AppLayout';
 import QuizClient from '@/components/quizzes/QuizClient';
-import { quizQuestions } from '@/lib/plant-data';
+import { plantService } from '@/services/plant.service';
 
 export const metadata = {
   title: 'Quizzes | AYUSH Virtual Garden',
   description: 'Test your knowledge about medicinal plants with interactive quizzes.',
 };
 
-export default function QuizzesPage() {
+export const revalidate = 3600; // Revalidate every hour
+
+export default async function QuizzesPage() {
+  const questions = await plantService.getQuizQuestions();
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -17,7 +21,7 @@ export default function QuizzesPage() {
             Engage in interactive quizzes to reinforce your learning about AYUSH medicinal plants.
           </p>
         </header>
-        <QuizClient questions={quizQuestions} />
+        <QuizClient questions={questions} />
       </div>
     </AppLayout>
   );

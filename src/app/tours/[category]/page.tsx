@@ -1,6 +1,7 @@
 import AppLayout from '@/components/layout/AppLayout';
 import PlantCard from '@/components/plants/PlantCard';
-import { plants as allPlants, tourCategories } from '@/lib/plant-data';
+import { plantService } from '@/services/plant.service';
+import { tourCategories as staticTours } from '@/lib/plant-data'; // For icons
 import type { Plant } from '@/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -11,13 +12,14 @@ interface TourCategoryPageProps {
 }
 
 export async function generateStaticParams() {
-  return tourCategories.map((category) => ({
+  const categories = await plantService.getTourCategories();
+  return categories.map((category) => ({
     category: category.id,
   }));
 }
 
 export async function generateMetadata({ params }: TourCategoryPageProps) {
-  const category = tourCategories.find(c => c.id === params.category);
+  const category = await plantService.getTourCategory(params.category);
   if (!category) {
     return { title: 'Tour Not Found' };
   }
@@ -27,9 +29,11 @@ export async function generateMetadata({ params }: TourCategoryPageProps) {
   };
 }
 
-export default function TourCategoryPage({ params }: TourCategoryPageProps) {
-  const category = tourCategories.find(c => c.id === params.category);
+export const revalidate = 3600; // Revalidate every hour
 
+export default async function TourCategoryPage({ params }: TourCategoryPageProps) {
+  const category = await plantService.getTourCategory(params.category);
+  
   if (!category) {
     return (
       <AppLayout>
@@ -44,7 +48,9 @@ export default function TourCategoryPage({ params }: TourCategoryPageProps) {
     );
   }
 
-  const plantsInTour = allPlants.filter(plant => category.plantIds.includes(plant.id));
+  const plantsInTour = await plantService.getPlantsForTour(category.plantIds);
+  const staticTour = staticTours.find(st => st.id === category.id);
+  const TourIcon = staticTour?.icon;
 
   return (
     <AppLayout>
@@ -55,7 +61,7 @@ export default function TourCategoryPage({ params }: TourCategoryPageProps) {
             Back to All Tours
           </Link>
           <div className="flex items-center">
-            {category.icon && <category.icon className="w-10 h-10 mr-3 text-primary" />}
+            {TourIcon && <TourIcon className="w-10 h-10 mr-3 text-primary" />}
             <div>
               <h1 className="text-3xl font-headline font-semibold text-primary">{category.name}</h1>
               <p className="text-lg text-muted-foreground mt-1">{category.description}</p>

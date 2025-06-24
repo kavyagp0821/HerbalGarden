@@ -1,13 +1,28 @@
 import AppLayout from '@/components/layout/AppLayout';
 import TourCard from '@/components/tours/TourCard';
-import { tourCategories } from '@/lib/plant-data';
+import { tourCategories as staticTours } from '@/lib/plant-data'; // For icons
+import { plantService } from '@/services/plant.service';
 
 export const metadata = {
   title: 'Virtual Tours | AYUSH Virtual Garden',
   description: 'Explore guided virtual tours of medicinal plants based on health categories.',
 };
 
-export default function ToursPage() {
+export const revalidate = 3600; // Revalidate every hour
+
+export default async function ToursPage() {
+  const tourCategories = await plantService.getTourCategories();
+
+  // Map icons from static data since they can't be stored in Firestore
+  const toursWithIcons = tourCategories.map(dbTour => {
+    const staticTour = staticTours.find(st => st.id === dbTour.id);
+    return {
+      ...dbTour,
+      icon: staticTour?.icon,
+    };
+  });
+
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -18,9 +33,9 @@ export default function ToursPage() {
           </p>
         </header>
 
-        {tourCategories.length > 0 ? (
+        {toursWithIcons.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tourCategories.map(category => (
+            {toursWithIcons.map(category => (
               <TourCard key={category.id} tourCategory={category} />
             ))}
           </div>

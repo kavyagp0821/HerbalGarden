@@ -1,6 +1,6 @@
 
 import AppLayout from '@/components/layout/AppLayout';
-import { plants } from '@/lib/plant-data';
+import { plantService } from '@/services/plant.service';
 import PlantPageClient from '@/components/plants/PlantPageClient';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ interface PlantPageProps {
 
 // This function runs at build time to generate static pages for each plant
 export async function generateStaticParams() {
+    const plants = await plantService.getPlants();
     return plants.map((plant) => ({
       id: plant.id,
     }));
@@ -19,7 +20,7 @@ export async function generateStaticParams() {
 
 // This function generates metadata for the page (e.g., title) on the server
 export async function generateMetadata({ params }: PlantPageProps): Promise<Metadata> {
-  const plant = plants.find(p => p.id === params.id);
+  const plant = await plantService.getPlant(params.id);
   if (!plant) {
     return {
       title: 'Plant Not Found'
@@ -31,9 +32,12 @@ export async function generateMetadata({ params }: PlantPageProps): Promise<Meta
   }
 }
 
+// Revalidate this page every hour to fetch new data from Firestore
+export const revalidate = 3600;
+
 // This is the main Server Component for the page
-export default function PlantPage({ params }: PlantPageProps) {
-  const plant = plants.find(p => p.id === params.id);
+export default async function PlantPage({ params }: PlantPageProps) {
+  const plant = await plantService.getPlant(params.id);
 
   if (!plant) {
     return (

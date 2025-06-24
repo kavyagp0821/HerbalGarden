@@ -7,11 +7,8 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import { plants } from '@/lib/plant-data';
-
-// Construct a summary of plants for the chatbot's context
-const plantSummary = plants.map(p => `${p.commonName} (${p.latinName}): Used for ${p.therapeuticUses.join(', ')}.`).join('\n');
+import {z} from 'zod';
+import { plantService } from '@/services/plant.service';
 
 const ChatbotInputSchema = z.object({
     history: z.array(z.object({
@@ -22,6 +19,10 @@ const ChatbotInputSchema = z.object({
 });
 
 export async function chatbotFlow(input: z.infer<typeof ChatbotInputSchema>): Promise<string> {
+    
+    // Fetch live plant data to provide context to the chatbot
+    const plants = await plantService.getPlants();
+    const plantSummary = plants.map(p => `${p.commonName} (${p.latinName}): Used for ${p.therapeuticUses.join(', ')}.`).join('\n');
 
     const systemPrompt = `You are a friendly and helpful virtual guide for the "AYUSH Virtual Garden" web application.
 Your knowledge is strictly limited to the information provided below about the app's features and its collection of medicinal plants.
@@ -43,6 +44,7 @@ ${plantSummary}
 Now, please respond to the user's message.`;
     
     const result = await ai.generate({
+        model: 'googleai/gemini-2.0-flash',
         system: systemPrompt,
         history: input.history,
         prompt: input.message,
