@@ -13,7 +13,7 @@ export const tourCategories: TourCategory[] = [
     name: 'Immunity Boosters',
     description: 'Explore plants renowned for strengthening the immune system.',
     icon: ShieldHalf,
-    plantIds: ['tulsi', 'amla', 'giloy', 'moringa', 'turmeric', 'ginger'],
+    plantIds: ['tulsi', 'amla', 'giloy', 'moringa', 'turmeric', 'ginger', 'echinacea', 'elderberry'],
     imageSrc: 'https://images.unsplash.com/photo-1579113800035-7a0342a43f11?q=80&w=400&auto=format&fit=crop',
     imageHint: 'immune system'
   },
@@ -22,7 +22,7 @@ export const tourCategories: TourCategory[] = [
     name: 'Stress Relief',
     description: 'Discover herbs that help calm the mind and reduce stress.',
     icon: Activity,
-    plantIds: ['tulsi', 'ashwagandha', 'brahmi', 'vetiver', 'sandalwood', 'lemongrass'],
+    plantIds: ['tulsi', 'ashwagandha', 'brahmi', 'vetiver', 'sandalwood', 'lemongrass', 'lavender', 'chamomile'],
     imageSrc: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=400&auto=format&fit=crop',
     imageHint: 'calm meditation'
   },
@@ -31,7 +31,7 @@ export const tourCategories: TourCategory[] = [
     name: 'Cognitive Enhancers',
     description: 'Learn about plants that support brain health and cognitive function.',
     icon: Brain,
-    plantIds: ['ashwagandha', 'brahmi', 'gotu-kola', 'ginkgo-biloba'],
+    plantIds: ['ashwagandha', 'brahmi', 'gotu-kola', 'ginkgo-biloba', 'rosemary'],
     imageSrc: 'https://images.unsplash.com/photo-1531592618329-9e8753235338?q=80&w=400&auto=format&fit=crop',
     imageHint: 'brain function'
   },
@@ -40,7 +40,7 @@ export const tourCategories: TourCategory[] = [
     name: 'Digestive Health',
     description: 'Find plants that aid digestion and soothe the stomach.',
     icon: Soup,
-    plantIds: ['turmeric', 'ginger', 'licorice', 'peppermint', 'fennel', 'cardamom'],
+    plantIds: ['turmeric', 'ginger', 'licorice', 'peppermint', 'fennel', 'cardamom', 'marshmallow-root'],
     imageSrc: 'https://images.unsplash.com/photo-1544558000-85c8a41755da?q=80&w=400&auto=format&fit=crop',
     imageHint: 'herbal tea'
   },
@@ -259,7 +259,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Female Reproductive Health', 'Adaptogen', 'Digestive Health'],
     region: 'Himalayas, India, and Nepal',
     classification: 'Asparagaceae family',
-    imageSrc: 'https://images.unsplash.com/photo-1604148485233-024b4c648012?q=80&w=600&auto=format&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1556910110-a5a636e13385?q=80&w=600&auto=format&fit=crop&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     imageHint: 'asparagus root powder',
     ayushUses: 'The primary rejuvenative tonic for females in Ayurveda. It supports lactation, balances hormones, and soothes the digestive tract.',
   },
@@ -287,6 +287,78 @@ export const plants: Plant[] = [
     imageHint: 'eucalyptus leaves',
     ayushUses: 'Used in Siddha medicine and modern aromatherapy as an inhalant to treat colds and bronchitis. Its cooling properties also help with muscle aches.',
   },
+  {
+    id: 'lavender',
+    commonName: 'Lavender',
+    latinName: 'Lavandula angustifolia',
+    description: 'A popular herb known for its calming scent, lavender is used in aromatherapy to reduce stress and anxiety, and promote restful sleep.',
+    therapeuticUses: ['Stress Relief', 'Sleep Aid', 'Aromatherapy'],
+    region: 'Mediterranean, Middle East, and India',
+    classification: 'Mint family',
+    imageSrc: 'https://images.unsplash.com/photo-1565015626376-bf0da7def242?q=80&w=600&auto=format&fit=crop',
+    imageHint: 'lavender fields',
+    ayushUses: 'Used in aromatherapy for its relaxing properties. It is also used topically in some traditional systems for its antiseptic and anti-inflammatory benefits.'
+  },
+  {
+    id: 'chamomile',
+    commonName: 'Chamomile',
+    latinName: 'Matricaria chamomilla',
+    description: 'A daisy-like plant commonly used to make a tea that promotes sleep and calms the nerves. It is also known to soothe stomach ailments.',
+    therapeuticUses: ['Sleep Aid', 'Stress Relief', 'Digestive Health'],
+    region: 'Europe and Western Asia',
+    classification: 'Asteraceae family',
+    imageSrc: 'https://images.unsplash.com/photo-1595594966682-998a44b79b5c?q=80&w=600&auto=format&fit=crop',
+    imageHint: 'chamomile flowers tea',
+    ayushUses: 'Often used in Unani and Western herbalism. It is a mild sedative, making it popular for insomnia and anxiety. It also helps with indigestion.'
+  },
+  {
+    id: 'rosemary',
+    commonName: 'Rosemary',
+    latinName: 'Salvia rosmarinus',
+    description: 'A fragrant evergreen herb with needle-like leaves. It is believed to improve memory and concentration and is rich in antioxidants.',
+    therapeuticUses: ['Cognitive Function', 'Antioxidant', 'Anti-inflammatory'],
+    region: 'Mediterranean',
+    classification: 'Mint family',
+    imageSrc: 'https://images.unsplash.com/photo-1598270591428-39b924c53846?q=80&w=600&auto=format&fit=crop',
+    imageHint: 'rosemary sprigs',
+    ayushUses: 'In traditional medicine, it is used to stimulate the mind, improve memory, and relieve muscle pain. The essential oil is used in aromatherapy for focus.'
+  },
+  {
+    id: 'echinacea',
+    commonName: 'Echinacea',
+    latinName: 'Echinacea purpurea',
+    description: 'Also known as purple coneflower, Echinacea is a popular herb believed to boost the immune system and help the body fight off infections, like the common cold.',
+    therapeuticUses: ['Immunity Booster', 'Cold and Flu', 'Anti-inflammatory'],
+    region: 'North America',
+    classification: 'Asteraceae family',
+    imageSrc: 'https://images.unsplash.com/photo-1594313490135-2c8a245a4a2c?q=80&w=600&auto=format&fit=crop',
+    imageHint: 'purple coneflower',
+    ayushUses: 'Though not native to India, it has been adopted into modern herbal practices for its immune-stimulating properties, similar to how Giloy is used in Ayurveda.'
+  },
+  {
+    id: 'elderberry',
+    commonName: 'Elderberry',
+    latinName: 'Sambucus nigra',
+    description: 'The dark purple berries of the elder tree are packed with antioxidants and vitamins. Syrups and extracts are often used to boost immunity and treat cold and flu symptoms.',
+    therapeuticUses: ['Immunity Booster', 'Cold and Flu', 'Antioxidant'],
+    region: 'Europe, North Africa, and Western Asia',
+    classification: 'Adoxaceae family',
+    imageSrc: 'https://images.unsplash.com/photo-1616118182928-86812835922a?q=80&w=600&auto=format&fit=crop',
+    imageHint: 'elderberry bunch',
+    ayushUses: 'Popular in Western herbalism, its use mirrors traditional remedies for viral infections. Rich in flavonoids, it is valued for its antiviral and immune-supporting effects.'
+  },
+  {
+    id: 'marshmallow-root',
+    commonName: 'Marshmallow Root',
+    latinName: 'Althaea officinalis',
+    description: 'This plant root has a high mucilage content, making it a soothing agent for sore throats, coughs, and digestive inflammation.',
+    therapeuticUses: ['Sore Throat Relief', 'Digestive Health', 'Respiratory Health'],
+    region: 'Europe, Western Asia, and North Africa',
+    classification: 'Mallow family',
+    imageSrc: 'https://images.unsplash.com/photo-1549887711-0a442a8a7e4b?q=80&w=600&auto=format&fit=crop&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageHint: 'marshmallow plant flower',
+    ayushUses: 'Used for its demulcent (soothing) properties. It helps coat and protect mucous membranes in the throat and digestive tract, similar to licorice.'
+  }
 ];
 
 
@@ -361,4 +433,41 @@ export const quizQuestions: QuizQuestion[] = [
     correctAnswer: 'Moringa',
     plantId: 'moringa',
   },
+  {
+    id: 'q11',
+    question: 'What is the main therapeutic use of Lavender essential oil?',
+    options: ['Boosting energy', 'Aiding digestion', 'Reducing stress and promoting sleep', 'Improving memory'],
+    correctAnswer: 'Reducing stress and promoting sleep',
+    plantId: 'lavender',
+  },
+  {
+    id: 'q12',
+    question: 'Which flower, often made into a tea, is a popular remedy for insomnia?',
+    options: ['Rose', 'Chamomile', 'Hibiscus', 'Jasmine'],
+    correctAnswer: 'Chamomile',
+    plantId: 'chamomile',
+  },
+  {
+    id: 'q13',
+    question: 'Rosemary is traditionally believed to help with what function?',
+    options: ['Bone strength', 'Muscle growth', 'Memory and concentration', 'Blood purification'],
+    correctAnswer: 'Memory and concentration',
+    plantId: 'rosemary',
+  },
+  {
+    id: 'q14',
+    question: 'Echinacea, or purple coneflower, is most commonly used for what purpose?',
+    options: ['Boosting the immune system', 'Soothing burns', 'Improving vision', 'Reducing cholesterol'],
+    correctAnswer: 'Boosting the immune system',
+    plantId: 'echinacea',
+  },
+  {
+    id: 'q15',
+    question: 'The high mucilage content of Marshmallow Root makes it effective for...',
+    options: ['Soothing sore throats', 'Stimulating hair growth', 'Increasing appetite', 'Strengthening nails'],
+    correctAnswer: 'Soothing sore throats',
+    plantId: 'marshmallow-root',
+  },
 ];
+
+    
