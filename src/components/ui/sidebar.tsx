@@ -535,18 +535,9 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
-const ButtonImpl = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<"button"> & { asChild?: boolean }
->(({ asChild, ...props }, ref) => {
-  return <button ref={ref} {...props} />;
-});
-ButtonImpl.displayName = "ButtonImpl";
-
 const SidebarMenuButton = React.forwardRef<
-  HTMLElement,
+  HTMLButtonElement,
   React.ComponentProps<"button"> & {
-    asChild?: boolean;
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
     href?: string;
@@ -554,7 +545,6 @@ const SidebarMenuButton = React.forwardRef<
 >(
   (
     {
-      asChild: isSlotComponent,
       isActive = false,
       variant = "default",
       size = "default",
@@ -562,37 +552,37 @@ const SidebarMenuButton = React.forwardRef<
       className,
       children,
       href,
-      ...restProps
+      ...props
     },
     ref
   ) => {
     const { isMobile, state } = useSidebar();
 
-    const Comp = isSlotComponent ? Slot : ButtonImpl;
+    const content = (
+      <button
+        ref={ref}
+        data-sidebar="menu-button"
+        data-size={size}
+        data-active={isActive}
+        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
+        {...props}
+      >
+        {children}
+      </button>
+    );
 
-    const buttonProps = {
-      ref,
-      "data-sidebar": "menu-button",
-      "data-size": size,
-      "data-active": isActive,
-      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
-      ...restProps,
-    };
-
-    const coreElement = <Comp {...buttonProps}>{children}</Comp>;
-    
     const interactiveElement = href ? (
-      <Link href={href} asChild>
-        {coreElement}
+      <Link href={href} passHref legacyBehavior>
+        {content}
       </Link>
     ) : (
-      coreElement
+      content
     );
-    
+
     if (!tooltip) {
       return interactiveElement;
     }
-    
+
     const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null ? tooltip : { children: tooltip };
 
     return (
