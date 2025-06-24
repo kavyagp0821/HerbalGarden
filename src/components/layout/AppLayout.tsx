@@ -34,9 +34,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <SidebarNav />
           </SidebarContent>
           <SidebarFooter className="p-4 group-data-[collapsible=icon]:hidden">
-            <p className="text-xs text-sidebar-foreground/70">
+            <div className="text-xs text-sidebar-foreground/70">
               &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} AYUSH Virtual Garden
-            </p>
+            </div>
           </SidebarFooter>
         </Sidebar>
         <SidebarRail/>
