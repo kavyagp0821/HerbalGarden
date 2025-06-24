@@ -10,7 +10,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Immunity Booster', 'Stress Relief', 'Respiratory Health'],
     region: 'Indian Subcontinent',
     classification: 'Herb',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?holy,basil',
     imageHint: 'tulsi plant',
     videoSrc: 'https://www.w3schools.com/html/mov_bbb.mp4', // Placeholder video
     ayushUses: 'Widely used in Ayurveda for treating coughs, colds, and improving longevity. Considered an adaptogen.',
@@ -23,7 +23,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Stress Relief', 'Energy Booster', 'Cognitive Function'],
     region: 'India, Middle East, Africa',
     classification: 'Shrub',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?ashwagandha,plant',
     imageHint: 'ashwagandha root',
     ayushUses: 'Used in Ayurveda to reduce stress and anxiety, improve energy levels, and enhance cognitive function. Its roots are primarily used.',
   },
@@ -35,7 +35,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Anti-inflammatory', 'Antioxidant', 'Digestive Health'],
     region: 'Southeast Asia',
     classification: 'Rhizome',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?turmeric,root',
     imageHint: 'turmeric spice',
     videoSrc: 'https://www.w3schools.com/html/mov_bbb.mp4', // Placeholder video
     ayushUses: 'A staple in Ayurvedic medicine for its anti-inflammatory properties, used to treat a variety of conditions including arthritis and digestive issues.',
@@ -48,7 +48,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Skin Health', 'Anti-bacterial', 'Dental Care'],
     region: 'Indian Subcontinent',
     classification: 'Tree',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?neem,leaves',
     imageHint: 'neem leaves',
     ayushUses: 'Used in Ayurveda for its purifying properties. Effective for skin diseases, dental health, and as a blood purifier.',
   },
@@ -60,7 +60,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Cognitive Function', 'Stress Relief', 'Anti-anxiety'],
     region: 'Wetlands in Asia, Australia, Europe, Africa, Americas',
     classification: 'Herb',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?bacopa,monnieri',
     imageHint: 'brahmi plant',
     ayushUses: 'Known as a brain tonic in Ayurveda, it supports memory, learning, and concentration. Also used to calm the nerves.',
   },
@@ -72,7 +72,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Immunity Booster', 'Antioxidant', 'Hair Health'],
     region: 'India and Southeast Asia',
     classification: 'Fruit Tree',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?gooseberry,fruit',
     imageHint: 'amla fruit',
     ayushUses: 'A cornerstone of Ayurvedic medicine, used in preparations like Chyawanprash to rejuvenate the body, boost immunity, and improve hair and skin.',
   },
@@ -84,7 +84,7 @@ export const plants: Plant[] = [
     therapeuticUses: ['Digestive Health', 'Anti-inflammatory', 'Nausea Relief'],
     region: 'Southeast Asia',
     classification: 'Rhizome',
-    imageSrc: 'https://placehold.co/600x400.png',
+    imageSrc: 'https://source.unsplash.com/600x400/?ginger,root',
     imageHint: 'ginger root',
     ayushUses: 'In Ayurveda, ginger is known as a universal medicine. It is used to aid digestion, reduce inflammation, and treat colds and nausea.',
   },
@@ -97,7 +97,7 @@ export const tourCategories: TourCategory[] = [
     description: 'Explore plants renowned for strengthening the immune system.',
     icon: ShieldHalf,
     plantIds: ['tulsi', 'ashwagandha', 'turmeric', 'amla'],
-    imageSrc: 'https://placehold.co/400x300.png',
+    imageSrc: 'https://source.unsplash.com/400x300/?herbs,health',
     imageHint: 'immune system'
   },
   {
@@ -106,7 +106,7 @@ export const tourCategories: TourCategory[] = [
     description: 'Discover herbs that help calm the mind and reduce stress.',
     icon: Activity,
     plantIds: ['tulsi', 'ashwagandha', 'brahmi'],
-    imageSrc: 'https://placehold.co/400x300.png',
+    imageSrc: 'https://source.unsplash.com/400x300/?calm,nature',
     imageHint: 'calm meditation'
   },
   {
@@ -115,7 +115,7 @@ export const tourCategories: TourCategory[] = [
     description: 'Learn about plants that support brain health and cognitive function.',
     icon: Brain,
     plantIds: ['ashwagandha', 'brahmi'],
-    imageSrc: 'https://placehold.co/400x300.png',
+    imageSrc: 'https://source.unsplash.com/400x300/?brain,focus',
     imageHint: 'brain function'
   },
   {
@@ -124,7 +124,7 @@ export const tourCategories: TourCategory[] = [
     description: 'Find plants that aid digestion and soothe the stomach.',
     icon: Soup,
     plantIds: ['turmeric', 'ginger'],
-    imageSrc: 'https://placehold.co/400x300.png',
+    imageSrc: 'https://source.unsplash.com/400x300/?herbal,tea',
     imageHint: 'herbal tea'
   },
 ];
