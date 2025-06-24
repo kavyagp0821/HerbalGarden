@@ -558,32 +558,34 @@ const SidebarMenuButton = React.forwardRef<
   ) => {
     const { isMobile, state } = useSidebar();
 
-    const content = (
-      <button
-        ref={ref}
-        data-sidebar="menu-button"
-        data-size={size}
-        data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
-        {...props}
-      >
-        {children}
-      </button>
-    );
+    const commonProps = {
+      "data-sidebar": "menu-button",
+      "data-size": size,
+      "data-active": isActive,
+      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
+      ...props,
+    };
 
+    // If href is provided, we render a Link component.
+    // Otherwise, we render a button.
     const interactiveElement = href ? (
-      <Link href={href} passHref legacyBehavior>
-        {content}
+      <Link href={href} {...commonProps} ref={ref as React.Ref<HTMLAnchorElement>}>
+        {children}
       </Link>
     ) : (
-      content
+      <button {...commonProps} ref={ref}>
+        {children}
+      </button>
     );
 
     if (!tooltip) {
       return interactiveElement;
     }
 
-    const tooltipContentProps = typeof tooltip === 'object' && tooltip !== null ? tooltip : { children: tooltip };
+    const tooltipContentProps =
+      typeof tooltip === "object" && tooltip !== null
+        ? tooltip
+        : { children: tooltip };
 
     return (
       <Tooltip>
@@ -598,7 +600,8 @@ const SidebarMenuButton = React.forwardRef<
     );
   }
 );
-SidebarMenuButton.displayName = "SidebarMenuButton"
+SidebarMenuButton.displayName = "SidebarMenuButton";
+
 
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
