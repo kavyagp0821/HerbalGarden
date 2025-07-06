@@ -9,6 +9,7 @@ import {
   ClipboardCheck,
   User,
   Sparkles,
+  PlusCircle,
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -24,6 +25,7 @@ const navItems: NavItem[] = [
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
   { href: '/profile', label: 'My Progress', icon: User },
+  { href: '/admin/add-plant', label: 'Add Plant', icon: PlusCircle },
 ];
 
 export default function SidebarNav() {
