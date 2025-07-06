@@ -9,22 +9,14 @@ export function getFirebaseConfig() {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   };
 
-  const missingVars = Object.entries(firebaseConfig)
-    .filter(([, value]) => !value || value.startsWith('YOUR_'))
-    .map(([key]) => `NEXT_PUBLIC_${key.replace(/([A-Z])/g, '_$1').toUpperCase()}`);
+  // Check if any of the essential firebase config values are missing or are placeholders
+  const isConfigIncomplete = Object.values(firebaseConfig).some(
+    (value) => !value || value.startsWith('YOUR_')
+  );
 
-  if (missingVars.length > 0) {
-     console.error('🔴🔴🔴 Firebase configuration is missing! 🔴🔴🔴');
-     console.error('The application cannot connect to the database.');
-     console.error('Please complete the following steps:');
-     console.error('1. Find the file named .env in your project\'s root directory.');
-     console.error('2. Copy the contents of the .env.example file into your .env file.');
-     console.error('3. Get your project credentials from your Firebase project settings.');
-     console.error('4. Replace the placeholder values (like YOUR_API_KEY) in .env with your actual credentials.');
-     console.error('Missing variables:', missingVars.join(', '));
-     console.error('5. IMPORTANT: You MUST restart the development server after editing the .env file.');
-     // We throw an error to prevent the app from running with invalid config.
-     throw new Error('Firebase configuration is incomplete. Check the server console for instructions.');
+  if (isConfigIncomplete) {
+    console.warn("Firebase config is not provided. Optional Firebase services like Auth will not be available.");
+    return null; // Return null if the config is not complete
   }
 
   return firebaseConfig;
