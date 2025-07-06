@@ -14,7 +14,16 @@ export async function GET() {
     return NextResponse.json(plants);
   } catch (e) {
     console.error('Error fetching plants from MongoDB:', e);
-    return NextResponse.json({ message: 'Internal Server Error: Could not fetch plants' }, { status: 500 });
+    const errorDetails = e instanceof Error ? e.message : String(e);
+    // Add a check for common connection issues.
+    if (errorDetails.includes('querySrv ESERVFAIL') || errorDetails.includes('connect ETIMEDOUT')) {
+        console.error('\n\n\n--- MONGO DB CONNECTION HINT ---');
+        console.error('This error often means the server\'s IP address is not whitelisted in MongoDB Atlas.');
+        console.error('To fix this, go to your Atlas dashboard > Network Access > Add IP Address and add `0.0.0.0/0` (Access from anywhere).');
+        console.error('Also, double-check your MONGODB_URI in the .env file.');
+        console.error('--- END HINT ---\n\n\n');
+    }
+    return NextResponse.json({ message: 'Internal Server Error: Could not fetch plants from database.' }, { status: 500 });
   }
 }
 
@@ -43,6 +52,14 @@ export async function POST(request: Request) {
 
     } catch (err) {
         console.error('Error storing plant in MongoDB:', err);
-        return NextResponse.json({ message: "Internal Server Error: Could not store plant" }, { status: 500 });
+        const errorDetails = err instanceof Error ? err.message : String(err);
+        if (errorDetails.includes('querySrv ESERVFAIL') || errorDetails.includes('connect ETIMEDOUT')) {
+            console.error('\n\n\n--- MONGO DB CONNECTION HINT ---');
+            console.error('This error often means the server\'s IP address is not whitelisted in MongoDB Atlas.');
+            console.error('To fix this, go to your Atlas dashboard > Network Access > Add IP Address and add `0.0.0.0/0` (Access from anywhere).');
+            console.error('Also, double-check your MONGODB_URI in the .env file.');
+            console.error('--- END HINT ---\n\n\n');
+        }
+        return NextResponse.json({ message: "Internal Server Error: Could not store plant in database" }, { status: 500 });
     }
 }
