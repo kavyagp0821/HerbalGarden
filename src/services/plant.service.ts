@@ -3,7 +3,10 @@ import type { Plant, TourCategory, QuizQuestion } from '@/types';
 // Keep quiz and tour data local, as the focus of the change is on plants.
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
 
-const BASE_URL = typeof window !== 'undefined' ? '/api' : 'http://localhost:9002/api';
+// Use an absolute URL for server-side fetching, and a relative one for client-side.
+// The `typeof window` check determines if the code is running in the browser or on the server.
+const BASE_URL = typeof window !== 'undefined' ? '/api' : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api` : 'http://localhost:9002/api');
+
 
 export const plantService = {
   async getPlants(): Promise<Plant[]> {
@@ -11,7 +14,9 @@ export const plantService = {
       // The base URL needs to be absolute when fetching on the server side (e.g., during build).
       const res = await fetch(`${BASE_URL}/plants`, { next: { revalidate: 3600 } }); // Revalidate every hour
       if (!res.ok) {
-        console.error('Failed to fetch plants:', res.statusText);
+        // Log the detailed error message from the API if available
+        const errorBody = await res.text();
+        console.error(`Failed to fetch plants: ${res.status} ${res.statusText}`, errorBody);
         return [];
       }
       return res.json();
@@ -28,7 +33,8 @@ export const plantService = {
         if (res.status === 404) {
           return null;
         }
-        console.error(`Failed to fetch plant with id: ${id}`, res.statusText);
+        const errorBody = await res.text();
+        console.error(`Failed to fetch plant with id: ${id}: ${res.status} ${res.statusText}`, errorBody);
         return null;
       }
       return res.json();
