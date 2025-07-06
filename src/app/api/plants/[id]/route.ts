@@ -19,13 +19,19 @@ export async function GET(request: Request, { params }: { params: { id: string }
     } catch (e) {
         console.error(`Error fetching plant with id ${params.id}:`, e);
         const errorDetails = e instanceof Error ? e.message : String(e);
+
         if (errorDetails.includes('querySrv ESERVFAIL') || errorDetails.includes('connect ETIMEDOUT')) {
             console.error('\n\n\n--- MONGO DB CONNECTION HINT ---');
             console.error('This error often means the server\'s IP address is not whitelisted in MongoDB Atlas.');
             console.error('To fix this, go to your Atlas dashboard > Network Access > Add IP Address and add `0.0.0.0/0` (Access from anywhere).');
-            console.error('Also, double-check your MONGODB_URI in the .env file.');
+            console.error('--- END HINT ---\n\n\n');
+        } else if (errorDetails.toLowerCase().includes('authentication failed')) {
+            console.error('\n\n\n--- MONGO DB CONNECTION HINT ---');
+            console.error('MongoDB authentication failed. This usually means the username or password in your MONGODB_URI is incorrect.');
+            console.error('Please double-check your credentials in the .env file. Ensure you have replaced `<password>` with your actual database user password.');
             console.error('--- END HINT ---\n\n\n');
         }
-        return NextResponse.json({ message: 'Internal Server Error: Could not fetch plant from database.' }, { status: 500 });
+
+        return NextResponse.json({ message: `Internal Server Error: Could not fetch plant from database. Details: ${errorDetails}` }, { status: 500 });
     }
 }

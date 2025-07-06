@@ -5,7 +5,9 @@ import { tourCategories, quizQuestions } from '@/lib/plant-data';
 
 // Use an absolute URL for server-side fetching, and a relative one for client-side.
 // The `typeof window` check determines if the code is running in the browser or on the server.
-const BASE_URL = typeof window !== 'undefined' ? '/api' : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api` : 'http://localhost:9002/api');
+const BASE_URL = typeof window !== 'undefined' 
+    ? '/api' 
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api` : 'http://localhost:9002/api');
 
 
 export const plantService = {
