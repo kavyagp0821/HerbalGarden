@@ -1,6 +1,15 @@
 // src/lib/mongodb.ts
 import { MongoClient } from 'mongodb';
 
+// =================================================================================
+// !! IMPORTANT DIAGNOSTIC LOG !!
+// This will print the exact MongoDB URI your server is using.
+// Please check the server logs for this output to debug connection issues.
+console.log('--- MONGODB URI FROM .env ---');
+console.log(process.env.MONGODB_URI);
+console.log('-----------------------------');
+// =================================================================================
+
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
