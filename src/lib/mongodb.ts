@@ -1,11 +1,23 @@
 // src/lib/mongodb.ts
 import { MongoClient } from 'mongodb'
 
-if (!process.env.MONGODB_URI) {
+const uri = process.env.MONGODB_URI;
+
+// --- DEBUGGING LOG ---
+// The following log is for debugging database connection issues.
+// It prints the URI being used, but masks the password for security.
+if (uri) {
+  console.log('Attempting to connect to MongoDB with URI:', uri.replace(/:([^:]*)@/, ':****@'));
+} else {
+  console.error('CRITICAL: MONGODB_URI environment variable is not defined!');
+}
+// --- END DEBUGGING LOG ---
+
+
+if (!uri) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
 }
 
-const uri = process.env.MONGODB_URI
 let client: MongoClient
 let clientPromise: Promise<MongoClient>
 
