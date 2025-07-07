@@ -1,7 +1,14 @@
 // src/lib/mongodb.ts
 import { MongoClient } from 'mongodb';
 
-const uri = process.env.MONGODB_URI;
+// --- TEMPORARY DEBUGGING STEP ---
+// The connection URI is hardcoded here to bypass any potential issues with
+// loading environment variables from the .env file.
+// If this works, it confirms the problem is with how the environment is configured.
+// This is NOT a permanent solution and will be removed once the issue is diagnosed.
+const uri = "mongodb+srv://plantadmin:MyPassword@cluster0.6xqbguf.mongodb.net/herbal_garden?retryWrites=true&w=majority";
+
+// const uri = process.env.MONGODB_URI;
 
 if (!uri) {
   console.error('\n\n❌ MONGODB_URI is not defined. Please check your .env file.\n');
