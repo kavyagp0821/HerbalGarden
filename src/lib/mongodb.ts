@@ -1,22 +1,20 @@
 // src/lib/mongodb.ts
 import { MongoClient } from 'mongodb';
 
-// --- TEMPORARY DEBUGGING STEP ---
-// The connection URI is hardcoded here to bypass any potential issues with
-// loading environment variables from the .env file.
-// If this works, it confirms the problem is with how the environment is configured.
-// This is NOT a permanent solution and will be removed once the issue is diagnosed.
-const uri = "mongodb+srv://plantadmin:MyPassword@cluster0.6xqbguf.mongodb.net/herbal_garden?retryWrites=true&w=majority";
-
-// const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 
 if (!uri) {
-  console.error('\n\n❌ MONGODB_URI is not defined. Please check your .env file.\n');
+  // This log is helpful for the user if they forget the .env file
+  console.error('\n\n\n--- MONGO DB CONNECTION HINT ---');
+  console.error('The MONGODB_URI environment variable is not set.');
+  console.error('Please create or check the .env file in the root directory and add your connection string.');
+  console.error('Example: MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/database?retryWrites=true&w=majority');
+  console.error('You can get your connection string from MongoDB Atlas under "Connect" > "Drivers".');
+  console.error('After adding it, you MUST restart your development server.');
+  console.error('--- END HINT ---\n\n\n');
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
-// Mask password in debug log
-console.log('✅ Connecting to MongoDB at:', uri.replace(/:\/\/(.*):(.*)@/, '://$1:****@'));
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
