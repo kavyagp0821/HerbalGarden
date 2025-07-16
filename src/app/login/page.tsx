@@ -23,7 +23,7 @@ function GoogleIcon() {
   );
 }
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
