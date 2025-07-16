@@ -6,6 +6,7 @@ import { User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
+import { Leaf } from 'lucide-react';
 
 interface AuthContextType {
   user: User | null;
