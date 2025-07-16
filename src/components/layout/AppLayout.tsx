@@ -1,13 +1,16 @@
-
+// src/components/layout/AppLayout.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
-import { Leaf } from 'lucide-react';
+import { Leaf, LogOut } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Chatbot from '../chatbot/Chatbot';
+import { useAuth } from '@/hooks/use-auth';
+import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -15,10 +18,17 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const [currentYear, setCurrentYear] = useState<string | null>(null);
+  const { signOut } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear().toString());
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  }
 
   return (
     <SidebarProvider defaultOpen>
@@ -33,8 +43,12 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <SidebarContent>
             <SidebarNav />
           </SidebarContent>
-          <SidebarFooter className="p-4 group-data-[collapsible=icon]:hidden">
-            <div className="text-xs text-sidebar-foreground/70">
+          <SidebarFooter className="p-4 flex flex-col gap-2">
+            <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground p-2">
+              <LogOut className="w-4 h-4" />
+              <span className="ml-2 group-data-[collapsible=icon]:hidden">Sign Out</span>
+            </Button>
+            <div className="text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
               &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} AYUSH Virtual Garden
             </div>
           </SidebarFooter>
