@@ -23,6 +23,7 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // This effect runs only on the client, after the component has mounted.
     setMounted(true);
   }, []);
 
@@ -68,7 +69,14 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
     // to avoid potential hydration mismatches with Select components.
     return (
       <div className="space-y-6">
-        <div className="h-48 bg-muted rounded-lg animate-pulse"></div>
+        <Card className="shadow-md">
+          <CardHeader>
+              <CardTitle className="text-xl font-headline">Find Your Plant</CardTitle>
+          </CardHeader>
+          <CardContent>
+             <div className="h-10 bg-muted rounded-md animate-pulse"></div>
+          </CardContent>
+        </Card>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[1,2,3,4].map(i => <div key={i} className="h-96 bg-muted rounded-lg animate-pulse"></div>)}
         </div>
