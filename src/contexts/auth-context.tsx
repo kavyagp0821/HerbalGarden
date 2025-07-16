@@ -2,13 +2,13 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import { User, onAuthStateChanged, Auth } from 'firebase/auth';
+import { User, onAuthStateChanged, Auth, getAuth } from 'firebase/auth';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { Leaf } from 'lucide-react';
 
 // --- Firebase Configuration ---
+// Using the exact configuration provided to ensure connection.
 const firebaseConfig = {
   apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
   authDomain: "virtual-herbalgarden-by437.firebaseapp.com",
@@ -17,20 +17,6 @@ const firebaseConfig = {
   messagingSenderId: "429243165583",
   appId: "1:429243165583:web:14dcf414b0dfef492079fa"
 };
-
-// --- Singleton Pattern for Firebase ---
-let app: FirebaseApp;
-let auth: Auth;
-
-if (typeof window !== 'undefined') {
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
-  }
-  auth = getAuth(app);
-}
-// --- End Firebase Singleton ---
 
 
 interface AuthContextType {
@@ -46,14 +32,21 @@ const unprotectedRoutes = ['/login', '/signup'];
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authInstance, setAuthInstance] = useState<Auth | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    // This effect runs only once on the client side
+    const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const auth = getAuth(app);
+    setAuthInstance(auth);
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
+    
     return () => unsubscribe();
   }, []);
 
@@ -68,19 +61,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user, loading, router, pathname]);
 
-  if (loading || (!user && !unprotectedRoutes.includes(pathname))) {
+  if (loading || !authInstance || (!user && !unprotectedRoutes.includes(pathname))) {
      return (
-        <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex h-screen w-full items-center justify-center bg-background">
             <Leaf className="w-12 h-12 text-primary animate-pulse" />
         </div>
     );
   }
 
   const getFirebaseAuth = () => {
-    if (!auth) {
-      throw new Error("Firebase Auth has not been initialized.");
+    if (!authInstance) {
+      throw new Error("Firebase Auth has not been initialized on the client yet.");
     }
-    return auth;
+    return authInstance;
   }
 
   return (
