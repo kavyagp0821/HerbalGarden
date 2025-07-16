@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
@@ -12,17 +12,29 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+let app: FirebaseApp;
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 
-// Sign-up function
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// Email/Password Sign-up
 const signUp = (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
-// Sign-in function
+// Email/Password Sign-in
 const signIn = (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export { auth, signUp, signIn };
+// Google Sign-in
+const signInWithGoogle = () => {
+  return signInWithPopup(auth, googleProvider);
+};
+
+export { auth, signUp, signIn, signInWithGoogle };

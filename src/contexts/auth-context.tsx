@@ -4,7 +4,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import type { User } from 'firebase/auth';
 import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth, signIn as firebaseSignIn, signUp as firebaseSignUp } from '@/lib/firebase';
+import { auth, signIn as firebaseSignIn, signUp as firebaseSignUp, signInWithGoogle as firebaseSignInWithGoogle } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
@@ -12,6 +12,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, pass: string) => Promise<any>;
   signUp: (email: string, pass: string) => Promise<any>;
+  signInWithGoogle: () => Promise<any>;
   signOut: () => Promise<void>;
 }
 
@@ -42,6 +43,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signUp = (email: string, pass: string) => {
     return firebaseSignUp(email, pass);
   };
+  
+  const signInWithGoogle = () => {
+    return firebaseSignInWithGoogle();
+  };
 
   const signOut = async () => {
     await firebaseSignOut(auth);
@@ -53,6 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loading,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
   };
 
