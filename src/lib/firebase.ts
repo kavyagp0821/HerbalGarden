@@ -2,6 +2,8 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,17 +13,14 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// Initialize Firebase for client-side
 let app: FirebaseApp;
-let auth: Auth;
-
-// This check ensures firebase is only initialized on the client side
-if (typeof window !== 'undefined' && !getApps().length) {
+if (!getApps().length) {
   app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-} else if (getApps().length) {
+} else {
   app = getApp();
-  auth = getAuth(app);
 }
 
-// @ts-ignore
+const auth = getAuth(app);
+
 export { app, auth };
