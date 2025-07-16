@@ -24,6 +24,7 @@ export default function PlantList({ plants: initialPlants }: PlantListProps) {
 
   useEffect(() => {
     // This effect runs only on the client, after the component has mounted.
+    // This prevents hydration mismatches with client-side state and logic.
     setMounted(true);
   }, []);
 
