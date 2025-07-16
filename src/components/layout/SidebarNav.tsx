@@ -9,7 +9,6 @@ import {
   ClipboardCheck,
   User,
   Sparkles,
-  PlusCircle,
   Globe,
 } from 'lucide-react';
 import {
@@ -22,11 +21,11 @@ import type { NavItem } from '@/types';
 const navItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
+  { href: '/tours', label: 'Virtual Tours', icon: Globe },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
   { href: '/profile', label: 'My Progress', icon: User },
-  { href: '/admin/add-plant', label: 'Add Plant', icon: PlusCircle },
 ];
 
 export default function SidebarNav() {
