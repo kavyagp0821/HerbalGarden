@@ -1,3 +1,4 @@
+
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
@@ -13,22 +14,8 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase for client-side
-let app: FirebaseApp;
-let auth: Auth;
+// Initialize Firebase and export the instances
+const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth: Auth = getAuth(app);
 
-// This check ensures we only initialize Firebase on the client-side.
-if (typeof window !== 'undefined' && !getApps().length) {
-  try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-  } catch (e) {
-    console.error("Failed to initialize Firebase", e);
-  }
-} else if (getApps().length > 0) {
-  app = getApp();
-  auth = getAuth(app);
-}
-
-// @ts-ignore
 export { app, auth };
