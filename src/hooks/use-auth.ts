@@ -1,5 +1,5 @@
 // src/hooks/use-auth.ts
-import { auth } from '@/lib/firebase';
+import { auth } from '@/contexts/auth-context';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
