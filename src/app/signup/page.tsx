@@ -12,6 +12,8 @@ import { Leaf, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +27,22 @@ export default function SignUpPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!emailRegex.test(email)) {
+      toast({
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (password.length < 6) {
+      toast({
+        title: 'Weak Password',
+        description: 'Password should be at least 6 characters.',
+        variant: 'destructive',
+      });
+      return;
+    }
     if (password !== confirmPassword) {
       toast({
         title: 'Passwords do not match',
