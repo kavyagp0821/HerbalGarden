@@ -35,7 +35,7 @@ export default function HomePage() {
       <div className="flex flex-col gap-8">
         <section className="relative rounded-lg overflow-hidden shadow-xl">
           <Image
-            src="https://placehold.co/1200x400.png"
+            src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=1200&h=400&fit=crop"
             alt="Herbal Garden Banner"
             width={1200}
             height={400}
