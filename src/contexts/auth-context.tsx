@@ -2,30 +2,10 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { User, onAuthStateChanged, getAuth, Auth } from 'firebase/auth';
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { User, onAuthStateChanged } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { Leaf } from 'lucide-react';
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
-  authDomain: "virtual-herbalgarden-by437.firebaseapp.com",
-  projectId: "virtual-herbalgarden-by437",
-  storageBucket: "virtual-herbalgarden-by437.appspot.com",
-  messagingSenderId: "429243165583",
-  appId: "1:429243165583:web:14dcf414b0dfef492079fa"
-};
-
-// Initialize Firebase
-let app: FirebaseApp;
-if (getApps().length === 0) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApp();
-}
-export const auth = getAuth(app);
-
+import { auth } from '@/lib/firebase'; // Import from the new firebase file
 
 interface AuthContextType {
   user: User | null;
