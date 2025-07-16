@@ -1,21 +1,45 @@
 // src/contexts/auth-context.tsx
 'use client';
 
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
+import { User, onAuthStateChanged, Auth } from 'firebase/auth';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { Leaf } from 'lucide-react';
-import { auth } from '@/lib/firebase'; // Import from the new firebase file
+
+// --- Firebase Configuration ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
+  authDomain: "virtual-herbalgarden-by437.firebaseapp.com",
+  projectId: "virtual-herbalgarden-by437",
+  storageBucket: "virtual-herbalgarden-by437.appspot.com",
+  messagingSenderId: "429243165583",
+  appId: "1:429243165583:web:14dcf414b0dfef492079fa"
+};
+
+// --- Singleton Pattern for Firebase ---
+let app: FirebaseApp;
+let auth: Auth;
+
+if (typeof window !== 'undefined') {
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApp();
+  }
+  auth = getAuth(app);
+}
+// --- End Firebase Singleton ---
+
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  getFirebaseAuth: () => Auth;
 }
 
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const unprotectedRoutes = ['/login', '/signup'];
 
@@ -52,9 +76,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
+  const getFirebaseAuth = () => {
+    if (!auth) {
+      throw new Error("Firebase Auth has not been initialized.");
+    }
+    return auth;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, getFirebaseAuth }}>
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuthContext must be used within an AuthProvider');
+  }
+  return context;
 };

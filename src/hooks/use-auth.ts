@@ -1,5 +1,4 @@
 // src/hooks/use-auth.ts
-import { auth } from '@/lib/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,8 +6,12 @@ import {
   GoogleAuthProvider,
   signOut as firebaseSignOut,
 } from 'firebase/auth';
+import { useAuthContext } from '@/contexts/auth-context';
 
 export const useAuth = () => {
+  const { getFirebaseAuth } = useAuthContext();
+  const auth = getFirebaseAuth();
+
   const signUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
