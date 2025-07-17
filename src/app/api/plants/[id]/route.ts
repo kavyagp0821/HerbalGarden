@@ -9,10 +9,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
         }
 
         const client = await clientPromise;
-        const db = client.db('herbal_garden');
+        const db = client.db('Virtualvana');
 
-        // Find one plant by its string ID, and exclude the internal _id field
-        const plant = await db.collection('plants').findOne({ id: params.id }, { projection: { _id: 0 } });
+        // Find one plant by its string ID in the Herbalplants collection
+        const plant = await db.collection('Herbalplants').findOne({ id: params.id }, { projection: { _id: 0 } });
 
         if (!plant) {
             return NextResponse.json({ message: 'Plant not found' }, { status: 404 });

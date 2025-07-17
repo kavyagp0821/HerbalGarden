@@ -6,10 +6,10 @@ import type { Plant } from '@/types';
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db('herbal_garden');
+    const db = client.db('Virtualvana');
     
-    // Find all plants, and exclude the internal _id field from the result
-    const plants = await db.collection('plants').find({}, { projection: { _id: 0 } }).toArray();
+    // Find all plants in the Herbalplants collection
+    const plants = await db.collection('Herbalplants').find({}).toArray();
     
     return NextResponse.json(plants);
   } catch (e) {
@@ -29,8 +29,8 @@ export async function POST(request: Request) {
         }
 
         const client = await clientPromise;
-        const db = client.db("herbal_garden");
-        const collection = db.collection("plants");
+        const db = client.db("Virtualvana");
+        const collection = db.collection("Herbalplants");
         
         // Check if a plant with this ID already exists to prevent duplicates
         const existingPlant = await collection.findOne({ id: plant.id });
