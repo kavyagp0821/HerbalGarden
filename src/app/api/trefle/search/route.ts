@@ -17,8 +17,8 @@ export async function GET(request: Request) {
         // Use the search endpoint if a query is provided
         trefleUrl = `https://trefle.io/api/v1/plants/search?token=${token}&q=${query}`;
     } else {
-        // Use the list endpoint if no query is provided, fetching the first page
-        trefleUrl = `https://trefle.io/api/v1/plants?token=${token}&page=1`;
+        // Use the list endpoint if no query is provided, and filter for medicinal plants
+        trefleUrl = `https://trefle.io/api/v1/plants?token=${token}&filter[medicinal]=true`;
     }
 
     try {
