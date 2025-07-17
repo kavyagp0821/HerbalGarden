@@ -8,8 +8,9 @@ export async function GET(request: Request) {
     const query = searchParams.get('q');
     const token = process.env.TREFLE_API_KEY;
 
-    if (!token) {
-        return NextResponse.json({ message: 'Trefle API key is not configured.' }, { status: 500 });
+    if (!token || token === "YOUR_TREFLE_API_KEY_HERE") {
+        console.error('Trefle API key is not configured in .env file.');
+        return NextResponse.json({ message: 'Trefle API key is not configured on the server. Please add it to your .env file.' }, { status: 500 });
     }
 
     let trefleUrl;
@@ -25,9 +26,9 @@ export async function GET(request: Request) {
         const trefleResponse = await fetch(trefleUrl);
 
         if (!trefleResponse.ok) {
-            const errorData = await trefleResponse.json();
+            const errorData = await trefleResponse.text();
             console.error('Trefle API responded with an error:', errorData);
-            return NextResponse.json({ message: `Error from Trefle API: ${errorData.error || 'Unknown error'}` }, { status: trefleResponse.status });
+            return NextResponse.json({ message: `Error from Trefle API: ${trefleResponse.statusText}` }, { status: trefleResponse.status });
         }
 
         const { data } = await trefleResponse.json();
