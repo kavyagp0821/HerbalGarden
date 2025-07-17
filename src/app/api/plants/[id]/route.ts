@@ -4,6 +4,10 @@ import clientPromise from '@/lib/mongodb';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
+        if (!process.env.MONGODB_URI) {
+            return NextResponse.json({ message: 'Database not configured. MONGODB_URI is missing from environment variables.' }, { status: 503 });
+        }
+
         const client = await clientPromise;
         const db = client.db('herbal_garden');
 
