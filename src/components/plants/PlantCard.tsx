@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Plant } from '@/types';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Box } from 'lucide-react';
 
 interface PlantCardProps {
   plant: Plant;
@@ -13,8 +13,8 @@ interface PlantCardProps {
 
 export default function PlantCard({ plant }: PlantCardProps) {
   return (
-    <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <CardHeader className="p-0">
+    <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group">
+      <CardHeader className="p-0 relative">
         <Link href={`/plants/${plant.id}`} aria-label={`View details for ${plant.commonName}`}>
             <div className="aspect-video relative w-full bg-muted">
                 <Image
@@ -22,11 +22,14 @@ export default function PlantCard({ plant }: PlantCardProps) {
                     alt={plant.commonName}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                     data-ai-hint={plant.imageHint || plant.commonName}
                 />
             </div>
         </Link>
+        <div className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full backdrop-blur-sm">
+            <Box className="w-5 h-5" title="3D Model Available"/>
+        </div>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-xl font-headline mb-1">

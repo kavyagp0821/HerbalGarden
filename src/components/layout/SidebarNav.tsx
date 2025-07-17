@@ -10,6 +10,7 @@ import {
   User,
   Sparkles,
   Globe,
+  Box,
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -21,7 +22,7 @@ import type { NavItem } from '@/types';
 const navItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
-  { href: '/tours', label: 'Virtual Tours', icon: Globe },
+  { href: '/models', label: '3D Models', icon: Box },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
