@@ -10,6 +10,7 @@ import {
   User,
   Sparkles,
   Globe,
+  Search,
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -24,6 +25,7 @@ const navItems: NavItem[] = [
   { href: '/tours', label: 'Virtual Tours', icon: Globe },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
+  { href: '/trefle-search', label: 'Trefle Search', icon: Search },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
   { href: '/profile', label: 'My Progress', icon: User },
 ];

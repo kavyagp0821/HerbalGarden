@@ -1,5 +1,54 @@
+// src/components/trefle/TreflePlantCard.tsx
+import Image from 'next/image';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import type { TreflePlant } from '@/types';
+import { Calendar, Sprout } from 'lucide-react';
 
-// This component is not in use.
-export default function TreflePlantCard() {
-  return null;
+interface TreflePlantCardProps {
+  plant: TreflePlant;
+}
+
+export default function TreflePlantCard({ plant }: TreflePlantCardProps) {
+  const placeholderImage = 'https://placehold.co/600x400.png';
+
+  return (
+    <Card className="flex flex-col h-full overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+      <CardHeader className="p-0">
+        <div className="aspect-video relative w-full bg-muted">
+          <Image
+            src={plant.image_url || placeholderImage}
+            alt={plant.common_name || plant.scientific_name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            data-ai-hint={plant.common_name || plant.scientific_name}
+            unoptimized={!!plant.image_url} // Trefle images may not need Next.js optimization
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="p-4 flex-grow">
+        <CardTitle className="text-lg font-headline mb-1">
+          {plant.common_name || 'Unknown Common Name'}
+        </CardTitle>
+        <CardDescription className="italic text-sm text-muted-foreground mb-3">
+          {plant.scientific_name}
+        </CardDescription>
+        <div className="flex flex-wrap gap-2">
+            <Badge variant="secondary" className="text-xs">Family: {plant.family || 'N/A'}</Badge>
+            <Badge variant="secondary" className="text-xs">Genus: {plant.genus || 'N/A'}</Badge>
+        </div>
+      </CardContent>
+      <CardFooter className="p-4 pt-0 text-xs text-muted-foreground flex justify-between">
+         <div className="flex items-center gap-1">
+            <Sprout className="w-3 h-3"/>
+            <span>{plant.rank}</span>
+        </div>
+        <div className="flex items-center gap-1">
+            <Calendar className="w-3 h-3"/>
+            <span>{plant.year}</span>
+        </div>
+      </CardFooter>
+    </Card>
+  );
 }

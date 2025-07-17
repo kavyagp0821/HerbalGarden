@@ -1,7 +1,48 @@
-
+// src/app/api/trefle/search/route.ts
 import { NextResponse } from 'next/server';
+import type { TreflePlant } from '@/types';
 
-// This API route is not in use.
 export async function GET(request: Request) {
-    return NextResponse.json({ message: 'This feature is not enabled.' }, { status: 404 });
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('q');
+    const token = process.env.TREFLE_API_KEY;
+
+    if (!token) {
+        return NextResponse.json({ message: 'Trefle API key is not configured.' }, { status: 500 });
+    }
+
+    if (!query) {
+        return NextResponse.json({ message: 'Search query parameter (q) is required.' }, { status: 400 });
+    }
+
+    try {
+        const trefleUrl = `https://trefle.io/api/v1/plants/search?token=${token}&q=${query}`;
+        const trefleResponse = await fetch(trefleUrl);
+
+        if (!trefleResponse.ok) {
+            const errorData = await trefleResponse.json();
+            console.error('Trefle API responded with an error:', errorData);
+            return NextResponse.json({ message: `Error from Trefle API: ${errorData.error || 'Unknown error'}` }, { status: trefleResponse.status });
+        }
+
+        const { data } = await trefleResponse.json();
+
+        const formattedData: TreflePlant[] = data.map((plant: any) => ({
+            id: plant.id,
+            common_name: plant.common_name,
+            scientific_name: plant.scientific_name,
+            year: plant.year,
+            image_url: plant.image_url,
+            family: plant.family,
+            genus: plant.genus,
+            rank: plant.rank,
+        }));
+        
+        return NextResponse.json(formattedData);
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Internal server error while fetching from Trefle:', errorMessage);
+        return NextResponse.json({ message: 'Internal Server Error', error: errorMessage }, { status: 500 });
+    }
 }

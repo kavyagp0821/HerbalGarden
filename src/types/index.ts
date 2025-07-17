@@ -65,3 +65,14 @@ export interface ChatMessage {
   role: 'user' | 'model';
   content: string;
 }
+
+export interface TreflePlant {
+    id: number;
+    common_name: string | null;
+    scientific_name: string;
+    year: number;
+    image_url: string | null;
+    family: string;
+    genus: string;
+    rank: string;
+}

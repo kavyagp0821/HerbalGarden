@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'bs.floristic.org',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 };
