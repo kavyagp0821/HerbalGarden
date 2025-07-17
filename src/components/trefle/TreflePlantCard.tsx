@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { TreflePlant } from '@/types';
-import { Calendar, Sprout } from 'lucide-react';
+import { Calendar, Sprout, Globe } from 'lucide-react';
 
 interface TreflePlantCardProps {
   plant: TreflePlant;
@@ -40,14 +40,26 @@ export default function TreflePlantCard({ plant }: TreflePlantCardProps) {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 text-xs text-muted-foreground flex justify-between">
-         <div className="flex items-center gap-1">
+         <div className="flex items-center gap-1" title="Rank">
             <Sprout className="w-3 h-3"/>
             <span>{plant.rank}</span>
         </div>
-        <div className="flex items-center gap-1">
-            <Calendar className="w-3 h-3"/>
-            <span>{plant.year}</span>
-        </div>
+        {plant.year && (
+             <div className="flex items-center gap-1" title="Year Discovered">
+                <Calendar className="w-3 h-3"/>
+                <span>{plant.year}</span>
+            </div>
+        )}
+         <a 
+            href={`https://www.google.com/search?q=${encodeURIComponent(plant.scientific_name)}`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center gap-1 hover:text-primary"
+            title="Search on Google"
+        >
+            <Globe className="w-3 h-3"/>
+            <span>Details</span>
+        </a>
       </CardFooter>
     </Card>
   );
