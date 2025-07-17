@@ -79,7 +79,7 @@ export default function LoginPage() {
         <CardHeader className="text-center">
            <Leaf className="mx-auto h-10 w-10 text-primary" />
           <CardTitle className="text-2xl font-headline">Welcome Back</CardTitle>
-          <CardDescription>Sign in to access your AYUSH Virtual Garden</CardDescription>
+          <CardDescription>Sign in to access Virtual Vana</CardDescription>
         </CardHeader>
         <CardContent>
             {error && (

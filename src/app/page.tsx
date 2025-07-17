@@ -45,7 +45,7 @@ export default function HomePage() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-white mb-4">
-              Welcome to the AYUSH Virtual Garden
+              Welcome to Virtual Vana: The Herbal Garden
             </h1>
             <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-3xl">
               Discover the ancient wisdom of AYUSH medicinal plants through an immersive and interactive experience.

@@ -79,7 +79,7 @@ export default function SignupPage() {
         <CardHeader className="text-center">
            <Leaf className="mx-auto h-10 w-10 text-primary" />
           <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
-          <CardDescription>Join the AYUSH Virtual Garden community</CardDescription>
+          <CardDescription>Join the Virtual Vana community</CardDescription>
         </CardHeader>
         <CardContent>
             {error && (

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: TourCategoryPageProps) {
     return { title: 'Tour Not Found' };
   }
   return {
-    title: `${category.name} Tour | AYUSH Virtual Garden`,
+    title: `${category.name} Tour | Virtual Vana`,
     description: `Explore plants related to ${category.name.toLowerCase()} in this guided virtual tour.`,
   };
 }

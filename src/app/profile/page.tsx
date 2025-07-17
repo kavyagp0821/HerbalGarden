@@ -58,7 +58,7 @@ export default function ProfilePage() {
                 <header>
                     <h1 className="text-3xl font-headline font-semibold text-primary">Your Progress & Badges</h1>
                     <p className="text-lg text-muted-foreground mt-2">
-                        Track your learning journey through the AYUSH Virtual Garden.
+                        Track your learning journey through Virtual Vana.
                     </p>
                 </header>
 

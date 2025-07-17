@@ -42,7 +42,7 @@ function InfoCard({ icon, title, content, children }: InfoCardProps) {
 export default function PlantPageClient({ plant }: PlantPageClientProps) {
   
   useEffect(() => {
-    document.title = `${plant.commonName} | AYUSH Virtual Garden`;
+    document.title = `${plant.commonName} | Virtual Vana`;
     
     // Update user progress in localStorage
     try {

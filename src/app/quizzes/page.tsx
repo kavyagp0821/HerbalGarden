@@ -3,7 +3,7 @@ import QuizClient from '@/components/quizzes/QuizClient';
 import { plantService } from '@/services/plant.service';
 
 export const metadata = {
-  title: 'Quizzes | AYUSH Virtual Garden',
+  title: 'Quizzes | Virtual Vana',
   description: 'Test your knowledge about medicinal plants with interactive quizzes.',
 };
 

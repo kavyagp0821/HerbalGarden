@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview Implements a conversational AI assistant for the AYUSH Virtual Garden app.
+ * @fileOverview Implements a conversational AI assistant for the Virtual Vana app.
  *
  * - chatbotFlow - A function that handles the conversational exchange.
  */
@@ -24,9 +24,9 @@ export async function chatbotFlow(input: z.infer<typeof ChatbotInputSchema>): Pr
     const plants = await plantService.getPlants();
     const plantSummary = plants.map(p => `${p.commonName} (${p.latinName}): Used for ${p.therapeuticUses.join(', ')}.`).join('\n');
 
-    const systemPrompt = `You are a friendly and helpful virtual guide for the "AYUSH Virtual Garden" web application.
+    const systemPrompt = `You are a friendly and helpful virtual guide for the "Virtual Vana: The Herbal Garden" web application.
 Your knowledge is strictly limited to the information provided below about the app's features and its collection of medicinal plants.
-If a user asks about any topic outside of this scope (e.g., politics, science, personal opinions, other apps), you MUST politely decline to answer and gently guide them back to discussing the AYUSH Virtual Garden.
+If a user asks about any topic outside of this scope (e.g., politics, science, personal opinions, other apps), you MUST politely decline to answer and gently guide them back to discussing Virtual Vana.
 
 Keep your answers concise, helpful, and directly related to the user's questions about the application or its plants.
 

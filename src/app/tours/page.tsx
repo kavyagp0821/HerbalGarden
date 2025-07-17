@@ -4,7 +4,7 @@ import { tourCategories as staticTours } from '@/lib/plant-data'; // For icons
 import { plantService } from '@/services/plant.service';
 
 export const metadata = {
-  title: 'Virtual Tours | AYUSH Virtual Garden',
+  title: 'Virtual Tours | Virtual Vana',
   description: 'Explore guided virtual tours of medicinal plants based on health categories.',
 };
 

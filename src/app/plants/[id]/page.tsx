@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PlantPageProps): Promise<Meta
     }
   }
   return {
-    title: `${plant.commonName} | AYUSH Virtual Garden`,
+    title: `${plant.commonName} | Virtual Vana`,
     description: plant.description,
   }
 }

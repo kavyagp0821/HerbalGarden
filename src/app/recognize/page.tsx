@@ -2,7 +2,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import PlantRecognitionForm from '@/components/plants/PlantRecognitionForm';
 
 export const metadata = {
-  title: 'Plant Recognition | AYUSH Virtual Garden',
+  title: 'Plant Recognition | Virtual Vana',
   description: 'Identify medicinal plants by uploading an image. Powered by AI.',
 };
 

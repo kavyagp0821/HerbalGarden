@@ -4,7 +4,7 @@ import { plantService } from '@/services/plant.service';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const metadata = {
-  title: 'Explore Medicinal Plants | AYUSH Virtual Garden',
+  title: 'Explore Medicinal Plants | Virtual Vana',
   description: 'Search, filter, and explore a wide variety of medicinal plants used in AYUSH systems.',
 };
 

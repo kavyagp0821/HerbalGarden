@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/contexts/auth-context';
 
 export const metadata: Metadata = {
-  title: 'AYUSH Virtual Garden',
+  title: 'Virtual Vana: The Herbal Garden',
   description: 'Explore medicinal plants with 3D visualizations, recognition, and interactive learning tools.',
 };
 

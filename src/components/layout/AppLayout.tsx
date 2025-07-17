@@ -47,7 +47,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <SidebarHeader className="p-4">
             <Link href="/" className="flex items-center gap-2 text-lg font-headline text-sidebar-primary hover:text-sidebar-primary-foreground transition-colors">
               <Leaf className="w-7 h-7" />
-              <span className="group-data-[collapsible=icon]:hidden">AYUSH Garden</span>
+              <span className="group-data-[collapsible=icon]:hidden">Virtual Vana</span>
             </Link>
           </SidebarHeader>
           <SidebarContent>
@@ -63,7 +63,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <span>Sign Out</span>
               </SidebarMenuButton>
             <div className="text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
-              &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} AYUSH Virtual Garden
+              &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} Virtual Vana
             </div>
           </SidebarFooter>
         </Sidebar>

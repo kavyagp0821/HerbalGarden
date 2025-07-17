@@ -73,7 +73,7 @@ export default function Chatbot() {
         <SheetHeader>
           <SheetTitle className="flex items-center">
             <Sparkles className="mr-2 h-5 w-5 text-primary"/>
-            AYUSH Garden Assistant
+            Vana Assistant
           </SheetTitle>
         </SheetHeader>
         <ScrollArea className="flex-grow my-4 pr-4" ref={scrollAreaRef}>
@@ -81,7 +81,7 @@ export default function Chatbot() {
              <div className="flex items-start gap-3">
                 <div className="p-2 rounded-full bg-primary/10 text-primary"><Bot /></div>
                 <div className="bg-muted p-3 rounded-lg max-w-xs">
-                    <p className="text-sm">Hello! I'm your friendly guide to the AYUSH Virtual Garden. How can I help you today?</p>
+                    <p className="text-sm">Hello! I'm your friendly guide to Virtual Vana. How can I help you today?</p>
                 </div>
             </div>
 
