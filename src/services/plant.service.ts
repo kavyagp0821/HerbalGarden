@@ -7,7 +7,7 @@ import { tourCategories, quizQuestions } from '@/lib/plant-data';
 // The `typeof window` check determines if the code is running in the browser or on the server.
 const BASE_URL = typeof window !== 'undefined' 
     ? '/api' 
-    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api` : 'http://localhost:9002/api');
+    : (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api` : 'http://localhost:9002/api');
 
 
 export const plantService = {

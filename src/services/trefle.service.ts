@@ -4,7 +4,7 @@ import type { TreflePlant } from '@/types';
 // Use an absolute URL for server-side fetching, and a relative one for client-side.
 const BASE_URL = typeof window !== 'undefined' 
     ? '' 
-    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:9002');
+    : (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:9002');
 
 
 async function searchTrefle(query: string): Promise<TreflePlant[]> {
