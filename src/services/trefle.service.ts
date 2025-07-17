@@ -1,10 +1,16 @@
 // src/services/trefle.service.ts
 import type { TreflePlant } from '@/types';
 
+// Use an absolute URL for server-side fetching, and a relative one for client-side.
+const BASE_URL = typeof window !== 'undefined' 
+    ? '' 
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:9002');
+
+
 async function searchTrefle(query: string): Promise<TreflePlant[]> {
   if (!query) return [];
   try {
-    const response = await fetch(`/api/trefle/search?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`${BASE_URL}/api/trefle/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Trefle API error:', errorData.message);
@@ -21,7 +27,7 @@ async function searchTrefle(query: string): Promise<TreflePlant[]> {
 async function listPlants(): Promise<TreflePlant[]> {
     try {
         // We call the same API route, but without the `q` parameter
-        const response = await fetch(`/api/trefle/search`);
+        const response = await fetch(`${BASE_URL}/api/trefle/search`);
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Trefle API error:', errorData.message);
