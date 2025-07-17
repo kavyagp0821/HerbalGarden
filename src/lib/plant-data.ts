@@ -3,7 +3,7 @@
 // When moving to a database, this data would be migrated.
 
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
-import { Leaf, ShieldHalf, Activity, Brain, Users, Sparkles, Filter, Wind, Sun, HeartPulse, Soup } from 'lucide-react';
+import { Leaf, ShieldHalf, Activity, Brain, Users, Sparkles, Filter, Wind, Sun, HeartPulse, Soup, Waves } from 'lucide-react';
 
 // We keep this static data here because Lucide icons (functions) cannot be stored in Firestore.
 // The tour data will be fetched from Firestore, and then the icon will be mapped from this list.
@@ -21,7 +21,7 @@ export const tourCategories: TourCategory[] = [
     id: 'stress-relief',
     name: 'Stress Relief',
     description: 'Discover herbs that help calm the mind and reduce stress.',
-    icon: Activity,
+    icon: Waves,
     plantIds: ['tulsi', 'ashwagandha', 'brahmi', 'vetiver', 'sandalwood', 'lemongrass', 'lavender', 'chamomile'],
     imageSrc: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=400&auto=format&fit=crop',
     imageHint: 'calm meditation'

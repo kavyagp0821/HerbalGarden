@@ -4,7 +4,7 @@
 import AppLayout from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, User, ScanSearch, Sparkles } from 'lucide-react';
+import { Leaf, User, ScanSearch, Sparkles, Route } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -61,13 +61,20 @@ export default function HomePage() {
 
         <section>
           <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Discover Our Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FeatureCard
               icon={<Leaf className="w-10 h-10 text-primary" />}
               title="Explore Plants"
               description="Explore detailed information and 3D models of medicinal plants. Learn about their unique structures."
               link="/plants"
               linkText="View Collection"
+            />
+            <FeatureCard
+              icon={<Route className="w-10 h-10 text-primary" />}
+              title="Virtual Tours"
+              description="Take guided tours through curated collections of plants based on themes like immunity and stress relief."
+              link="/tours"
+              linkText="Start a Tour"
             />
              <FeatureCard
               icon={<Sparkles className="w-10 h-10 text-primary" />}

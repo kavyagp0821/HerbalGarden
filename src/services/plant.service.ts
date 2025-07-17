@@ -2,6 +2,7 @@
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
 // Keep quiz and tour data local, as the focus of the change is on plants.
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
+import { lucideIconMapping } from '@/lib/icon-mapping';
 
 // Use an absolute URL for server-side fetching, and a relative one for client-side.
 // The `typeof window` check determines if the code is running in the browser or on the server.
@@ -47,13 +48,36 @@ export const plantService = {
   },
   
   async getTourCategories(): Promise<TourCategory[]> {
-    // This data remains static for now.
-    return Promise.resolve(tourCategories);
+    try {
+      const res = await fetch(`${BASE_URL}/tours`, { next: { revalidate: 3600 }});
+      if (!res.ok) throw new Error("Failed to fetch tour categories");
+      const tours = await res.json();
+      
+      // Map the icon string from the response to the actual Lucide icon component
+      return tours.map((tour: any) => ({
+        ...tour,
+        icon: lucideIconMapping[tour.icon as keyof typeof lucideIconMapping]
+      }));
+
+    } catch (error) {
+      console.error("Error fetching tour categories", error);
+      return [];
+    }
   },
 
   async getTourCategory(id: string): Promise<TourCategory | null> {
-      const category = tourCategories.find(c => c.id === id) || null;
-      return Promise.resolve(category);
+      try {
+        const res = await fetch(`${BASE_URL}/tours/${id}`, { next: { revalidate: 3600 }});
+        if (!res.ok) return null;
+        const tour = await res.json();
+        return {
+          ...tour,
+          icon: lucideIconMapping[tour.icon as keyof typeof lucideIconMapping]
+        }
+      } catch (error) {
+        console.error(`Error fetching tour category with id: ${id}`, error);
+        return null;
+      }
   },
 
   async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
