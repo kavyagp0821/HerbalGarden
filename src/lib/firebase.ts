@@ -1,6 +1,15 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth';
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  sendPasswordResetEmail, 
+  signOut, 
+  onAuthStateChanged 
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -14,30 +23,26 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app: FirebaseApp;
+let auth: ReturnType<typeof getAuth>;
+let db: ReturnType<typeof getFirestore>;
+let googleProvider: GoogleAuthProvider;
 
-// Check if all required environment variables are present
-const areFirebaseCredsAvailable =
-  firebaseConfig.apiKey &&
-  firebaseConfig.authDomain &&
-  firebaseConfig.projectId;
+const areFirebaseCredsAvailable = firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId;
 
 if (areFirebaseCredsAvailable) {
-    if (getApps().length === 0) {
-      app = initializeApp(firebaseConfig);
-    } else {
-      app = getApp();
-    }
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  auth = getAuth(app);
+  db = getFirestore(app);
+  googleProvider = new GoogleAuthProvider();
 } else {
-    if (typeof window !== 'undefined') {
-        console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
-    }
+  if (typeof window !== 'undefined') {
+    console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
+  }
+  // Provide mock objects for server-side rendering or when creds are missing
+  auth = {} as any;
+  db = {} as any;
+  googleProvider = {} as any;
 }
-
-
-// Conditionally initialize Firebase services
-const auth = areFirebaseCredsAvailable ? getAuth(app!) : ({} as any);
-const db = areFirebaseCredsAvailable ? getFirestore(app!) : ({} as any);
-const googleProvider = areFirebaseCredsAvailable ? new GoogleAuthProvider() : ({} as any);
 
 // Email/Password Sign-up
 const firebaseSignUp = (email: string, password: string) => {

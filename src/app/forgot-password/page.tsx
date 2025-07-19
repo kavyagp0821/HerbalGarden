@@ -31,9 +31,12 @@ export default function ForgotPasswordPage() {
     } catch (err: any) {
       if (err.code === 'auth/invalid-email') {
         setError('Please enter a valid email address.');
+      } else if (err.message === "Firebase not configured.") {
+          setError('The application is not properly configured to handle password resets. Please contact the administrator.');
+          console.error("Password reset error:", err.message || err);
       } else {
         // For security, don't reveal if an email is not registered.
-        // Show a generic success message for most errors, including configuration issues.
+        // Show a generic success message for most errors.
         setSuccess('If an account with this email exists, a password reset link has been sent.');
         console.error("Password reset error:", err.message || err);
       }
