@@ -10,7 +10,6 @@ import {
   User,
   Sparkles,
   Route,
-  PlusCircle
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -26,7 +25,6 @@ const navItems: NavItem[] = [
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
-  { href: '/add', label: 'Add Plants', icon: PlusCircle },
   { href: '/profile', label: 'My Progress', icon: User },
 ];
 

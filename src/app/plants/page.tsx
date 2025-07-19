@@ -1,3 +1,4 @@
+
 // src/app/plants/page.tsx
 import AppLayout from '@/components/layout/AppLayout';
 import PlantCard from '@/components/plants/PlantCard';
@@ -39,11 +40,8 @@ export default async function PlantsPage() {
           </div>
         ) : (
           <div className="text-center py-16 bg-card rounded-lg shadow-sm">
-            <p className="text-xl font-semibold text-foreground">Your Garden is Empty</p>
-            <p className="text-muted-foreground mt-2 max-w-md mx-auto">It looks like no plants have been added to the database yet. Start by adding some plants to your collection!</p>
-            <Link href="/add" className="mt-4 inline-block">
-                <Button>Add a Plant</Button>
-            </Link>
+            <p className="text-xl font-semibold text-foreground">The Garden is Being Prepared</p>
+            <p className="text-muted-foreground mt-2 max-w-md mx-auto">It looks like the plant collection is currently empty. Please check back later as we cultivate our virtual garden.</p>
           </div>
         )}
       </div>
