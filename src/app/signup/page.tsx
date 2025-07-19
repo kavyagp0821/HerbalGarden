@@ -32,7 +32,9 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleAuthError = (err: any) => {
-    if (err.code === 'auth/email-already-in-use') {
+    if (err.message === "Firebase not configured.") {
+        setError('The application is not properly configured to handle sign-ups. Please contact the administrator.');
+    } else if (err.code === 'auth/email-already-in-use') {
         setError('This email is already registered. Please try logging in.');
     } else if (err.code === 'auth/weak-password') {
         setError('Password should be at least 6 characters.');
@@ -40,7 +42,7 @@ export default function SignupPage() {
         setError('This sign-up method is not enabled. Please contact the administrator or use another sign-up method.');
     } else {
         setError('An unexpected error occurred. Please try again.');
-        console.error(err);
+        console.error("Signup Error:", err);
     }
   };
 
