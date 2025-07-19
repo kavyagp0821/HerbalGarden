@@ -36,14 +36,11 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  experimental: {
-    esmExternals: false, 
-    serverComponentsExternalPackages: [
+  serverExternalPackages: [
       'three',
       '@react-three/fiber',
       '@react-three/drei'
-    ],
-  },
+  ],
    webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
