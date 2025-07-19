@@ -74,9 +74,9 @@ const firebaseSignOut = () => {
 export { 
     auth, 
     db, 
-    signUp as firebaseSignUp, 
-    signIn as firebaseSignIn, 
-    signInWithGoogle as firebaseSignInWithGoogle, 
-    sendPasswordReset as firebaseSendPasswordReset,
-    signOut as firebaseSignOut
+    firebaseSignUp, 
+    firebaseSignIn, 
+    firebaseSignInWithGoogle, 
+    firebaseSendPasswordReset,
+    firebaseSignOut
 };
