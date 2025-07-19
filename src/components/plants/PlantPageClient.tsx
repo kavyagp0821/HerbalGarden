@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic';
 
 const ThreeDViewer = dynamic(() => import('./ThreeDViewer'), {
   ssr: false,
-  loading: () => <Skeleton className="w-full h-full flex items-center justify-center"><Orbit className="w-16 h-16 text-primary animate-spin" /></Skeleton>,
+  loading: () => <Skeleton className="w-full h-full min-h-[400px] flex items-center justify-center"><Orbit className="w-16 h-16 text-primary animate-spin" /></Skeleton>,
 });
 
 
