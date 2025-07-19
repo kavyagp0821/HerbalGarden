@@ -1,6 +1,5 @@
 'use client';
 
-// src/components/plants/ThreeDViewer.tsx
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
@@ -16,7 +15,7 @@ function Model({ modelPath }: ModelProps) {
   return <primitive object={scene} />;
 }
 
-// Preload the model
+// Preload the models
 useGLTF.preload('/models/tulsi.glb');
 useGLTF.preload('/models/ashwagandha.glb');
 useGLTF.preload('/models/turmeric.glb');
