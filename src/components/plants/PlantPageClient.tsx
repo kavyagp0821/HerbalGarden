@@ -8,9 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Leaf, MapPin, Milestone, Orbit } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import ThreeDViewer from './ThreeDViewer';
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
+import dynamic from 'next/dynamic';
+
+const ThreeDViewer = dynamic(() => import('./ThreeDViewer'), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-full flex items-center justify-center"><Orbit className="w-16 h-16 text-primary animate-spin" /></Skeleton>,
+});
+
 
 interface PlantPageClientProps {
   plant: Plant;
