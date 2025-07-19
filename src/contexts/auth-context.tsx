@@ -28,12 +28,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    // Only subscribe if auth is a valid object with functions
+    if (auth && typeof auth.onAuthStateChanged === 'function') {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } else {
+      // If firebase is not configured, stop loading and treat as logged out.
       setLoading(false);
-    });
-
-    return () => unsubscribe();
+      setUser(null);
+    }
   }, []);
 
   const signIn = (email: string, pass: string) => {
@@ -49,7 +55,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signOut = async () => {
-    await firebaseSignOut(auth);
+    // Check if signOut is available before calling
+    if (auth && typeof auth.signOut === 'function') {
+        await firebaseSignOut(auth);
+    }
     router.push('/login');
   };
 
