@@ -6,6 +6,7 @@ import type { Plant } from '@/types';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 interface PlantPageProps {
   params: { id: string };
@@ -55,6 +56,10 @@ export default async function PlantPage({ params }: PlantPageProps) {
 
   return (
     <AppLayout>
+        <Link href="/plants" className="inline-flex items-center text-sm text-primary hover:underline mb-4">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Explore
+        </Link>
       <PlantPageClient plant={plant} />
     </AppLayout>
   );
