@@ -5,8 +5,7 @@ import PlantCard from '@/components/plants/PlantCard';
 import { plantService } from '@/services/plant.service';
 import type { Plant } from '@/types';
 import { Leaf } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import SeedButton from '@/components/plants/SeedButton';
 
 export const metadata = {
   title: 'Explore Plants | Virtual Vana',
@@ -42,6 +41,9 @@ export default async function PlantsPage() {
           <div className="text-center py-16 bg-card rounded-lg shadow-sm">
             <p className="text-xl font-semibold text-foreground">The Garden is Being Prepared</p>
             <p className="text-muted-foreground mt-2 max-w-md mx-auto">It looks like the plant collection is currently empty. Please check back later as we cultivate our virtual garden.</p>
+            <div className="mt-6">
+              <SeedButton />
+            </div>
           </div>
         )}
       </div>
