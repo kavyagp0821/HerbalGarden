@@ -5,11 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail, SidebarMenuButton } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
-import { Leaf, LogOut } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Chatbot from '../chatbot/Chatbot';
-import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -17,27 +15,10 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const [currentYear, setCurrentYear] = useState<string | null>(null);
-  const { user, loading, signOut: handleSignOut } = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear().toString());
   }, []);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-
-  if (loading || !user) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <p>Loading application...</p>
-      </div>
-    );
-  }
 
   return (
     <SidebarProvider defaultOpen>
@@ -53,14 +34,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <SidebarNav />
           </SidebarContent>
           <SidebarFooter className="p-4 flex flex-col gap-2">
-            <SidebarMenuButton
-                onClick={handleSignOut}
-                tooltip="Sign Out"
-                className="justify-center"
-              >
-                <LogOut />
-                <span>Sign Out</span>
-              </SidebarMenuButton>
             <div className="text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
               &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} Virtual Vana
             </div>
