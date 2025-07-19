@@ -1,24 +1,18 @@
 // src/app/api/plants/[id]/route.ts
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
-        if (!process.env.MONGODB_URI) {
-            return NextResponse.json({ message: 'Database not configured. MONGODB_URI is missing from environment variables.' }, { status: 503 });
-        }
+        const plantRef = doc(db, 'plants', params.id);
+        const plantSnap = await getDoc(plantRef);
 
-        const client = await clientPromise;
-        const db = client.db('Virtualvana');
-
-        // Find one plant by its string ID in the Herbalplants collection
-        const plant = await db.collection('Herbalplants').findOne({ id: params.id }, { projection: { _id: 0 } });
-
-        if (!plant) {
+        if (!plantSnap.exists()) {
             return NextResponse.json({ message: 'Plant not found' }, { status: 404 });
         }
         
-        return NextResponse.json(plant);
+        return NextResponse.json({ id: plantSnap.id, ...plantSnap.data() });
 
     } catch (e) {
         const errorDetails = e instanceof Error ? e.message : String(e);

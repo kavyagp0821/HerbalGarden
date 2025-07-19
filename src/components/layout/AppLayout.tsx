@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { Leaf, LogOut } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Chatbot from '../chatbot/Chatbot';
-import { Button } from '../ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 

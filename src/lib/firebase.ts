@@ -1,14 +1,15 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
-  authDomain: "virtual-herbalgarden-by437.firebaseapp.com",
-  projectId: "virtual-herbalgarden-by437",
-  storageBucket: "virtual-herbalgarden-by437.appspot.com",
-  messagingSenderId: "429243165583",
-  appId: "1:429243165583:web:14dcf414b0dfef492079fa"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
@@ -20,6 +21,7 @@ if (getApps().length === 0) {
 }
 
 const auth = getAuth(app);
+const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 // Email/Password Sign-up
@@ -37,4 +39,4 @@ const signInWithGoogle = () => {
   return signInWithPopup(auth, googleProvider);
 };
 
-export { auth, signUp, signIn, signInWithGoogle };
+export { auth, db, signUp, signIn, signInWithGoogle };

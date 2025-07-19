@@ -22,6 +22,15 @@ export async function generateMetadata({ params }: PlantPageProps) {
   };
 }
 
+// This function can be used to pre-render pages at build time
+// for better performance, but it's optional.
+// export async function generateStaticParams() {
+//   const plants = await plantService.getPlants();
+//   return plants.map((plant) => ({
+//     id: plant.id,
+//   }));
+// }
+
 // This page will be server-rendered for each plant
 export default async function PlantPage({ params }: PlantPageProps) {
   const plant = await plantService.getPlant(params.id);

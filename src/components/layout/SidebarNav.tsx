@@ -9,8 +9,6 @@ import {
   ClipboardCheck,
   User,
   Sparkles,
-  Globe,
-  Box,
   Route,
 } from 'lucide-react';
 import {
@@ -23,7 +21,6 @@ import type { NavItem } from '@/types';
 const navItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
-  { href: '/models', label: '3D Models', icon: Box },
   { href: '/tours', label: 'Virtual Tours', icon: Route },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
