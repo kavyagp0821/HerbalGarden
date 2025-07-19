@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -30,8 +30,6 @@ if (areFirebaseCredsAvailable) {
 } else {
     if (typeof window !== 'undefined') {
         console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
-    } else {
-        // Don't log on the server during build, it's expected there.
     }
 }
 
@@ -78,5 +76,6 @@ export {
     firebaseSignIn, 
     firebaseSignInWithGoogle, 
     firebaseSendPasswordReset,
-    firebaseSignOut
+    firebaseSignOut,
+    onAuthStateChanged
 };

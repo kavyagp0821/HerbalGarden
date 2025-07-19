@@ -3,9 +3,9 @@
 
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import type { User } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
 import { 
   auth, 
+  onAuthStateChanged,
   firebaseSignIn, 
   firebaseSignUp, 
   firebaseSignInWithGoogle, 
