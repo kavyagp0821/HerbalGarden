@@ -2,13 +2,14 @@
 
 import dynamic from 'next/dynamic';
 import { Skeleton } from '../ui/skeleton';
+import { Orbit } from 'lucide-react';
 
 // Import using absolute path to avoid any relative import issues
 const IsolatedThreeScene = dynamic(
   () => import('@/components/three/IsolatedThreeScene'),
   { 
     ssr: false,
-    loading: () => <Skeleton className="w-full h-full" />
+    loading: () => <Skeleton className="w-full h-full flex items-center justify-center"><Orbit className="w-16 h-16 text-primary animate-spin" /></Skeleton>
   }
 );
 
