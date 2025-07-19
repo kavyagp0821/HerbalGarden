@@ -1,6 +1,6 @@
-// src/components/plants/ThreeDViewer.tsx
 'use client';
 
+// src/components/plants/ThreeDViewer.tsx
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
