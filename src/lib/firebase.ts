@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -28,7 +28,11 @@ if (areFirebaseCredsAvailable) {
       app = getApp();
     }
 } else {
-    console.warn("Firebase credentials are not available. Firebase services will be disabled.");
+    if (typeof window !== 'undefined') {
+        console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
+    } else {
+        // Don't log on the server during build, it's expected there.
+    }
 }
 
 
@@ -38,27 +42,41 @@ const db = areFirebaseCredsAvailable ? getFirestore(app!) : ({} as any);
 const googleProvider = areFirebaseCredsAvailable ? new GoogleAuthProvider() : ({} as any);
 
 // Email/Password Sign-up
-const signUp = (email: string, password: string) => {
+const firebaseSignUp = (email: string, password: string) => {
   if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
 // Email/Password Sign-in
-const signIn = (email: string, password: string) => {
+const firebaseSignIn = (email: string, password: string) => {
   if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return signInWithEmailAndPassword(auth, email, password);
 };
 
 // Google Sign-in
-const signInWithGoogle = () => {
+const firebaseSignInWithGoogle = () => {
   if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return signInWithPopup(auth, googleProvider);
 };
 
 // Password Reset
-const sendPasswordReset = (email: string) => {
+const firebaseSendPasswordReset = (email: string) => {
     if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
     return sendPasswordResetEmail(auth, email);
 }
 
-export { auth, db, signUp, signIn, signInWithGoogle, sendPasswordReset };
+// Sign out
+const firebaseSignOut = () => {
+    if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
+    return signOut(auth);
+}
+
+export { 
+    auth, 
+    db, 
+    signUp as firebaseSignUp, 
+    signIn as firebaseSignIn, 
+    signInWithGoogle as firebaseSignInWithGoogle, 
+    sendPasswordReset as firebaseSendPasswordReset,
+    signOut as firebaseSignOut
+};

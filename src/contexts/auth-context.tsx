@@ -3,8 +3,15 @@
 
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import type { User } from 'firebase/auth';
-import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth, signIn as firebaseSignIn, signUp as firebaseSignUp, signInWithGoogle as firebaseSignInWithGoogle, sendPasswordReset as firebaseSendPasswordReset } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { 
+  auth, 
+  firebaseSignIn, 
+  firebaseSignUp, 
+  firebaseSignInWithGoogle, 
+  firebaseSendPasswordReset,
+  firebaseSignOut
+} from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
@@ -56,10 +63,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signOut = async () => {
-    // Check if signOut is available before calling
-    if (auth && typeof auth.signOut === 'function') {
-        await firebaseSignOut(auth);
-    }
+    await firebaseSignOut();
     router.push('/login');
   };
 
