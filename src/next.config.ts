@@ -2,6 +2,7 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  transpilePackages: ['three', '@react-three/drei', '@react-three/fiber'],
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -35,10 +36,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
-  },
-  webpack: (config) => {
-    config.resolve.alias.canvas = false;
-    return config;
   },
 };
 
