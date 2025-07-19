@@ -32,9 +32,9 @@ export default function ForgotPasswordPage() {
         setError('Please enter a valid email address.');
       } else {
         // For security, don't reveal if an email is not registered.
-        // Show a generic success message instead.
+        // Show a generic success message for most errors, including configuration issues.
         setSuccess('If an account with this email exists, a password reset link has been sent.');
-        console.error("Password reset error:", err);
+        console.error("Password reset error:", err.message || err);
       }
     } finally {
       setIsLoading(false);
