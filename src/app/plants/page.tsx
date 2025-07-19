@@ -4,6 +4,8 @@ import PlantCard from '@/components/plants/PlantCard';
 import { plantService } from '@/services/plant.service';
 import type { Plant } from '@/types';
 import { Leaf } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export const metadata = {
   title: 'Explore Plants | Virtual Vana',
@@ -37,8 +39,11 @@ export default async function PlantsPage() {
           </div>
         ) : (
           <div className="text-center py-16 bg-card rounded-lg shadow-sm">
-            <p className="text-xl font-semibold text-foreground">Could Not Load Plants</p>
-            <p className="text-muted-foreground mt-2">There was an issue fetching plant data from the database. Please try again later.</p>
+            <p className="text-xl font-semibold text-foreground">Your Garden is Empty</p>
+            <p className="text-muted-foreground mt-2 max-w-md mx-auto">It looks like no plants have been added to the database yet. Start by adding some plants to your collection!</p>
+            <Link href="/add" className="mt-4 inline-block">
+                <Button>Add a Plant</Button>
+            </Link>
           </div>
         )}
       </div>

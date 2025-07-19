@@ -24,12 +24,15 @@ export default function PlantCard({ plant }: PlantCardProps) {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     data-ai-hint={plant.imageHint || plant.commonName}
+                    unoptimized // Necessary for external URLs like those from Trefle that might not be pre-configured
                 />
             </div>
         </Link>
-        <div className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full backdrop-blur-sm">
-            <Box className="w-5 h-5" title="3D Model Available"/>
-        </div>
+        {plant.threeDModelSrc && (
+          <div className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full backdrop-blur-sm">
+              <Box className="w-5 h-5" title="3D Model Available"/>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-xl font-headline mb-1">

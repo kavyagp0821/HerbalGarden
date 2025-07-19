@@ -5,10 +5,30 @@ import { Orbit, ZoomIn, ZoomOut, Move3d } from 'lucide-react';
 interface ThreeDViewerPlaceholderProps {
   plantName: string;
   imageSrc: string;
+  threeDModelSrc?: string;
   imageHint?: string;
 }
 
-export default function ThreeDViewerPlaceholder({ plantName, imageSrc, imageHint }: ThreeDViewerPlaceholderProps) {
+export default function ThreeDViewerPlaceholder({ plantName, imageSrc, threeDModelSrc, imageHint }: ThreeDViewerPlaceholderProps) {
+  if (!threeDModelSrc) {
+    return (
+       <Card className="overflow-hidden shadow-lg">
+          <CardContent className="p-0">
+            <div className="aspect-video relative bg-muted flex items-center justify-center">
+              <Image
+                src={imageSrc}
+                alt={`Visual representation of ${plantName}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                data-ai-hint={imageHint || `botanical illustration ${plantName.toLowerCase()}`}
+              />
+            </div>
+          </CardContent>
+       </Card>
+    )
+  }
+  
   return (
     <Card className="overflow-hidden shadow-lg">
       <CardContent className="p-0">

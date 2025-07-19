@@ -10,6 +10,7 @@ import {
   User,
   Sparkles,
   Route,
+  PlusCircle
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -25,6 +26,7 @@ const navItems: NavItem[] = [
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
+  { href: '/add', label: 'Add Plants', icon: PlusCircle },
   { href: '/profile', label: 'My Progress', icon: User },
 ];
 
@@ -37,7 +39,7 @@ export default function SidebarNav() {
         <SidebarMenuItem key={item.label}>
           <SidebarMenuButton
             href={item.href}
-            isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
+            isActive={pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/')}
             tooltip={item.label}
             aria-disabled={item.disabled}
             className={item.disabled ? "cursor-not-allowed opacity-50" : ""}

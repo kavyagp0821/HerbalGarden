@@ -14,28 +14,44 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app: FirebaseApp;
-if (getApps().length === 0) {
-  app = initializeApp(firebaseConfig);
+
+// Check if all required environment variables are present
+const areFirebaseCredsAvailable =
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId;
+
+if (areFirebaseCredsAvailable) {
+    if (getApps().length === 0) {
+      app = initializeApp(firebaseConfig);
+    } else {
+      app = getApp();
+    }
 } else {
-  app = getApp();
+    console.warn("Firebase credentials are not available. Firebase services will be disabled.");
 }
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
+
+// Conditionally initialize Firebase services
+const auth = areFirebaseCredsAvailable ? getAuth(app!) : ({} as any);
+const db = areFirebaseCredsAvailable ? getFirestore(app!) : ({} as any);
+const googleProvider = areFirebaseCredsAvailable ? new GoogleAuthProvider() : ({} as any);
 
 // Email/Password Sign-up
 const signUp = (email: string, password: string) => {
+  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
 // Email/Password Sign-in
 const signIn = (email: string, password: string) => {
+  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return signInWithEmailAndPassword(auth, email, password);
 };
 
 // Google Sign-in
 const signInWithGoogle = () => {
+  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
   return signInWithPopup(auth, googleProvider);
 };
 

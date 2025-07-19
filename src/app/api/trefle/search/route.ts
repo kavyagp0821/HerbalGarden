@@ -2,7 +2,6 @@
 import { NextResponse } from 'next/server';
 import type { TreflePlant } from '@/types';
 
-// This route can now handle both general listing and searching
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q');
@@ -13,15 +12,12 @@ export async function GET(request: Request) {
         return NextResponse.json({ message: 'Trefle API key is not configured on the server. Please add it to your .env file.' }, { status: 500 });
     }
 
-    let trefleUrl;
-    if (query) {
-        // Use the search endpoint if a query is provided
-        trefleUrl = `https://trefle.io/api/v1/plants/search?token=${token}&q=${query}`;
-    } else {
-        // Use the list endpoint if no query is provided, and filter for medicinal plants
-        trefleUrl = `https://trefle.io/api/v1/plants?token=${token}&filter[medicinal]=true`;
+    if (!query) {
+        return NextResponse.json({ message: 'Search query parameter "q" is required.' }, { status: 400 });
     }
 
+    const trefleUrl = `https://trefle.io/api/v1/plants/search?token=${token}&q=${query}`;
+    
     try {
         const trefleResponse = await fetch(trefleUrl);
 

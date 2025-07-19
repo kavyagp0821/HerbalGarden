@@ -4,6 +4,10 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+      return NextResponse.json({ message: 'Firebase is not configured correctly.' }, { status: 500 });
+    }
+  
     try {
         const plantRef = doc(db, 'plants', params.id);
         const plantSnap = await getDoc(plantRef);

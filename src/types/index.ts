@@ -11,9 +11,9 @@ export interface Plant {
   classification: string;
   imageSrc: string;
   imageHint?: string;
-  videoSrc?: string; // URL to video
-  audioSrc?: string; // URL to audio narration
-  threeDModelSrc?: string; // Placeholder for سى D model path or identifier
+  videoSrc?: string; 
+  audioSrc?: string; 
+  threeDModelSrc?: string;
   ayushUses?: string;
 }
 
