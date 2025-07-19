@@ -8,7 +8,15 @@ export async function GET(request: Request) {
     const token = process.env.TREFLE_API_KEY;
 
     if (!token || token === "YOUR_TREFLE_API_KEY_HERE") {
-        console.error('Trefle API key is not configured in .env file.');
+        console.error('======================================================================');
+        console.error('  🔴🔴🔴 Trefle API key is not configured in .env file. 🔴🔴🔴');
+        console.error('  The "Add Plants" feature will not work until this is fixed.');
+        console.error('  1. Go to https://trefle.io/ and sign up for a free account to get an API key.');
+        console.error('  2. In the `src` directory, open the `.env` file.');
+        console.error('  3. Find the line `TREFLE_API_KEY=YOUR_TREFLE_API_KEY_HERE`');
+        console.error('  4. Replace `YOUR_TREFLE_API_KEY_HERE` with your actual key.');
+        console.error('  5. IMPORTANT: You MUST restart your development server after editing the .env file.\n');
+        console.error('======================================================================');
         return NextResponse.json({ message: 'Trefle API key is not configured on the server. Please add it to your .env file.' }, { status: 500 });
     }
 
