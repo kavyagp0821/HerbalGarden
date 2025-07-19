@@ -1,14 +1,16 @@
 // src/components/plants/PlantPageClient.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import type { Plant } from '@/types';
-import ThreeDViewerPlaceholder from '@/components/plants/ThreeDViewerPlaceholder';
 import PlantInteractions from '@/components/plants/PlantInteractions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Leaf, MapPin, Milestone } from 'lucide-react';
+import { Leaf, MapPin, Milestone, Orbit } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import ThreeDViewer from './ThreeDViewer';
+import Image from 'next/image';
+import { Skeleton } from '../ui/skeleton';
 
 interface PlantPageClientProps {
   plant: Plant;
@@ -41,11 +43,27 @@ export default function PlantPageClient({ plant }: PlantPageClientProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
-          <ThreeDViewerPlaceholder 
-            plantName={plant.commonName}
-            imageSrc={plant.imageSrc}
-            imageHint={plant.imageHint}
-          />
+            <Card className="overflow-hidden shadow-lg">
+                <CardContent className="p-0">
+                    <div className="aspect-video relative bg-muted flex items-center justify-center">
+                    {plant.threeDModelSrc ? (
+                        <Suspense fallback={<Skeleton className="w-full h-full flex items-center justify-center"><Orbit className="w-16 h-16 text-primary animate-spin" /></Skeleton>}>
+                            <ThreeDViewer modelPath={plant.threeDModelSrc} />
+                        </Suspense>
+                    ) : (
+                        <Image
+                            src={plant.imageSrc}
+                            alt={`Visual representation of ${plant.commonName}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover"
+                            data-ai-hint={plant.imageHint || `botanical illustration ${plant.commonName.toLowerCase()}`}
+                        />
+                    )}
+                    </div>
+                </CardContent>
+            </Card>
+
            <Card>
             <CardHeader>
               <CardTitle className="flex items-center text-xl font-headline">
