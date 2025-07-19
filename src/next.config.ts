@@ -1,4 +1,5 @@
 import type {NextConfig} from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -35,6 +36,16 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
+  },
+  webpack: (config, { isServer }) => {
+    // This is to solve a very specific issue with @react-three/fiber and Next.js
+    // It ensures that the correct version of three.js and drei are used.
+    config.resolve.alias = {
+        ...config.resolve.alias,
+        '@react-three/drei': path.resolve('./node_modules/@react-three/drei'),
+        'three': path.resolve('./node_modules/three')
+    };
+    return config;
   },
 };
 
