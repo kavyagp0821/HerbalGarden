@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -55,4 +55,10 @@ const signInWithGoogle = () => {
   return signInWithPopup(auth, googleProvider);
 };
 
-export { auth, db, signUp, signIn, signInWithGoogle };
+// Password Reset
+const sendPasswordReset = (email: string) => {
+    if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
+    return sendPasswordResetEmail(auth, email);
+}
+
+export { auth, db, signUp, signIn, signInWithGoogle, sendPasswordReset };
