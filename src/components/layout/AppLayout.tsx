@@ -2,12 +2,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail, SidebarMenuButton } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
-import { Leaf } from 'lucide-react';
+import { Leaf, LogOut } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Chatbot from '../chatbot/Chatbot';
+import { firebaseSignOut, onAuthStateChanged, auth } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
+import type { User } from 'firebase/auth';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -15,17 +18,50 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const [currentYear, setCurrentYear] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear().toString());
-  }, []);
+    
+    if (!auth.app) {
+        console.warn("Firebase not configured, cannot check auth state.");
+        setAuthChecked(true); // Treat as checked to avoid redirect loops
+        return;
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        router.push('/');
+      }
+      setAuthChecked(true);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+  
+  const handleSignOut = async () => {
+    await firebaseSignOut();
+    router.push('/');
+  }
+
+  if (!authChecked) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <Skeleton className="h-24 w-24 rounded-full" />
+        </div>
+    );
+  }
 
   return (
     <SidebarProvider defaultOpen>
       <div className="flex min-h-screen">
         <Sidebar collapsible="icon" className="shadow-lg">
           <SidebarHeader className="p-4">
-            <Link href="/" className="flex items-center gap-2 text-lg font-headline text-sidebar-primary hover:text-sidebar-primary-foreground transition-colors">
+            <Link href="/dashboard" className="flex items-center gap-2 text-lg font-headline text-sidebar-primary hover:text-sidebar-primary-foreground transition-colors">
               <Leaf className="w-7 h-7" />
               <span className="group-data-[collapsible=icon]:hidden">Virtual Vana</span>
             </Link>
@@ -34,6 +70,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <SidebarNav />
           </SidebarContent>
           <SidebarFooter className="p-4 flex flex-col gap-2">
+            <SidebarMenuButton onClick={handleSignOut} tooltip="Sign Out">
+                <LogOut />
+                <span>Sign Out</span>
+            </SidebarMenuButton>
             <div className="text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
               &copy; {currentYear !== null ? currentYear : <Skeleton className="inline-block h-3 w-10" />} Virtual Vana
             </div>

@@ -19,7 +19,7 @@ import {
 import type { NavItem } from '@/types';
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
   { href: '/tours', label: 'Virtual Tours', icon: Route },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
