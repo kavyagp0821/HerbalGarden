@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
-import { AlertCircle, Cube } from 'lucide-react';
+import { Orbit } from 'lucide-react';
 import Model from './Model';
 
 interface ThreeDViewerProps {
@@ -15,7 +15,7 @@ export default function ThreeDViewer({ modelPath }: ThreeDViewerProps) {
   if (!modelPath) {
     return (
       <Alert>
-        <Cube className="h-4 w-4" />
+        <Orbit className="h-4 w-4" />
         <AlertTitle>3D Model Not Available</AlertTitle>
         <AlertDescription>An interactive 3D model for this plant has not been added yet.</AlertDescription>
       </Alert>
