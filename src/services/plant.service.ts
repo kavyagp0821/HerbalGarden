@@ -1,113 +1,65 @@
 // src/services/plant.service.ts
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
-// Keep quiz and tour data local for now as they are static.
 import { initialPlants } from '@/lib/initial-plant-data';
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
 import { lucideIconMapping } from '@/lib/icon-mapping';
 
-const areFirebaseCredsAvailable = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-
-async function fetchFromApi<T>(url: string): Promise<T> {
-  const getBaseUrl = () => {
-    if (typeof window !== 'undefined') return ''; // Browser should use relative path
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-    if (process.env.NEXT_PUBLIC_VERCEL_URL) return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-    return 'http://localhost:9002'; // Local development
-  };
-  
-  const response = await fetch(`${getBaseUrl()}${url}`);
-  
-  if (!response.ok) {
-    let errorMessage = `API call failed with status ${response.status}`;
-    try {
-        const errorBody = await response.json();
-        // Handle specific Firestore error codes passed from the backend
-        if (errorBody.code === 'unavailable') {
-            errorMessage = "Please check your internet connection and try again.";
-        } else if (errorBody.code === 'permission-denied') {
-            errorMessage = "You don't have permission to access this data.";
-        } else {
-            errorMessage = errorBody.message || errorMessage;
-        }
-    } catch (e) {
-      // Ignore if response body is not JSON
-    }
-    throw new Error(errorMessage);
-  }
-  return response.json();
-}
+// This service now uses local data exclusively.
 
 export const plantService = {
   async getPlants(): Promise<Plant[]> {
-    if (!areFirebaseCredsAvailable) {
-        console.warn("Firebase not configured, falling back to local data.");
-        return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
-    }
-    // No fallback here, let the UI component handle the error
-    return await fetchFromApi<Plant[]>('/api/plants');
+    console.log("Fetching plants from local data.");
+    // Sort plants alphabetically by common name
+    const sortedPlants = [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
+    return Promise.resolve(sortedPlants as Plant[]);
   },
 
   async getPlant(id: string): Promise<Plant | null> {
-    if (!areFirebaseCredsAvailable) {
-        console.warn(`Firebase not configured, fetching plant ${id} from local data.`);
-        return initialPlants.find(p => p.id === id) || null;
-    }
-    try {
-        return await fetchFromApi<Plant>(`/api/plants/${id}`);
-    } catch(e) {
-        console.warn(`API fetch for plant ${id} failed, falling back to local data:`, e);
-        if (e instanceof Error && (e.message.includes('404') || e.message.includes('not found'))) {
-            return null;
-        }
-        return initialPlants.find(p => p.id === id) || null;
-    }
+    console.log(`Fetching plant ${id} from local data.`);
+    const plant = initialPlants.find(p => p.id === id) || null;
+    return Promise.resolve(plant as Plant | null);
   },
   
   async getTourCategories(): Promise<TourCategory[]> {
-    // Tours are static and don't require Firebase for this version.
+    console.log("Fetching tour categories from local data.");
     try {
-      return tourCategories.map(tour => ({
+      const tours = tourCategories.map(tour => ({
         ...tour,
         icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
       }));
+      return Promise.resolve(tours);
     } catch (e) {
         console.error('Failed to load local tour categories', e);
-        return [];
+        return Promise.resolve([]);
     }
   },
 
   async getTourCategory(id: string): Promise<TourCategory | null> {
-    // Tours are static and don't require Firebase for this version.
-      try {
-        const tour = tourCategories.find(t => t.id === id);
-        if (!tour) return null;
-        
-        return {
-          ...tour,
-          icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
-        };
-      } catch(e) {
-        console.error(`Failed to fetch local tour category ${id}`, e);
-        return null;
-      }
+    console.log(`Fetching tour category ${id} from local data.`);
+    try {
+      const tour = tourCategories.find(t => t.id === id);
+      if (!tour) return Promise.resolve(null);
+      
+      const tourWithIcon = {
+        ...tour,
+        icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
+      };
+      return Promise.resolve(tourWithIcon);
+    } catch(e) {
+      console.error(`Failed to fetch local tour category ${id}`, e);
+      return Promise.resolve(null);
+    }
   },
 
   async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
+    console.log("Fetching plants for tour from local data.");
     if (!plantIds || plantIds.length === 0) return Promise.resolve([]);
-    try {
-        const allPlants = await this.getPlants();
-        const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
-        return plantsInTour;
-    } catch (error) {
-        console.error("Failed to get plants for tour, falling back to local data", error);
-        const allPlants = initialPlants; // Fallback to local data
-        const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
-        return plantsInTour as Plant[];
-    }
+    const plantsInTour = initialPlants.filter(plant => plantIds.includes(plant.id));
+    return Promise.resolve(plantsInTour as Plant[]);
   },
   
   async getQuizQuestions(): Promise<QuizQuestion[]> {
-    // Quiz questions are static for this app version.
+    console.log("Fetching quiz questions from local data.");
     return Promise.resolve(quizQuestions);
   },
 };

@@ -1,16 +1,14 @@
 // src/lib/firebase.ts
+// This file is simplified to prevent authentication/database logic from running.
+// If you want to re-enable Firebase, you will need to restore the previous content
+// and ensure your .env file is correctly configured.
+
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { 
   getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  sendPasswordResetEmail, 
-  signOut, 
   onAuthStateChanged 
 } from 'firebase/auth';
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -21,79 +19,36 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
+// Mock Firebase when credentials are not available
+const areFirebaseCredsAvailable = firebaseConfig.apiKey && firebaseConfig.projectId;
+
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
 let db: ReturnType<typeof getFirestore>;
-let googleProvider: GoogleAuthProvider;
-
-const areFirebaseCredsAvailable = firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId;
 
 if (areFirebaseCredsAvailable) {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
-  googleProvider = new GoogleAuthProvider();
-
-  if (typeof window !== 'undefined') {
-    enableIndexedDbPersistence(db)
-      .catch((err) => {
-        if (err.code == 'failed-precondition') {
-          console.warn("Firestore persistence failed: Multiple tabs open, persistence can only be enabled in one tab at a a time.");
-        } else if (err.code == 'unimplemented') {
-          console.warn("Firestore persistence failed: The current browser does not support all of the features required to enable persistence.");
-        } else {
-            console.warn("Firestore persistence failed with error: ", err);
-        }
-      });
-  }
-
 } else {
-  if (typeof window !== 'undefined') {
-    console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
-  }
   // Provide mock objects for server-side rendering or when creds are missing
+  console.warn("Firebase credentials not found. Using mock Firebase services.");
   app = {} as any;
   auth = {} as any;
   db = {} as any;
-  googleProvider = {} as any;
 }
 
-// Email/Password Sign-up
-const firebaseSignUp = (email: string, password: string) => {
-  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
-  return createUserWithEmailAndPassword(auth, email, password);
-};
+// Mock functions to prevent errors
+const firebaseSignIn = () => Promise.reject(new Error("Firebase is not configured."));
+const firebaseSignInWithGoogle = () => Promise.reject(new Error("Firebase is not configured."));
+const firebaseSendPasswordReset = () => Promise.reject(new Error("Firebase is not configured."));
+const firebaseSignOut = () => Promise.resolve();
 
-// Email/Password Sign-in
-const firebaseSignIn = (email: string, password: string) => {
-  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
-  return signInWithEmailAndPassword(auth, email, password);
-};
-
-// Google Sign-in
-const firebaseSignInWithGoogle = () => {
-  if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
-  return signInWithPopup(auth, googleProvider);
-};
-
-// Password Reset
-const firebaseSendPasswordReset = (email: string) => {
-    if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
-    return sendPasswordResetEmail(auth, email);
-}
-
-// Sign out
-const firebaseSignOut = () => {
-    if (!areFirebaseCredsAvailable) return Promise.reject(new Error("Firebase not configured."));
-    return signOut(auth);
-}
 
 export { 
     app,
     auth, 
     db, 
-    firebaseSignUp, 
     firebaseSignIn, 
     firebaseSignInWithGoogle, 
     firebaseSendPasswordReset,
