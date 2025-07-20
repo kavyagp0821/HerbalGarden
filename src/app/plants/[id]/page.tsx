@@ -1,66 +1,233 @@
 // src/app/plants/[id]/page.tsx
-import AppLayout from '@/components/layout/AppLayout';
-import PlantPageClient from '@/components/plants/PlantPageClient';
-import { plantService } from '@/services/plant.service';
-import type { Plant } from '@/types';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import type { Plant } from '@/types';
+import PlantInteractions from '@/components/plants/PlantInteractions';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Leaf, MapPin, Milestone, Orbit, Volume2, Loader2 } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
+import ThreeDViewer from '@/components/plants/ThreeDViewer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
+import { useToast } from '@/hooks/use-toast';
+import { plantService } from '@/services/plant.service';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 interface PlantPageProps {
   params: { id: string };
 }
 
-export async function generateMetadata({ params }: PlantPageProps) {
-  const plant = await plantService.getPlant(params.id);
+export default function PlantOverviewPage({ params }: PlantPageProps) {
+  const [plant, setPlant] = useState<Plant | null>(null);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    async function fetchPlant() {
+      const fetchedPlant = await plantService.getPlant(params.id);
+      if (fetchedPlant) {
+        setPlant(fetchedPlant);
+        // Track viewed plants for the user's progress
+        try {
+          const progress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+          const viewedPlants = progress.viewedPlants || {};
+          if (!viewedPlants[fetchedPlant.id]) {
+            viewedPlants[fetchedPlant.id] = fetchedPlant.commonName;
+            progress.viewedPlants = viewedPlants;
+            localStorage.setItem('userProgress', JSON.stringify(progress));
+          }
+        } catch (error) {
+          console.error("Failed to update user progress for viewed plants.", error);
+        }
+      } else {
+        notFound();
+      }
+    }
+    fetchPlant();
+  }, [params.id]);
+
+
   if (!plant) {
-    return { title: 'Plant Not Found | Virtual Vana' };
+    return <PlantOverviewSkeleton />;
   }
-  return {
-    title: `${plant.commonName} | Virtual Vana`,
-    description: `Learn about ${plant.commonName}: its uses, habitat, and more.`,
-  };
-}
 
-// This function can be used to pre-render pages at build time
-// for better performance, but it's optional.
-// export async function generateStaticParams() {
-//   const plants = await plantService.getPlants();
-//   return plants.map((plant) => ({
-//     id: plant.id,
-//   }));
-// }
-
-// This page will be server-rendered for each plant
-export default async function PlantPage({ params }: PlantPageProps) {
-  const plant = await plantService.getPlant(params.id);
-
-  if (!plant) {
-    // This is a more graceful way to handle missing plants.
-    // It will show a "Not Found" page instead of crashing the server.
-    return (
-      <AppLayout>
-        <div className="text-center py-10">
-          <h1 className="text-2xl font-bold text-primary mb-4">Plant Not Found</h1>
-          <p className="text-muted-foreground mb-6">
-            We couldn't find the plant you were looking for. It might not be in our database yet.
-          </p>
-          <Link href="/plants">
-            <Button>Back to Explore</Button>
-          </Link>
-        </div>
-      </AppLayout>
-    );
+  const handleListen = async () => {
+    setIsGeneratingAudio(true);
+    try {
+        const fullText = `${plant.commonName}. ${plant.latinName}. ${plant.description} ${plant.ayushUses ? `Traditional AYUSH Uses: ${plant.ayushUses}` : ''}`;
+        const result = await textToSpeech(fullText);
+        setAudioSrc(result.audioDataUri);
+    } catch (error) {
+        console.error("TTS Generation Error:", error);
+        toast({
+            title: "Audio Generation Failed",
+            description: "Could not generate audio for this plant. Please try again later.",
+            variant: "destructive"
+        });
+    } finally {
+        setIsGeneratingAudio(false);
+    }
   }
+
 
   return (
-    <AppLayout>
-        <Link href="/plants" className="inline-flex items-center text-sm text-primary hover:underline mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Explore
-        </Link>
-      <PlantPageClient plant={plant} />
-    </AppLayout>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
+          <Card className="overflow-hidden shadow-lg">
+              <CardContent className="p-0">
+                  <div className="aspect-video relative bg-muted flex items-center justify-center">
+                      <Image
+                          src={plant.imageSrc}
+                          alt={`Visual representation of ${plant.commonName}`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover"
+                          data-ai-hint={plant.imageHint || `botanical illustration ${plant.commonName.toLowerCase()}`}
+                          priority
+                      />
+                  </div>
+              </CardContent>
+          </Card>
+
+         <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center text-xl font-headline">
+              <Leaf className="w-5 h-5 mr-2 text-primary" />
+              Therapeutic Uses
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {plant.therapeuticUses.map((use, index) => (
+                <Badge key={index} variant="secondary">{use}</Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="space-y-6">
+        <Card>
+          <CardHeader className="flex flex-row justify-between items-center">
+            <CardTitle className="text-xl font-headline">Description</CardTitle>
+              <Button onClick={handleListen} variant="outline" size="sm" disabled={isGeneratingAudio}>
+                  {isGeneratingAudio ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                      <Volume2 className="mr-2 h-4 w-4" />
+                  )}
+                  Listen
+              </Button>
+          </CardHeader>
+          <CardContent>
+             {audioSrc && (
+              <div className="mb-4">
+                  <audio controls autoPlay src={audioSrc} className="w-full">
+                      Your browser does not support the audio element.
+                  </audio>
+              </div>
+              )}
+            <p className="text-foreground/90 leading-relaxed">{plant.description}</p>
+            {plant.ayushUses && (
+              <>
+              <Separator className="my-4" />
+              <h3 className="font-semibold mb-2">Traditional AYUSH Uses</h3>
+              <p className="text-foreground/90 leading-relaxed">{plant.ayushUses}</p>
+              </>
+            )}
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+              <CardTitle className="flex items-center text-xl font-headline">
+                  <Orbit className="w-5 h-5 mr-2 text-primary" />
+                  Interactive 3D Model
+              </CardTitle>
+          </CardHeader>
+          <CardContent>
+              <ThreeDViewer modelPath={plant.threeDModelSrc} />
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center text-lg font-headline">
+                <MapPin className="w-5 h-5 mr-2 text-primary" />
+                Region & Habitat
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-foreground/80">{plant.region}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center text-lg font-headline">
+                <Milestone className="w-5 h-5 mr-2 text-primary" />
+                Classification
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-foreground/80">{plant.classification}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <PlantInteractions plantId={plant.id} plantName={plant.commonName} />
+      </div>
+    </div>
   );
+}
+
+function PlantOverviewSkeleton() {
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-8">
+                <Card className="overflow-hidden shadow-lg">
+                    <CardContent className="p-0">
+                        <Skeleton className="aspect-video w-full" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <Skeleton className="h-6 w-3/5" />
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-2">
+                        <Skeleton className="h-6 w-20" />
+                        <Skeleton className="h-6 w-24" />
+                        <Skeleton className="h-6 w-16" />
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <Skeleton className="h-6 w-2/5" />
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-4/5" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <Skeleton className="h-6 w-1/2" />
+                    </CardHeader>
+                    <CardContent>
+                         <Skeleton className="h-96 w-full" />
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    );
 }
