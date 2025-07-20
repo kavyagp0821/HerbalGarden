@@ -21,7 +21,14 @@ async function fetchFromApi<T>(url: string): Promise<T> {
     let errorMessage = `API call failed with status ${response.status}`;
     try {
         const errorBody = await response.json();
-        errorMessage = errorBody.message || errorMessage;
+        // Handle specific Firestore error codes passed from the backend
+        if (errorBody.code === 'unavailable') {
+            errorMessage = "Please check your internet connection and try again.";
+        } else if (errorBody.code === 'permission-denied') {
+            errorMessage = "You don't have permission to access this data.";
+        } else {
+            errorMessage = errorBody.message || errorMessage;
+        }
     } catch (e) {
       // Ignore if response body is not JSON
     }
@@ -36,12 +43,8 @@ export const plantService = {
         console.warn("Firebase not configured, falling back to local data.");
         return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
     }
-    try {
-        return await fetchFromApi<Plant[]>('/api/plants');
-    } catch (error) {
-        console.error("API fetch failed, falling back to local data:", error);
-        return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
-    }
+    // No fallback here, let the UI component handle the error
+    return await fetchFromApi<Plant[]>('/api/plants');
   },
 
   async getPlant(id: string): Promise<Plant | null> {
@@ -53,7 +56,7 @@ export const plantService = {
         return await fetchFromApi<Plant>(`/api/plants/${id}`);
     } catch(e) {
         console.warn(`API fetch for plant ${id} failed, falling back to local data:`, e);
-        if (e instanceof Error && e.message.includes('404')) {
+        if (e instanceof Error && (e.message.includes('404') || e.message.includes('not found'))) {
             return null;
         }
         return initialPlants.find(p => p.id === id) || null;
@@ -91,9 +94,16 @@ export const plantService = {
 
   async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
     if (!plantIds || plantIds.length === 0) return Promise.resolve([]);
-    const allPlants = await this.getPlants();
-    const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
-    return plantsInTour;
+    try {
+        const allPlants = await this.getPlants();
+        const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
+        return plantsInTour;
+    } catch (error) {
+        console.error("Failed to get plants for tour, falling back to local data", error);
+        const allPlants = initialPlants; // Fallback to local data
+        const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
+        return plantsInTour as Plant[];
+    }
   },
   
   async getQuizQuestions(): Promise<QuizQuestion[]> {

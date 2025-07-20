@@ -31,13 +31,26 @@ async function seedDatabase() {
 }
 
 async function checkAndSeed() {
+    if (!db.app) return false; // Don't try to seed if firebase isn't configured
     const seededRef = doc(db, 'meta', 'seeded');
-    const seededSnap = await getDoc(seededRef);
-    if (!seededSnap.exists()) {
-        console.log("Seeding flag not found. Initializing database seeding.");
-        await seedDatabase();
-        return true; // Indicates seeding was performed
+    try {
+        const seededSnap = await getDoc(seededRef);
+        if (!seededSnap.exists()) {
+            console.log("Seeding flag not found. Initializing database seeding.");
+            await seedDatabase();
+            return true; // Indicates seeding was performed
+        }
+    } catch (error) {
+        console.error("Error checking for seeded flag. This might happen on first run.", error);
+        console.log("Attempting to seed database anyway.");
+        try {
+           await seedDatabase();
+           return true;
+        } catch (seedError) {
+           console.error("Database seeding failed.", seedError);
+        }
     }
+
     console.log("Database has already been seeded.");
     return false; // Indicates seeding was not needed
 }
@@ -45,8 +58,8 @@ async function checkAndSeed() {
 
 
 export async function GET() {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    return NextResponse.json({ message: 'Firebase is not configured correctly.' }, { status: 500 });
+  if (!db.app) {
+    return NextResponse.json({ message: 'Firebase is not configured correctly.', code: 'unconfigured' }, { status: 500 });
   }
 
   try {
@@ -60,16 +73,19 @@ export async function GET() {
     plantsList.sort((a, b) => a.commonName.localeCompare(b.commonName));
 
     return NextResponse.json(plantsList);
-  } catch (e) {
+  } catch (e: any) {
     const errorDetails = e instanceof Error ? e.message : String(e);
     console.error('Error fetching plants from Firestore:', errorDetails);
-    return NextResponse.json({ message: `Internal Server Error: Could not fetch plants from database. Details: ${errorDetails}` }, { status: 500 });
+    return NextResponse.json({ 
+        message: `Internal Server Error: Could not fetch plants from database. Details: ${errorDetails}`,
+        code: e.code || 'unknown'
+    }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
-    if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-      return NextResponse.json({ message: 'Firebase is not configured correctly.' }, { status: 500 });
+    if (!db.app) {
+      return NextResponse.json({ message: 'Firebase is not configured correctly.', code: 'unconfigured' }, { status: 500 });
     }
     
     try {
@@ -93,9 +109,12 @@ export async function POST(request: Request) {
             ...plantData
         }, { status: 201 });
 
-    } catch (e) {
+    } catch (e: any) {
         const errorDetails = e instanceof Error ? e.message : String(e);
         console.error('Error storing plant in Firestore:', e);
-        return NextResponse.json({ message: `Internal Server Error: Could not store plant in database. Details: ${errorDetails}` }, { status: 500 });
+        return NextResponse.json({ 
+            message: `Internal Server Error: Could not store plant in database. Details: ${errorDetails}`,
+            code: e.code || 'unknown'
+        }, { status: 500 });
     }
 }

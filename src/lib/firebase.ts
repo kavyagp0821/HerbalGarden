@@ -10,7 +10,7 @@ import {
   signOut, 
   onAuthStateChanged 
 } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -34,11 +34,26 @@ if (areFirebaseCredsAvailable) {
   auth = getAuth(app);
   db = getFirestore(app);
   googleProvider = new GoogleAuthProvider();
+
+  if (typeof window !== 'undefined') {
+    enableIndexedDbPersistence(db)
+      .catch((err) => {
+        if (err.code == 'failed-precondition') {
+          console.warn("Firestore persistence failed: Multiple tabs open, persistence can only be enabled in one tab at a a time.");
+        } else if (err.code == 'unimplemented') {
+          console.warn("Firestore persistence failed: The current browser does not support all of the features required to enable persistence.");
+        } else {
+            console.warn("Firestore persistence failed with error: ", err);
+        }
+      });
+  }
+
 } else {
   if (typeof window !== 'undefined') {
     console.warn("Firebase credentials are not available. Firebase services will be disabled on the client.");
   }
   // Provide mock objects for server-side rendering or when creds are missing
+  app = {} as any;
   auth = {} as any;
   db = {} as any;
   googleProvider = {} as any;
@@ -75,6 +90,7 @@ const firebaseSignOut = () => {
 }
 
 export { 
+    app,
     auth, 
     db, 
     firebaseSignUp, 
