@@ -27,11 +27,11 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
   const [quizFinished, setQuizFinished] = useState(false);
 
   const startNewQuiz = () => {
-     // Shuffle all questions and take the first QUIZ_LENGTH
+     // Shuffle all questions and take the first QUIZ_LENGTH to ensure a new set each time
      const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
      setCurrentQuizQuestions(shuffled.slice(0, QUIZ_LENGTH));
      
-     // Reset all state
+     // Reset all state for the new quiz
      setCurrentQuestionIndex(0);
      setSelectedAnswer(null);
      setScore(0);
@@ -43,12 +43,14 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
     if(allQuestions.length > 0) {
       startNewQuiz();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allQuestions]);
 
 
   const currentQuestion = useMemo(() => currentQuizQuestions[currentQuestionIndex], [currentQuizQuestions, currentQuestionIndex]);
   const currentOptions = useMemo(() => {
     if (!currentQuestion) return [];
+    // Shuffle options for the current question
     return [...currentQuestion.options].sort(() => Math.random() - 0.5);
   }, [currentQuestion]);
 
@@ -72,7 +74,7 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
       try {
         const progress: UserProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
         const quizHistory = progress.quizHistory || [];
-        // Add score from this session. Note: score state might not be updated yet.
+        // The score state might not be updated yet, so we calculate the final score directly.
         const finalScore = (selectedAnswer === currentQuestion.correctAnswer ? score + 1 : score);
         quizHistory.push({ score: finalScore, total: currentQuizQuestions.length, date: new Date().toISOString() });
         progress.quizHistory = quizHistory;
@@ -120,8 +122,17 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
     );
   }
 
-  if (!currentQuestion) {
-    return <p>Loading quiz...</p>; // Or some other loading state
+  if (currentQuizQuestions.length === 0 || !currentQuestion) {
+    return (
+        <Card className="max-w-xl mx-auto shadow-xl">
+            <CardHeader>
+                <CardTitle>Loading Quiz...</CardTitle>
+            </CardHeader>
+             <CardContent>
+                <p>Preparing a new set of questions for you.</p>
+            </CardContent>
+        </Card>
+    );
   }
   
   const progressValue = ((currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
