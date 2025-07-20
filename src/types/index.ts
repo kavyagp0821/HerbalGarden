@@ -21,7 +21,7 @@ export interface TourCategory {
   id:string;
   name: string;
   description: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | string; // Can be a component or a string name
   plantIds: string[]; // IDs of plants in this tour
   imageSrc: string;
   imageHint?: string;

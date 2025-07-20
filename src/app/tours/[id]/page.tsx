@@ -4,7 +4,8 @@ import PlantCard from '@/components/plants/PlantCard';
 import { plantService } from '@/services/plant.service';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Leaf } from 'lucide-react';
+import { lucideIconMapping } from '@/lib/icon-mapping';
 
 interface TourPageProps {
   params: { id: string };
@@ -44,7 +45,7 @@ export default async function TourPage({ params }: TourPageProps) {
   }
 
   const plantsInTour = await plantService.getPlantsForTour(tour.plantIds);
-  const TourIcon = tour.icon;
+  const TourIcon = typeof tour.icon === 'string' ? lucideIconMapping[tour.icon] || Leaf : tour.icon || Leaf;
 
   return (
     <AppLayout>

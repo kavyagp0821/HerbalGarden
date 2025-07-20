@@ -23,11 +23,15 @@ export const plantService = {
   async getTourCategories(): Promise<TourCategory[]> {
     console.log("Fetching tour categories from local data.");
     try {
-      const tours = tourCategories.map(tour => ({
-        ...tour,
-        icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
-      }));
-      return Promise.resolve(tours);
+      const tours = tourCategories.map(tour => {
+        const { icon, ...rest } = tour;
+        const iconName = (icon as any).displayName || (icon as any).name || 'Leaf';
+        return {
+          ...rest,
+          icon: iconName,
+        };
+      });
+      return Promise.resolve(tours as TourCategory[]);
     } catch (e) {
         console.error('Failed to load local tour categories', e);
         return Promise.resolve([]);
@@ -40,11 +44,14 @@ export const plantService = {
       const tour = tourCategories.find(t => t.id === id);
       if (!tour) return Promise.resolve(null);
       
-      const tourWithIcon = {
-        ...tour,
-        icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
+      const { icon, ...rest } = tour;
+      const iconName = (icon as any).displayName || (icon as any).name || 'Leaf';
+
+      const tourWithIconName = {
+        ...rest,
+        icon: iconName,
       };
-      return Promise.resolve(tourWithIcon);
+      return Promise.resolve(tourWithIconName as TourCategory);
     } catch(e) {
       console.error(`Failed to fetch local tour category ${id}`, e);
       return Promise.resolve(null);

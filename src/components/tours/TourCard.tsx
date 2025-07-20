@@ -6,15 +6,16 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { TourCategory } from '@/types';
-import { ArrowRight, Volume2, Loader2 } from 'lucide-react';
+import { ArrowRight, Volume2, Loader2, Leaf } from 'lucide-react';
 import { useAudioPlayer } from '@/hooks/use-audio-player';
+import { lucideIconMapping } from '@/lib/icon-mapping';
 
 interface TourCardProps {
   tour: TourCategory;
 }
 
 export default function TourCard({ tour }: TourCardProps) {
-    const TourIcon = tour.icon;
+    const TourIcon = typeof tour.icon === 'string' ? lucideIconMapping[tour.icon] || Leaf : tour.icon || Leaf;
     const textToSpeak = `${tour.name}. ${tour.description}`;
     const { isPlaying, isLoading, playAudio, stopAudio } = useAudioPlayer(tour.id, textToSpeak);
 
