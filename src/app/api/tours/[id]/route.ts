@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
         const { icon, ...tourForApi } = tour;
         const responseData = {
           ...tourForApi,
-          icon: icon ? icon.displayName || (icon as any).name : undefined,
+          icon: icon ? (icon as any).name || (icon as any).displayName : undefined,
         }
 
         return NextResponse.json(responseData);

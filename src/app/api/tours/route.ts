@@ -7,7 +7,7 @@ export async function GET() {
     // We remove the actual Icon component before sending it over the API
     const toursForApi = tourCategories.map(({ icon, ...tour }) => ({
         ...tour,
-        icon: icon ? icon.displayName || (icon as any).name : undefined,
+        icon: icon ? (icon as any).name || (icon as any).displayName : undefined,
     }));
     return NextResponse.json(toursForApi);
   } catch (e) {

@@ -1,9 +1,11 @@
 // src/services/plant.service.ts
-import type { Plant, TourCategory, QuizQuestion, TreflePlant } from '@/types';
+import type { Plant, TourCategory, QuizQuestion } from '@/types';
 // Keep quiz and tour data local for now as they are static.
 import { initialPlants } from '@/lib/initial-plant-data';
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
 import { lucideIconMapping } from '@/lib/icon-mapping';
+
+const areFirebaseCredsAvailable = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
 async function fetchFromApi<T>(url: string): Promise<T> {
   const getBaseUrl = () => {
@@ -30,10 +32,18 @@ async function fetchFromApi<T>(url: string): Promise<T> {
 
 export const plantService = {
   async getPlants(): Promise<Plant[]> {
+    if (!areFirebaseCredsAvailable) {
+        console.warn("Firebase not configured, falling back to local data.");
+        return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
+    }
     return fetchFromApi<Plant[]>('/api/plants');
   },
 
   async getPlant(id: string): Promise<Plant | null> {
+    if (!areFirebaseCredsAvailable) {
+        console.warn(`Firebase not configured, fetching plant ${id} from local data.`);
+        return initialPlants.find(p => p.id === id) || null;
+    }
     try {
         return await fetchFromApi<Plant>(`/api/plants/${id}`);
     } catch(e) {
@@ -46,22 +56,22 @@ export const plantService = {
   },
   
   async getTourCategories(): Promise<TourCategory[]> {
+    // Tours are static and don't require Firebase for this version.
     try {
-        const tours = await fetchFromApi<TourCategory[]>('/api/tours');
-         // Map the string representation of the icon to the actual component
-        return tours.map(tour => ({
-          ...tour,
-          icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
-        }));
+      return tourCategories.map(tour => ({
+        ...tour,
+        icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
+      }));
     } catch (e) {
-        console.error('Failed to fetch tour categories', e);
+        console.error('Failed to load local tour categories', e);
         return [];
     }
   },
 
   async getTourCategory(id: string): Promise<TourCategory | null> {
+    // Tours are static and don't require Firebase for this version.
       try {
-        const tour = await fetchFromApi<TourCategory>(`/api/tours/${id}`);
+        const tour = tourCategories.find(t => t.id === id);
         if (!tour) return null;
         
         return {
@@ -69,7 +79,7 @@ export const plantService = {
           icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
         };
       } catch(e) {
-        console.error(`Failed to fetch tour category ${id}`, e);
+        console.error(`Failed to fetch local tour category ${id}`, e);
         return null;
       }
   },
