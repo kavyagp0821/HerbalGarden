@@ -126,12 +126,17 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
     translate();
   }, [plant, targetLanguage, toast]);
 
-
-  if (!plant) {
-    return <PlantOverviewSkeleton />;
-  }
-  
   const displayedContent = useMemo(() => {
+    if (!plant) {
+        return {
+            description: <Skeleton className="h-24 w-full" />,
+            ayushUses: <Skeleton className="h-16 w-full" />,
+            therapeuticUses: Array.from({length: 3}).map((_, i) => <Skeleton key={i} className="h-8 w-20" />),
+            region: <Skeleton className="h-5 w-3/4" />,
+            classification: <Skeleton className="h-5 w-3/4" />,
+        };
+    }
+    
     const content = translatedContent || plant;
     const isLoading = isTranslating || !translatedContent;
     
@@ -143,6 +148,11 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
         classification: isLoading ? <Skeleton className="h-5 w-3/4" /> : <p className="text-sm text-foreground/80">{content.classification}</p>,
     }
   }, [isTranslating, translatedContent, plant]);
+
+
+  if (!plant) {
+    return <PlantOverviewSkeleton />;
+  }
 
   const handleListen = async () => {
     setIsGeneratingAudio(true);
