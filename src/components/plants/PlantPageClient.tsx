@@ -6,9 +6,11 @@ import type { Plant } from '@/types';
 import PlantInteractions from '@/components/plants/PlantInteractions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Leaf, MapPin, Milestone } from 'lucide-react';
+import { Leaf, MapPin, Milestone, Cube } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import ThreeDViewer from './ThreeDViewer';
+
 
 interface PlantPageClientProps {
   plant: Plant;
@@ -88,6 +90,18 @@ export default function PlantPageClient({ plant }: PlantPageClientProps) {
                 <p className="text-foreground/90 leading-relaxed">{plant.ayushUses}</p>
                 </>
               )}
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center text-xl font-headline">
+                    <Cube className="w-5 h-5 mr-2 text-primary" />
+                    Interactive 3D Model
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ThreeDViewer modelPath={plant.threeDModelSrc} />
             </CardContent>
           </Card>
 
