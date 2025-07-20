@@ -11,13 +11,32 @@ import { Loader2, PlusCircle, Search, CheckCircle } from 'lucide-react';
 import { trefleService } from '@/services/trefle.service';
 import type { TreflePlant, Plant } from '@/types';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
+
+// Helper to convert a Trefle plant to our Plant format
+const adaptTrefleToPlant = (treflePlant: TreflePlant): Omit<Plant, 'id'> => {
+    return {
+        commonName: treflePlant.common_name || treflePlant.scientific_name,
+        latinName: treflePlant.scientific_name,
+        description: `A plant from the family ${treflePlant.family}, genus ${treflePlant.genus}. Further details can be researched.`,
+        therapeuticUses: [], // Needs to be populated manually or via another AI call
+        region: 'Varies',
+        classification: `${treflePlant.family} / ${treflePlant.genus}`,
+        imageSrc: treflePlant.image_url || 'https://placehold.co/600x400.png',
+        imageHint: treflePlant.common_name || treflePlant.scientific_name,
+        ayushUses: 'To be determined.',
+    };
+};
+
 
 export default function AddPlantPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isAdding, setIsAdding] = useState<number | null>(null);
     const [searchResults, setSearchResults] = useState<TreflePlant[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [addedPlants, setAddedPlants] = useState<Set<number>>(new Set());
+    const { toast } = useToast();
 
     const handleSearch = async () => {
         if (!searchTerm) return;
@@ -27,43 +46,56 @@ export default function AddPlantPage() {
         try {
             const results = await trefleService.search(searchTerm);
             setSearchResults(results);
+            if (results.length === 0) {
+                toast({
+                    title: "No Results Found",
+                    description: `No plants matching "${searchTerm}" were found in the Trefle database.`,
+                });
+            }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+            setError(errorMessage);
+            toast({
+                title: "Search Error",
+                description: errorMessage,
+                variant: 'destructive',
+            });
         } finally {
             setIsLoading(false);
         }
     };
     
     const handleAddPlant = async (treflePlant: TreflePlant) => {
+        setIsAdding(treflePlant.id);
         try {
-            // Trefle plants don't have 3D models, so threeDModelSrc is omitted.
-            const newPlant: Omit<Plant, 'id'> = {
-                commonName: treflePlant.common_name || treflePlant.scientific_name,
-                latinName: treflePlant.scientific_name,
-                description: `A plant from the family ${treflePlant.family}, genus ${treflePlant.genus}.`,
-                therapeuticUses: ['Medicinal'], // Default value
-                region: 'Global',
-                classification: `${treflePlant.family} / ${treflePlant.genus}`,
-                imageSrc: treflePlant.image_url || `https://placehold.co/600x400.png`,
-                imageHint: treflePlant.common_name || treflePlant.scientific_name,
-                ayushUses: "To be determined."
-            };
-
+            const newPlantData = adaptTrefleToPlant(treflePlant);
             const response = await fetch('/api/plants', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newPlant),
+                body: JSON.stringify(newPlantData),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to add plant');
+                throw new Error(errorData.message || 'Failed to add plant to database.');
             }
-            
+
+            const result = await response.json();
             setAddedPlants(prev => new Set(prev).add(treflePlant.id));
+            toast({
+                title: "Plant Added!",
+                description: `${treflePlant.common_name} has been added to your collection.`,
+            });
 
         } catch (err) {
-             setError(err instanceof Error ? err.message : 'An unknown error occurred while adding the plant.');
+            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+            toast({
+                title: "Error Adding Plant",
+                description: errorMessage,
+                variant: 'destructive',
+            });
+        } finally {
+            setIsAdding(null);
         }
     }
 
@@ -77,7 +109,7 @@ export default function AddPlantPage() {
                             Add Plants to Your Collection
                         </CardTitle>
                         <CardDescription>
-                            Search the Trefle.io database to find plants and add them to your own curated collection in Firestore.
+                            Search the Trefle.io database to find new plants and add them to your collection in Firestore.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -95,7 +127,7 @@ export default function AddPlantPage() {
                     </CardContent>
                 </Card>
 
-                {error && (
+                {error && !isLoading && (
                     <Alert variant="destructive">
                         <AlertTitle>Error</AlertTitle>
                         <AlertDescription>{error}</AlertDescription>
@@ -115,13 +147,15 @@ export default function AddPlantPage() {
                                 </div>
                             )}
                             <CardHeader>
-                                <CardTitle className="text-base">{plant.common_name}</CardTitle>
+                                <CardTitle className="text-base">{plant.common_name || 'N/A'}</CardTitle>
                                 <CardDescription>{plant.scientific_name}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <Button onClick={() => handleAddPlant(plant)} disabled={addedPlants.has(plant.id)} className="w-full">
-                                    {addedPlants.has(plant.id) ? <CheckCircle className="mr-2"/> : <PlusCircle className="mr-2"/>}
-                                    {addedPlants.has(plant.id) ? 'Added' : 'Add to Collection'}
+                                <Button onClick={() => handleAddPlant(plant)} disabled={addedPlants.has(plant.id) || isAdding === plant.id} className="w-full">
+                                    {isAdding === plant.id ? <Loader2 className="mr-2 animate-spin"/> :
+                                     addedPlants.has(plant.id) ? <CheckCircle className="mr-2"/> : <PlusCircle className="mr-2"/>
+                                    }
+                                    {isAdding === plant.id ? 'Adding...' : addedPlants.has(plant.id) ? 'Added' : 'Add to Collection'}
                                 </Button>
                             </CardContent>
                         </Card>

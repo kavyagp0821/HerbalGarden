@@ -1,4 +1,3 @@
-
 import type { LucideIcon } from 'lucide-react';
 
 export interface Plant {
@@ -15,6 +14,17 @@ export interface Plant {
   audioSrc?: string; 
   threeDModelSrc?: string;
   ayushUses?: string;
+}
+
+export interface TreflePlant {
+  id: number;
+  common_name: string;
+  scientific_name: string;
+  year: number;
+  image_url: string;
+  family: string;
+  genus: string;
+  rank: string;
 }
 
 export interface TourCategory {
