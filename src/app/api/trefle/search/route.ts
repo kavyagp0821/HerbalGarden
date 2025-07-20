@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const query = searchParams.get('q');
     const token = process.env.TREFLE_API_KEY;
 
-    if (!token || token === "YOUR_TREFLE_API_KEY_HERE") {
+    if (!token || token === "YOUR_TREFLE_API_KEY_HERE" || token.trim() === "") {
         console.error('======================================================================');
         console.error('  🔴🔴🔴 Trefle API key is not configured in .env file. 🔴🔴🔴');
         console.error('  The "Add Plants" feature will not work until this is fixed.');

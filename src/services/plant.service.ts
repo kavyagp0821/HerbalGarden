@@ -4,68 +4,85 @@ import type { Plant, TourCategory, QuizQuestion, TreflePlant } from '@/types';
 import { initialPlants } from '@/lib/initial-plant-data';
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
 import { lucideIconMapping } from '@/lib/icon-mapping';
-import { trefleService } from './trefle.service';
+
+async function fetchFromApi<T>(url: string): Promise<T> {
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') return ''; // Browser should use relative path
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    if (process.env.NEXT_PUBLIC_VERCEL_URL) return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    return 'http://localhost:9002'; // Local development
+  };
+  
+  const response = await fetch(`${getBaseUrl()}${url}`);
+  
+  if (!response.ok) {
+    let errorMessage = `API call failed with status ${response.status}`;
+    try {
+        const errorBody = await response.json();
+        errorMessage = errorBody.message || errorMessage;
+    } catch (e) {
+      // Ignore if response body is not JSON
+    }
+    throw new Error(errorMessage);
+  }
+  return response.json();
+}
 
 export const plantService = {
   async getPlants(): Promise<Plant[]> {
-    // Directly return the static data instead of fetching from an API
-    return Promise.resolve(initialPlants);
+    return fetchFromApi<Plant[]>('/api/plants');
   },
 
   async getPlant(id: string): Promise<Plant | null> {
-    const plant = initialPlants.find(p => p.id === id) || null;
-    if (plant) {
-        return Promise.resolve(plant);
-    }
-    // Fallback to searching Trefle if not in initial data
-    const treflePlants = await trefleService.search(id.replace('-', ' '));
-    if (treflePlants.length > 0) {
-        const treflePlant = treflePlants[0];
-        // Adapt TreflePlant to Plant
-        return {
-            id: String(treflePlant.id),
-            commonName: treflePlant.common_name || treflePlant.scientific_name,
-            latinName: treflePlant.scientific_name,
-            description: `A plant from the family ${treflePlant.family}, genus ${treflePlant.genus}.`,
-            therapeuticUses: ['Medicinal'], // Default value
-            region: 'Global',
-            classification: `${treflePlant.family} / ${treflePlant.genus}`,
-            imageSrc: treflePlant.image_url || `https://placehold.co/600x400.png`,
-            imageHint: treflePlant.common_name || treflePlant.scientific_name,
-            ayushUses: "To be determined."
+    try {
+        return await fetchFromApi<Plant>(`/api/plants/${id}`);
+    } catch(e) {
+        if (e instanceof Error && e.message.includes('404')) {
+            return null;
         }
+        console.error(`Failed to fetch plant ${id}`, e);
+        return null;
     }
-    return Promise.resolve(null);
   },
   
   async getTourCategories(): Promise<TourCategory[]> {
-    // Map the string representation of the icon to the actual component
-    const toursWithIcons = tourCategories.map(tour => ({
-      ...tour,
-      icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
-    }));
-    return Promise.resolve(toursWithIcons);
+    try {
+        const tours = await fetchFromApi<TourCategory[]>('/api/tours');
+         // Map the string representation of the icon to the actual component
+        return tours.map(tour => ({
+          ...tour,
+          icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
+        }));
+    } catch (e) {
+        console.error('Failed to fetch tour categories', e);
+        return [];
+    }
   },
 
   async getTourCategory(id: string): Promise<TourCategory | null> {
-      const tour = tourCategories.find(t => t.id === id);
-      if (!tour) return Promise.resolve(null);
-      
-      const tourWithIcon = {
-        ...tour,
-        icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
-      };
-      return Promise.resolve(tourWithIcon);
+      try {
+        const tour = await fetchFromApi<TourCategory>(`/api/tours/${id}`);
+        if (!tour) return null;
+        
+        return {
+          ...tour,
+          icon: lucideIconMapping[tour.icon as unknown as keyof typeof lucideIconMapping] || tour.icon
+        };
+      } catch(e) {
+        console.error(`Failed to fetch tour category ${id}`, e);
+        return null;
+      }
   },
 
   async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
     if (!plantIds || plantIds.length === 0) return Promise.resolve([]);
-    const plants = initialPlants.filter(plant => plantIds.includes(plant.id));
-    return Promise.resolve(plants);
+    const allPlants = await this.getPlants();
+    const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
+    return plantsInTour;
   },
   
   async getQuizQuestions(): Promise<QuizQuestion[]> {
-    // Quiz questions are static.
+    // Quiz questions are static for this app version.
     return Promise.resolve(quizQuestions);
   },
 };
