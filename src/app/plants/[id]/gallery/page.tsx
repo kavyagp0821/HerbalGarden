@@ -1,9 +1,21 @@
 // src/app/plants/[id]/gallery/page.tsx
 import Image from "next/image";
+import { plantService } from "@/services/plant.service";
+import { notFound } from "next/navigation";
 
-export default function GalleryPage() {
+interface GalleryPageProps {
+  params: { id: string };
+}
+
+export default async function GalleryPage({ params }: GalleryPageProps) {
+  const plant = await plantService.getPlant(params.id);
+
+  if (!plant) {
+    notFound();
+  }
+  
   const placeholderImages = [
-    { src: 'https://placehold.co/600x400.png', alt: 'Lush green leaves of a plant', hint: 'plant leaves' },
+    { src: plant.imageSrc, alt: `Main image of ${plant.commonName}`, hint: plant.imageHint || plant.commonName },
     { src: 'https://placehold.co/400x600.png', alt: 'A close-up of a plant flower', hint: 'plant flower' },
     { src: 'https://placehold.co/600x400.png', alt: 'The plant growing in its natural habitat', hint: 'plant habitat' },
     { src: 'https://placehold.co/600x400.png', alt: 'Dried herbs from the plant', hint: 'dried herbs' },
@@ -19,6 +31,7 @@ export default function GalleryPage() {
             src={image.src}
             alt={image.alt}
             fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             className="object-cover transition-transform duration-300 group-hover:scale-110"
             data-ai-hint={image.hint}
           />

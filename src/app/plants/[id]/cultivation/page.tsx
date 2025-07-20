@@ -1,6 +1,6 @@
 // src/app/plants/[id]/cultivation/page.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, Sun, Thermometer, Droplets, Wind } from "lucide-react";
+import { Leaf, Sun, Droplets, Wind, Thermometer } from "lucide-react";
 import { plantService } from "@/services/plant.service";
 import { notFound } from "next/navigation";
 

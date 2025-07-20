@@ -18,6 +18,21 @@ export default function PlantInteractions({ plantId, plantName }: PlantInteracti
   const [showNotesSaved, setShowNotesSaved] = useState(false);
   const { toast } = useToast();
 
+  // Effect to track viewed plants
+  useEffect(() => {
+    try {
+      const progress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+      const viewedPlants = progress.viewedPlants || {};
+      if (!viewedPlants[plantId]) {
+        viewedPlants[plantId] = plantName;
+        progress.viewedPlants = viewedPlants;
+        localStorage.setItem('userProgress', JSON.stringify(progress));
+      }
+    } catch (error) {
+      console.error("Failed to update user progress for viewed plants.", error);
+    }
+  }, [plantId, plantName]);
+
   useEffect(() => {
     // Load bookmark status from localStorage
     const storedBookmarks = JSON.parse(localStorage.getItem('bookmarkedPlants') || '{}');

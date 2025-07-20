@@ -1,15 +1,11 @@
 // src/app/plants/[id]/layout.tsx
-'use client';
-
 import AppLayout from "@/components/layout/AppLayout";
 import PlantDetailNav from "@/components/plants/PlantDetailNav";
 import { plantService } from "@/services/plant.service";
 import { notFound } from "next/navigation";
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
 import type { Plant } from "@/types";
 
 interface PlantDetailLayoutProps {
@@ -17,34 +13,23 @@ interface PlantDetailLayoutProps {
   params: { id: string };
 }
 
-export default function PlantDetailLayout({ children, params }: PlantDetailLayoutProps) {
-  const [plant, setPlant] = useState<Plant | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchPlantData() {
-        const fetchedPlant = await plantService.getPlant(params.id);
-        if (fetchedPlant) {
-            setPlant(fetchedPlant);
-        } else {
-            notFound();
-        }
-        setIsLoading(false);
-    }
-    fetchPlantData();
-  }, [params.id]);
-  
-  // This is a bit of a workaround to avoid a separate metadata function
-  useEffect(() => {
-    if (plant) {
-        document.title = `${plant.commonName} | Virtual Vana`;
-    }
-  }, [plant]);
+// This function generates metadata for the page.
+export async function generateMetadata({ params }: PlantDetailLayoutProps) {
+  const plant = await plantService.getPlant(params.id);
+  if (!plant) {
+    return { title: 'Plant Not Found | Virtual Vana' };
+  }
+  return {
+    title: `${plant.commonName} | Virtual Vana`,
+  };
+}
 
 
-  if (isLoading || !plant) {
-    // A simple loader while waiting for plant data
-    return <AppLayout><div className="text-center p-10">Loading plant details...</div></AppLayout>;
+export default async function PlantDetailLayout({ children, params }: PlantDetailLayoutProps) {
+  const plant: Plant | null = await plantService.getPlant(params.id);
+
+  if (!plant) {
+    notFound();
   }
 
   return (
