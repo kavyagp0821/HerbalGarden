@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Plant } from '@/types';
-import { ArrowRight, Box } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface PlantCardProps {
   plant: Plant;
@@ -28,11 +28,6 @@ export default function PlantCard({ plant }: PlantCardProps) {
                 />
             </div>
         </Link>
-        {plant.threeDModelSrc && (
-          <div className="absolute top-2 right-2 bg-black/50 text-white p-1.5 rounded-full backdrop-blur-sm">
-              <Box className="w-5 h-5" title="3D Model Available"/>
-          </div>
-        )}
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-xl font-headline mb-1">

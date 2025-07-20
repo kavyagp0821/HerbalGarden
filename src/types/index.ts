@@ -10,23 +10,12 @@ export interface Plant {
   classification: string;
   imageSrc: string;
   imageHint?: string;
-  videoSrc?: string; 
-  audioSrc?: string; 
   threeDModelSrc?: string;
   ayushUses?: string;
+  source?: 'local' | 'Trefle';
+  sourceId?: string;
   createdAt?: string;
   updatedAt?: string;
-}
-
-export interface TreflePlant {
-  id: number;
-  common_name: string;
-  scientific_name: string;
-  year: number;
-  image_url: string;
-  family: string;
-  genus: string;
-  rank: string;
 }
 
 export interface TourCategory {

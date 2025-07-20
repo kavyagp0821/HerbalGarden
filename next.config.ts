@@ -1,7 +1,6 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['three', '@react-three/drei', '@react-three/fiber'],
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -36,20 +35,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  serverExternalPackages: [
-      'three',
-      '@react-three/fiber',
-      '@react-three/drei'
-  ],
-   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'react/jsx-runtime.js': require.resolve('react/jsx-runtime'),
-      'react': require.resolve('react'),
-      'react-dom': require.resolve('react-dom'),
-    };
-    return config;
-  }
 };
 
 export default nextConfig;
