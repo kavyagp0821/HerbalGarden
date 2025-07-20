@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -15,24 +16,37 @@ interface QuizClientProps {
   questions: QuizQuestion[];
 }
 
-export default function QuizClient({ questions: initialQuestions }: QuizClientProps) {
-  const [shuffledQuestions, setShuffledQuestions] = useState<QuizQuestion[]>([]);
+const QUIZ_LENGTH = 5;
+
+export default function QuizClient({ questions: allQuestions }: QuizClientProps) {
+  const [currentQuizQuestions, setCurrentQuizQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [quizFinished, setQuizFinished] = useState(false);
 
-  const shuffleQuestions = () => {
-     setShuffledQuestions([...initialQuestions].sort(() => Math.random() - 0.5));
+  const startNewQuiz = () => {
+     // Shuffle all questions and take the first QUIZ_LENGTH
+     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+     setCurrentQuizQuestions(shuffled.slice(0, QUIZ_LENGTH));
+     
+     // Reset all state
+     setCurrentQuestionIndex(0);
+     setSelectedAnswer(null);
+     setScore(0);
+     setShowResult(false);
+     setQuizFinished(false);
   }
 
   useEffect(() => {
-    shuffleQuestions();
-  }, [initialQuestions]);
+    if(allQuestions.length > 0) {
+      startNewQuiz();
+    }
+  }, [allQuestions]);
 
 
-  const currentQuestion = useMemo(() => shuffledQuestions[currentQuestionIndex], [shuffledQuestions, currentQuestionIndex]);
+  const currentQuestion = useMemo(() => currentQuizQuestions[currentQuestionIndex], [currentQuizQuestions, currentQuestionIndex]);
   const currentOptions = useMemo(() => {
     if (!currentQuestion) return [];
     return [...currentQuestion.options].sort(() => Math.random() - 0.5);
@@ -50,7 +64,7 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
   const handleNextQuestion = () => {
     setShowResult(false);
     setSelectedAnswer(null);
-    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+    if (currentQuestionIndex < currentQuizQuestions.length - 1) {
       setCurrentQuestionIndex(prevIndex => prevIndex + 1);
     } else {
       setQuizFinished(true);
@@ -60,7 +74,7 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
         const quizHistory = progress.quizHistory || [];
         // Add score from this session. Note: score state might not be updated yet.
         const finalScore = (selectedAnswer === currentQuestion.correctAnswer ? score + 1 : score);
-        quizHistory.push({ score: finalScore, total: shuffledQuestions.length, date: new Date().toISOString() });
+        quizHistory.push({ score: finalScore, total: currentQuizQuestions.length, date: new Date().toISOString() });
         progress.quizHistory = quizHistory;
         localStorage.setItem('userProgress', JSON.stringify(progress));
       } catch (error) {
@@ -70,23 +84,18 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
   };
 
   const restartQuiz = () => {
-    shuffleQuestions();
-    setCurrentQuestionIndex(0);
-    setSelectedAnswer(null);
-    setScore(0);
-    setShowResult(false);
-    setQuizFinished(false);
+    startNewQuiz();
   };
 
   if (quizFinished) {
     const finalScore = score;
-    const percentage = (finalScore / shuffledQuestions.length) * 100;
+    const percentage = (finalScore / currentQuizQuestions.length) * 100;
     return (
       <Card className="max-w-xl mx-auto shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Quiz Completed!</CardTitle>
           <CardDescription className="text-lg">
-            You scored {finalScore} out of {shuffledQuestions.length} ({percentage.toFixed(0)}%).
+            You scored {finalScore} out of {currentQuizQuestions.length} ({percentage.toFixed(0)}%).
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center">
@@ -115,14 +124,14 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
     return <p>Loading quiz...</p>; // Or some other loading state
   }
   
-  const progressValue = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
+  const progressValue = ((currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
 
   return (
     <Card className="max-w-xl mx-auto shadow-xl">
       <CardHeader>
         <div className="flex justify-between items-center mb-2">
             <CardTitle className="text-2xl font-headline">AYUSH Plant Quiz</CardTitle>
-            <span className="text-sm text-muted-foreground">Question {currentQuestionIndex + 1} of {shuffledQuestions.length}</span>
+            <span className="text-sm text-muted-foreground">Question {currentQuestionIndex + 1} of {currentQuizQuestions.length}</span>
         </div>
         <Progress value={progressValue} aria-label={`${progressValue}% quiz completed`} className="w-full h-2" />
       </CardHeader>
@@ -166,7 +175,7 @@ export default function QuizClient({ questions: initialQuestions }: QuizClientPr
       <CardFooter>
         {showResult ? (
           <Button onClick={handleNextQuestion} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-            {currentQuestionIndex < shuffledQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+            {currentQuestionIndex < currentQuizQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
           </Button>
         ) : (
           <Button onClick={handleAnswerSubmit} disabled={!selectedAnswer} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
