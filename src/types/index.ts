@@ -10,7 +10,6 @@ export interface Plant {
   classification: string;
   imageSrc: string;
   imageHint?: string;
-  threeDModelSrc?: string;
   ayushUses?: string;
   source?: 'local' | 'Trefle';
   sourceId?: string;

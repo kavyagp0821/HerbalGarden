@@ -9,12 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Leaf, MapPin, Milestone, Orbit, Volume2, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import ThreeDViewer from '@/components/plants/ThreeDViewer';
 import { Button } from '@/components/ui/button';
 import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
 import { useToast } from '@/hooks/use-toast';
 import { plantService } from '@/services/plant.service';
 import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
 
 
 interface PlantPageProps {
@@ -79,15 +79,19 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
       <div className="lg:col-span-3 space-y-6">
-        <Card className="shadow-lg h-[500px]">
-          <CardHeader>
-              <CardTitle className="flex items-center text-xl font-headline">
-                  <Orbit className="w-5 h-5 mr-2 text-primary" />
-                  Interactive 3D Model
-              </CardTitle>
-          </CardHeader>
-          <CardContent>
-              <ThreeDViewer modelPath={plant.threeDModelSrc} />
+        <Card className="shadow-lg">
+          <CardContent className="p-0">
+             <div className="aspect-video relative w-full">
+                <Image
+                    src={plant.imageSrc}
+                    alt={plant.commonName}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover rounded-t-lg"
+                    data-ai-hint={plant.imageHint || plant.commonName}
+                    priority
+                />
+            </div>
           </CardContent>
         </Card>
         <PlantInteractions plantId={plant.id} plantName={plant.commonName} />
@@ -178,12 +182,9 @@ function PlantOverviewSkeleton() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3 space-y-6">
-                 <Card className="shadow-lg h-[500px]">
-                     <CardHeader>
-                         <Skeleton className="h-6 w-1/2" />
-                    </CardHeader>
-                     <CardContent>
-                         <Skeleton className="h-96 w-full" />
+                 <Card className="shadow-lg h-96">
+                     <CardContent className="p-0 h-full">
+                         <Skeleton className="h-full w-full rounded-t-lg" />
                     </CardContent>
                 </Card>
                 <Card>

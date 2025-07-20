@@ -12,7 +12,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Lamiaceae / Ocimum',
     imageSrc: 'https://images.unsplash.com/photo-1596701193354-219b697d41f7?q=80&w=600&auto=format&fit=crop',
     imageHint: 'holy basil plant',
-    threeDModelSrc: '/models/tulsi.glb',
     ayushUses: 'Considered a sacred plant, Tulsi is used in Ayurveda to treat a variety of ailments including fever, cough, and to promote longevity.'
   },
   {
@@ -25,7 +24,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Solanaceae / Withania',
     imageSrc: 'https://bs.floristic.org/image/o/8a64d1f215d2e237418931795744465814594f71',
     imageHint: 'ashwagandha plant',
-    threeDModelSrc: '/models/ashwagandha.glb',
     ayushUses: 'Known as a potent adaptogen in Ayurveda, it helps the body manage stress and is used to boost brain function and lower blood sugar and cortisol levels.'
   },
   {
@@ -38,7 +36,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Zingiberaceae / Curcuma',
     imageSrc: 'https://images.unsplash.com/photo-1582276558195-a63d91753948?q=80&w=600&auto=format&fit=crop',
     imageHint: 'turmeric root',
-    threeDModelSrc: '/models/turmeric.glb',
     ayushUses: 'Its active compound, curcumin, is a powerful anti-inflammatory and antioxidant. Used in Ayurveda for skin conditions, arthritis, and digestive issues.'
   },
   {
@@ -51,7 +48,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Plantaginaceae / Bacopa',
     imageSrc: 'https://bs.floristic.org/image/o/8e04d493e8784d2dee77f62057639414598cf4d6',
     imageHint: 'bacopa monnieri plant',
-    threeDModelSrc: '/models/brahmi.glb',
     ayushUses: 'Often called a "brain tonic," Brahmi is used in Ayurvedic medicine to enhance memory, reduce anxiety, and treat epilepsy.'
   },
   {
@@ -64,7 +60,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Phyllanthaceae / Phyllanthus',
     imageSrc: 'https://images.unsplash.com/photo-1623832386859-c29373ee9f29?q=80&w=600&auto=format&fit=crop',
     imageHint: 'amla fruit',
-    threeDModelSrc: '/models/amla.glb',
     ayushUses: 'A very rich source of Vitamin C, Amla is used to boost the immune system, improve skin and hair, and aid in digestion.'
   },
   {
@@ -77,7 +72,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Meliaceae / Azadirachta',
     imageSrc: 'https://bs.floristic.org/image/o/8a93e3221e3f8b05634e9e02316e255a82898a12',
     imageHint: 'neem tree leaves',
-    threeDModelSrc: '/models/neem.glb',
     ayushUses: 'Known as "the village pharmacy," Neem has powerful antibacterial, antiviral, and antifungal properties, used for skin diseases, dental care, and as a blood purifier.'
   },
   {
@@ -90,7 +84,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Asparagaceae / Asparagus',
     imageSrc: 'https://bs.floristic.org/image/o/070f80a4a89697a224647358e5d3c1a84c8a29a0',
     imageHint: 'asparagus racemosus plant',
-    threeDModelSrc: '/models/shatavari.glb',
     ayushUses: 'Primarily used as a female reproductive tonic, Shatavari supports hormonal balance, enhances libido, and is used to treat conditions like PCOS.'
   },
   {
@@ -103,7 +96,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Zingiberaceae / Zingiber',
     imageSrc: 'https://images.unsplash.com/photo-1552318819-3c0049202671?q=80&w=600&auto=format&fit=crop',
     imageHint: 'ginger root spice',
-    threeDModelSrc: '/models/ginger.glb',
     ayushUses: 'Used to aid digestion, reduce nausea, and help fight the flu and common cold. Its active ingredient, gingerol, has potent anti-inflammatory and antioxidant effects.'
   },
   {
@@ -116,7 +108,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Menispermaceae / Tinospora',
     imageSrc: 'https://bs.floristic.org/image/o/f199e4ea8a82d25089f280e22b10313c8808169e',
     imageHint: 'giloy plant vine',
-    threeDModelSrc: '/models/giloy.glb',
     ayushUses: 'Known as the "root of immortality," Giloy is a powerful immune-stimulant and is used in Ayurveda to treat chronic fever, diabetes, and high cholesterol.'
   },
   {
@@ -129,7 +120,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Moringaceae / Moringa',
     imageSrc: 'https://images.unsplash.com/photo-1608832168993-2c908c691f3e?q=80&w=600&auto=format&fit=crop',
     imageHint: 'moringa leaves',
-    threeDModelSrc: '/models/moringa.glb',
     ayushUses: 'Often called the "miracle tree," its leaves are a powerhouse of vitamins, minerals, and antioxidants. Used to combat malnutrition and reduce inflammation.'
   },
   {
@@ -142,7 +132,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Poaceae / Chrysopogon',
     imageSrc: 'https://bs.floristic.org/image/o/8e0bd6f272a2753a39e7c387b322a30b5015b699',
     imageHint: 'vetiver grass',
-    threeDModelSrc: '/models/vetiver.glb',
     ayushUses: 'Known as "the oil of tranquility," its essential oil is deeply calming and grounding. The roots are used for their cooling properties to treat heatstroke and inflammation.'
   },
   {
@@ -155,7 +144,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Santalaceae / Santalum',
     imageSrc: 'https://images.unsplash.com/photo-1622398934812-34335b29314?q=80&w=600&auto=format&fit=crop',
     imageHint: 'sandalwood powder',
-    threeDModelSrc: '/models/sandalwood.glb',
     ayushUses: 'Highly prized for its cooling properties and fragrance. Used in Ayurveda for skin disorders, urinary tract infections, and as a meditative aid.'
   },
   {
@@ -168,7 +156,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Fabaceae / Glycyrrhiza',
     imageSrc: 'https://images.unsplash.com/photo-1635398623049-53b708d5b88b?q=80&w=600&auto=format&fit=crop',
     imageHint: 'licorice root sticks',
-    threeDModelSrc: '/models/licorice.glb',
     ayushUses: 'Used as a demulcent to soothe sore throats and ulcers. It also supports adrenal function and is a mild laxative.'
   },
   {
@@ -181,7 +168,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Lamiaceae / Mentha',
     imageSrc: 'https://images.unsplash.com/photo-1596464555802-9599a41984a9?q=80&w=600&auto=format&fit=crop',
     imageHint: 'peppermint leaves',
-    threeDModelSrc: '/models/peppermint.glb',
     ayushUses: 'Commonly used to soothe digestive issues like IBS. The menthol in peppermint is a muscle relaxant and can help with tension headaches when applied topically.'
   },
   {
@@ -194,7 +180,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Poaceae / Cymbopogon',
     imageSrc: 'https://images.unsplash.com/photo-1594282486799-a4a35049b422?q=80&w=600&auto=format&fit=crop',
     imageHint: 'lemongrass stalks',
-    threeDModelSrc: '/models/lemongrass.glb',
     ayushUses: 'Used in traditional medicine to relieve anxiety, lower cholesterol, and as a potent antibacterial and antifungal agent. Its oil is popular in aromatherapy.'
   },
   {
@@ -207,7 +192,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Asteraceae / Matricaria',
     imageSrc: 'https://images.unsplash.com/photo-1563988187-84d3534d8a5c?q=80&w=600&auto=format&fit=crop',
     imageHint: 'chamomile flowers',
-    threeDModelSrc: '/models/chamomile.glb',
     ayushUses: 'Widely recognized for its calming properties. Chamomile tea is a popular remedy for insomnia and anxiety. It also helps soothe an upset stomach.'
   },
   {
@@ -220,7 +204,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Lamiaceae / Lavandula',
     imageSrc: 'https://images.unsplash.com/photo-1565015626359-a21235b29314?q=80&w=600&auto=format&fit=crop',
     imageHint: 'lavender fields',
-    threeDModelSrc: '/models/lavender.glb',
     ayushUses: 'The essential oil is renowned for its ability to reduce stress, anxiety, and promote sleep. It also has antiseptic and anti-inflammatory properties, useful for skin irritations.'
   },
   {
@@ -233,7 +216,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Lamiaceae / Salvia',
     imageSrc: 'https://images.unsplash.com/photo-1597855145993-03a305141b71?q=80&w=600&auto=format&fit=crop',
     imageHint: 'rosemary sprig',
-    threeDModelSrc: '/models/rosemary.glb',
     ayushUses: 'Traditionally used to improve memory and concentration. Its aroma can be invigorating, and it is a rich source of antioxidants that boost the immune system.'
   },
   {
@@ -246,7 +228,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Asteraceae / Echinacea',
     imageSrc: 'https://images.unsplash.com/photo-1600862082260-23ac7547d79b?q=80&w=600&auto=format&fit=crop',
     imageHint: 'purple coneflower',
-    threeDModelSrc: '/models/echinacea.glb',
     ayushUses: 'Popularly used to shorten the duration of the common cold and flu and reduce symptoms, such as sore throat, cough, and fever.'
   },
   {
@@ -259,7 +240,6 @@ export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
     classification: 'Malvaceae / Althaea',
     imageSrc: 'https://bs.floristic.org/image/o/8f3994348a27d53b9a527f3118a1a473f7663f73',
     imageHint: 'marshmallow plant flower',
-    threeDModelSrc: '/models/marshmallow-root.glb',
     ayushUses: 'Its high mucilage content makes it a useful demulcent, soothing irritated membranes of the respiratory and digestive tracts.'
   }
 ];
