@@ -5,3 +5,4 @@
 import '@/ai/flows/recognize-plant.ts';
 import '@/ai/flows/recommend-plants-flow.ts';
 import '@/ai/flows/chatbot-flow.ts';
+import '@/ai/flows/text-to-speech-flow.ts';

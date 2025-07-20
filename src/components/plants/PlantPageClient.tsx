@@ -1,15 +1,18 @@
 // src/components/plants/PlantPageClient.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { Plant } from '@/types';
 import PlantInteractions from '@/components/plants/PlantInteractions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Leaf, MapPin, Milestone, Orbit } from 'lucide-react';
+import { Leaf, MapPin, Milestone, Orbit, Volume2, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import ThreeDViewer from './ThreeDViewer';
+import { Button } from '../ui/button';
+import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
+import { useToast } from '@/hooks/use-toast';
 
 
 interface PlantPageClientProps {
@@ -17,6 +20,9 @@ interface PlantPageClientProps {
 }
 
 export default function PlantPageClient({ plant }: PlantPageClientProps) {
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     // Track viewed plants for the user's progress
@@ -32,6 +38,24 @@ export default function PlantPageClient({ plant }: PlantPageClientProps) {
       console.error("Failed to update user progress for viewed plants.", error);
     }
   }, [plant.id, plant.commonName]);
+
+  const handleListen = async () => {
+    setIsGeneratingAudio(true);
+    try {
+        const fullText = `${plant.commonName}. ${plant.latinName}. ${plant.description} ${plant.ayushUses ? `Traditional AYUSH Uses: ${plant.ayushUses}` : ''}`;
+        const result = await textToSpeech(fullText);
+        setAudioSrc(result.audioDataUri);
+    } catch (error) {
+        console.error("TTS Generation Error:", error);
+        toast({
+            title: "Audio Generation Failed",
+            description: "Could not generate audio for this plant. Please try again later.",
+            variant: "destructive"
+        });
+    } finally {
+        setIsGeneratingAudio(false);
+    }
+  }
 
 
   return (
@@ -78,10 +102,25 @@ export default function PlantPageClient({ plant }: PlantPageClientProps) {
 
         <div className="space-y-6">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row justify-between items-center">
               <CardTitle className="text-xl font-headline">Description</CardTitle>
+                <Button onClick={handleListen} variant="outline" size="sm" disabled={isGeneratingAudio}>
+                    {isGeneratingAudio ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                        <Volume2 className="mr-2 h-4 w-4" />
+                    )}
+                    Listen
+                </Button>
             </CardHeader>
             <CardContent>
+               {audioSrc && (
+                <div className="mb-4">
+                    <audio controls autoPlay src={audioSrc} className="w-full">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                )}
               <p className="text-foreground/90 leading-relaxed">{plant.description}</p>
               {plant.ayushUses && (
                 <>
