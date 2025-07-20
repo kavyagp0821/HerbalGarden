@@ -40,7 +40,6 @@ export default function PlantCard({ plant }: PlantCardProps) {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     data-ai-hint={plant.imageHint || plant.commonName}
-                    unoptimized // Necessary for external URLs like those from Trefle that might not be pre-configured
                 />
             </div>
         </Link>
@@ -70,7 +69,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
       </CardContent>
       <CardFooter className="p-4 pt-0">
          <Link href={`/plants/${plant.id}`} className="w-full">
-            <Button variant="outline" className="w-full text-primary border-primary hover:bg-primary/10">
+            <Button variant="default" className="w-full">
                 View Details <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
         </Link>

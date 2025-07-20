@@ -24,11 +24,11 @@ export default function ThreeDViewer({ modelPath }: ThreeDViewerProps) {
 
   return (
     <div className="h-96 w-full rounded-lg bg-muted border flex items-center justify-center">
-      <Suspense fallback={<div className="animate-pulse">Loading 3D model...</div>}>
-        <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+      <Suspense fallback={<div className="animate-pulse text-center">Loading 3D model...</div>}>
+        <Canvas camera={{ position: [0, 1, 5], fov: 50 }}>
           <ambientLight intensity={0.5} />
-          <Environment preset="sunset" />
-          <OrbitControls enableZoom={true} autoRotate={true} />
+          <Environment preset="forest" />
+          <OrbitControls enableZoom={true} autoRotate={true} autoRotateSpeed={0.5} />
           <Model modelPath={modelPath} />
         </Canvas>
       </Suspense>

@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Leaf, MapPin, Milestone, Orbit, Volume2, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import Image from 'next/image';
 import ThreeDViewer from '@/components/plants/ThreeDViewer';
 import { Button } from '@/components/ui/button';
 import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
@@ -59,6 +58,7 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
 
   const handleListen = async () => {
     setIsGeneratingAudio(true);
+    setAudioSrc(null);
     try {
         const fullText = `${plant.commonName}. ${plant.latinName}. ${plant.description} ${plant.ayushUses ? `Traditional AYUSH Uses: ${plant.ayushUses}` : ''}`;
         const result = await textToSpeech(fullText);
@@ -77,25 +77,58 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
 
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="space-y-8">
-          <Card className="overflow-hidden shadow-lg">
-              <CardContent className="p-0">
-                  <div className="aspect-video relative bg-muted flex items-center justify-center">
-                      <Image
-                          src={plant.imageSrc}
-                          alt={`Visual representation of ${plant.commonName}`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover"
-                          data-ai-hint={plant.imageHint || `botanical illustration ${plant.commonName.toLowerCase()}`}
-                          priority
-                      />
-                  </div>
-              </CardContent>
-          </Card>
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      <div className="lg:col-span-3 space-y-6">
+        <Card className="shadow-lg h-[500px]">
+          <CardHeader>
+              <CardTitle className="flex items-center text-xl font-headline">
+                  <Orbit className="w-5 h-5 mr-2 text-primary" />
+                  Interactive 3D Model
+              </CardTitle>
+          </CardHeader>
+          <CardContent>
+              <ThreeDViewer modelPath={plant.threeDModelSrc} />
+          </CardContent>
+        </Card>
+        <PlantInteractions plantId={plant.id} plantName={plant.commonName} />
+      </div>
 
-         <Card>
+      <div className="lg:col-span-2 space-y-6">
+        <Card>
+          <CardHeader className="flex flex-row justify-between items-start">
+            <div>
+                <CardTitle className="text-2xl font-headline">Description</CardTitle>
+                 <p className="text-foreground/80 leading-relaxed mt-2">{plant.description}</p>
+            </div>
+              <Button onClick={handleListen} variant="outline" size="icon" className="flex-shrink-0" disabled={isGeneratingAudio}>
+                  {isGeneratingAudio ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                      <Volume2 className="h-5 w-5" />
+                  )}
+                  <span className="sr-only">Listen to description</span>
+              </Button>
+          </CardHeader>
+          <CardContent>
+             {audioSrc && (
+              <div className="mb-4">
+                  <audio controls autoPlay src={audioSrc} className="w-full h-10">
+                      Your browser does not support the audio element.
+                  </audio>
+              </div>
+              )}
+            
+            {plant.ayushUses && (
+              <>
+              <Separator className="my-4" />
+              <h3 className="font-semibold mb-2 text-primary">Traditional AYUSH Uses</h3>
+              <p className="text-foreground/80 leading-relaxed">{plant.ayushUses}</p>
+              </>
+            )}
+          </CardContent>
+        </Card>
+        
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center text-xl font-headline">
               <Leaf className="w-5 h-5 mr-2 text-primary" />
@@ -105,54 +138,9 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {plant.therapeuticUses.map((use, index) => (
-                <Badge key={index} variant="secondary">{use}</Badge>
+                <Badge key={index} variant="secondary" className="text-sm">{use}</Badge>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="space-y-6">
-        <Card>
-          <CardHeader className="flex flex-row justify-between items-center">
-            <CardTitle className="text-xl font-headline">Description</CardTitle>
-              <Button onClick={handleListen} variant="outline" size="sm" disabled={isGeneratingAudio}>
-                  {isGeneratingAudio ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                      <Volume2 className="mr-2 h-4 w-4" />
-                  )}
-                  Listen
-              </Button>
-          </CardHeader>
-          <CardContent>
-             {audioSrc && (
-              <div className="mb-4">
-                  <audio controls autoPlay src={audioSrc} className="w-full">
-                      Your browser does not support the audio element.
-                  </audio>
-              </div>
-              )}
-            <p className="text-foreground/90 leading-relaxed">{plant.description}</p>
-            {plant.ayushUses && (
-              <>
-              <Separator className="my-4" />
-              <h3 className="font-semibold mb-2">Traditional AYUSH Uses</h3>
-              <p className="text-foreground/90 leading-relaxed">{plant.ayushUses}</p>
-              </>
-            )}
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-              <CardTitle className="flex items-center text-xl font-headline">
-                  <Orbit className="w-5 h-5 mr-2 text-primary" />
-                  Interactive 3D Model
-              </CardTitle>
-          </CardHeader>
-          <CardContent>
-              <ThreeDViewer modelPath={plant.threeDModelSrc} />
           </CardContent>
         </Card>
 
@@ -181,8 +169,6 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
             </CardContent>
           </Card>
         </div>
-
-        <PlantInteractions plantId={plant.id} plantName={plant.commonName} />
       </div>
     </div>
   );
@@ -190,28 +176,29 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
 
 function PlantOverviewSkeleton() {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-8">
-                <Card className="overflow-hidden shadow-lg">
-                    <CardContent className="p-0">
-                        <Skeleton className="aspect-video w-full" />
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <Skeleton className="h-6 w-3/5" />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div className="lg:col-span-3 space-y-6">
+                 <Card className="shadow-lg h-[500px]">
+                     <CardHeader>
+                         <Skeleton className="h-6 w-1/2" />
                     </CardHeader>
-                    <CardContent className="flex flex-wrap gap-2">
-                        <Skeleton className="h-6 w-20" />
-                        <Skeleton className="h-6 w-24" />
-                        <Skeleton className="h-6 w-16" />
+                     <CardContent>
+                         <Skeleton className="h-96 w-full" />
                     </CardContent>
                 </Card>
-            </div>
-            <div className="space-y-6">
                 <Card>
                     <CardHeader>
                         <Skeleton className="h-6 w-2/5" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-24 w-full" />
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="lg:col-span-2 space-y-6">
+                <Card>
+                    <CardHeader>
+                        <Skeleton className="h-8 w-3/5" />
                     </CardHeader>
                     <CardContent className="space-y-2">
                         <Skeleton className="h-4 w-full" />
@@ -221,10 +208,12 @@ function PlantOverviewSkeleton() {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <Skeleton className="h-6 w-1/2" />
+                        <Skeleton className="h-6 w-3/5" />
                     </CardHeader>
-                    <CardContent>
-                         <Skeleton className="h-96 w-full" />
+                    <CardContent className="flex flex-wrap gap-2">
+                        <Skeleton className="h-8 w-20" />
+                        <Skeleton className="h-8 w-24" />
+                        <Skeleton className="h-8 w-16" />
                     </CardContent>
                 </Card>
             </div>

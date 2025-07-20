@@ -20,12 +20,12 @@ export default async function PlantsPage() {
     <AppLayout>
       <div className="space-y-8">
         <header>
-            <h1 className="text-3xl font-headline font-semibold text-primary flex items-center">
-                <Leaf className="w-8 h-8 mr-3" />
-                Explore Our Plant Collection
+            <h1 className="text-4xl font-headline font-bold text-primary flex items-center">
+                <Leaf className="w-10 h-10 mr-4" />
+                Explore the Garden
             </h1>
-             <p className="text-lg text-muted-foreground mt-2">
-                Discover our curated collection of medicinal plants, complete with detailed information and interactive 3D models.
+             <p className="text-lg text-muted-foreground mt-2 max-w-3xl">
+                Discover our curated collection of medicinal plants. Click on any plant to see its detailed profile, including an interactive 3D model, therapeutic uses, and cultivation information.
             </p>
         </header>
 
