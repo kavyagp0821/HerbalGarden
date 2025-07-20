@@ -2,10 +2,18 @@
 
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Orbit } from 'lucide-react';
-import Model from './Model';
+
+interface ModelProps {
+  modelPath: string;
+}
+
+function Model({ modelPath }: ModelProps) {
+  const { scene } = useGLTF(modelPath);
+  return <primitive object={scene} scale={1.5} />;
+}
 
 interface ThreeDViewerProps {
   modelPath?: string;
