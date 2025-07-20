@@ -118,39 +118,5 @@ export const quizQuestions: QuizQuestion[] = [
     correctAnswer: 'Moringa',
     plantId: 'moringa',
   },
-  {
-    id: 'q11',
-    question: 'What is the main therapeutic use of Lavender essential oil?',
-    options: ['Boosting energy', 'Aiding digestion', 'Reducing stress and promoting sleep', 'Improving memory'],
-    correctAnswer: 'Reducing stress and promoting sleep',
-    plantId: 'lavender',
-  },
-  {
-    id: 'q12',
-    question: 'Which flower, often made into a tea, is a popular remedy for insomnia?',
-    options: ['Rose', 'Chamomile', 'Hibiscus', 'Jasmine'],
-    correctAnswer: 'Chamomile',
-    plantId: 'chamomile',
-  },
-  {
-    id: 'q13',
-    question: 'Rosemary is traditionally believed to help with what function?',
-    options: ['Bone strength', 'Muscle growth', 'Memory and concentration', 'Blood purification'],
-    correctAnswer: 'Memory and concentration',
-    plantId: 'rosemary',
-  },
-  {
-    id: 'q14',
-    question: 'Echinacea, or purple coneflower, is most commonly used for what purpose?',
-    options: ['Boosting the immune system', 'Soothing burns', 'Improving vision', 'Reducing cholesterol'],
-    correctAnswer: 'Boosting the immune system',
-    plantId: 'echinacea',
-  },
-  {
-    id: 'q15',
-    question: 'The high mucilage content of Marshmallow Root makes it effective for...',
-    options: ['Soothing sore throats', 'Stimulating hair growth', 'Increasing appetite', 'Strengthening nails'],
-    correctAnswer: 'Soothing sore throats',
-    plantId: 'marshmallow-root',
-  },
 ];
+
