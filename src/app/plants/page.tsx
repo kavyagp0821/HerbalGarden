@@ -1,4 +1,3 @@
-
 // src/app/plants/page.tsx
 import AppLayout from '@/components/layout/AppLayout';
 import PlantCard from '@/components/plants/PlantCard';
