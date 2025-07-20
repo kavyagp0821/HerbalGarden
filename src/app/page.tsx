@@ -11,17 +11,27 @@ import { plantService } from '@/services/plant.service';
 import { useEffect, useState } from 'react';
 import type { Plant } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { initialPlants } from '@/lib/initial-plant-data';
 
 export default function HomePage() {
   const [plantOfTheDay, setPlantOfTheDay] = useState<Plant | null>(null);
 
   useEffect(() => {
     async function fetchPlant() {
-      const plants = await plantService.getPlants();
-      if (plants.length > 0) {
-        // Simple logic to pick a new plant each day based on the day of the year
-        const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-        setPlantOfTheDay(plants[dayOfYear % plants.length]);
+      try {
+        const plants = await plantService.getPlants();
+        if (plants.length > 0) {
+          // Simple logic to pick a new plant each day based on the day of the year
+          const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+          setPlantOfTheDay(plants[dayOfYear % plants.length]);
+        }
+      } catch (error) {
+        console.warn("Could not fetch plants for Plant of the Day, falling back to local data.", error);
+        // Fallback to local data if API fails
+        if (initialPlants.length > 0) {
+          const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+          setPlantOfTheDay(initialPlants[dayOfYear % initialPlants.length] as Plant);
+        }
       }
     }
     fetchPlant();
