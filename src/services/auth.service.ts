@@ -2,7 +2,6 @@
 import {
   auth,
   firebaseSignIn,
-  firebaseSignInWithGoogle,
   firebaseSignOut,
   onAuthStateChanged as onFirebaseAuthStateChanged
 } from '@/lib/firebase';
@@ -37,7 +36,6 @@ const onAuthStateChanged = (callback: (user: User | null) => void) => {
 
 export const authService = {
   signIn: firebaseSignIn,
-  signInWithGoogle: firebaseSignInWithGoogle,
   signOut: firebaseSignOut,
   onAuthStateChanged,
   getErrorMessage,

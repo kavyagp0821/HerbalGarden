@@ -4,20 +4,18 @@ import {
   getAuth, 
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
   signOut,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: "AIzaSyDInxjNSipqOsz9z3A7fpmjm-salHBPjKQ",
+  authDomain: "virtual-herbalgarden-by437.firebaseapp.com",
+  projectId: "virtual-herbalgarden-by437",
+  storageBucket: "virtual-herbalgarden-by437.firebasestorage.app",
+  messagingSenderId: "429243165583",
+  appId: "1:429243165583:web:f523c0c2baa33f812079fa"
 };
 
 // Check if all necessary Firebase credentials are provided in the environment.
@@ -52,12 +50,6 @@ const firebaseSignIn = async (email: string, password: string) => {
     return await signInWithEmailAndPassword(auth, email, password);
 };
 
-const firebaseSignInWithGoogle = async () => {
-    if (!areFirebaseCredsAvailable) throw { code: 'auth/unconfigured' };
-    const provider = new GoogleAuthProvider();
-    return await signInWithPopup(auth, provider);
-};
-
 const firebaseSignOut = async () => {
     if (!areFirebaseCredsAvailable) return Promise.resolve();
     return await signOut(auth);
@@ -68,7 +60,6 @@ export {
     auth, 
     db, 
     firebaseSignIn, 
-    firebaseSignInWithGoogle, 
     firebaseSignOut,
     onAuthStateChanged
 };
