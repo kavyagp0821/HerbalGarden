@@ -2,12 +2,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
-import { Leaf, LogOut } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Chatbot from '../chatbot/Chatbot';
+import { authService } from '@/services/auth.service';
+import { useRouter } from 'next/navigation';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -15,10 +17,41 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const [currentYear, setCurrentYear] = useState<string | null>(null);
-
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // null means loading
+  const router = useRouter();
+  
+  useEffect(() => {
+    const unsubscribe = authService.onAuthStateChanged(user => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        router.push('/login');
+      }
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [router]);
+  
   useEffect(() => {
     setCurrentYear(new Date().getFullYear().toString());
   }, []);
+
+  if (isAuthenticated === null) {
+      return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+                <Leaf className="h-12 w-12 animate-spin text-primary" />
+                <p className="text-muted-foreground">Loading Virtual Vana...</p>
+            </div>
+        </div>
+      )
+  }
+  
+  if (!isAuthenticated) {
+      // Although the effect redirects, this prevents rendering children before the redirect happens
+      return null;
+  }
 
   return (
     <SidebarProvider defaultOpen>

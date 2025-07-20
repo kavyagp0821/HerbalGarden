@@ -1,7 +1,7 @@
 
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Leaf,
@@ -10,13 +10,17 @@ import {
   User,
   Sparkles,
   Route,
+  LogOut,
 } from 'lucide-react';
 import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
+import { authService } from '@/services/auth.service';
+import { useToast } from '@/hooks/use-toast';
 
 const navItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -30,6 +34,19 @@ const navItems: NavItem[] = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+      try {
+          await authService.signOut();
+          toast({ title: 'Signed Out', description: 'You have been successfully signed out.' });
+          router.push('/login');
+          router.refresh(); // Clears any cached user data
+      } catch (error) {
+           toast({ title: 'Sign Out Failed', description: 'Could not sign you out. Please try again.', variant: 'destructive' });
+      }
+  };
 
   return (
     <SidebarMenu>
@@ -47,6 +64,16 @@ export default function SidebarNav() {
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
+      <SidebarSeparator className="my-2" />
+       <SidebarMenuItem>
+          <SidebarMenuButton
+            onClick={handleSignOut}
+            tooltip="Sign Out"
+          >
+            <LogOut />
+            <span>Sign Out</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
     </SidebarMenu>
   );
 }

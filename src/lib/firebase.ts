@@ -2,7 +2,11 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { 
   getAuth, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
@@ -26,27 +30,36 @@ let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
 let db: ReturnType<typeof getFirestore>;
 
+const unconfiguredError = new Error("Firebase is not configured correctly.");
+unconfiguredError.name = "UnconfiguredFirebase";
+
 if (areFirebaseCredsAvailable) {
-  // Initialize Firebase only if it hasn't been initialized yet
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
 } else {
-  // If credentials are not available, use mock objects and log a warning.
-  // This prevents the application from crashing, especially during build or on the server.
-  console.warn("Firebase credentials are not fully configured. Using mock services.");
-  app = {} as any; // Using `any` to mock the FirebaseApp type
+  console.warn("Firebase credentials are not fully configured. Authentication and database services will not be available.");
+  // Use mock objects to prevent app from crashing if firebase calls are made without config
+  app = {} as any; 
   auth = {} as any;
   db = {} as any;
 }
 
-// These are mock functions to be used when Firebase is not configured.
-// They prevent runtime errors if these functions are called without a proper Firebase setup.
-const firebaseSignIn = () => Promise.reject(new Error("Firebase is not configured."));
-const firebaseSignInWithGoogle = () => Promise.reject(new Error("Firebase is not configured."));
-const firebaseSendPasswordReset = () => Promise.reject(new Error("Firebase is not configured."));
-const firebaseSignOut = () => Promise.resolve();
+const firebaseSignIn = async (email: string, password: string) => {
+    if (!areFirebaseCredsAvailable) throw { code: 'auth/unconfigured' };
+    return await signInWithEmailAndPassword(auth, email, password);
+};
 
+const firebaseSignInWithGoogle = async () => {
+    if (!areFirebaseCredsAvailable) throw { code: 'auth/unconfigured' };
+    const provider = new GoogleAuthProvider();
+    return await signInWithPopup(auth, provider);
+};
+
+const firebaseSignOut = async () => {
+    if (!areFirebaseCredsAvailable) return Promise.resolve();
+    return await signOut(auth);
+};
 
 export { 
     app,
@@ -54,7 +67,6 @@ export {
     db, 
     firebaseSignIn, 
     firebaseSignInWithGoogle, 
-    firebaseSendPasswordReset,
     firebaseSignOut,
     onAuthStateChanged
 };
