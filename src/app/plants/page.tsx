@@ -1,20 +1,32 @@
 // src/app/plants/page.tsx
+'use client';
+
+import { useEffect, useState } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import PlantCard from '@/components/plants/PlantCard';
 import { plantService } from '@/services/plant.service';
 import type { Plant } from '@/types';
 import { Leaf } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export const metadata = {
-  title: 'Explore Plants | Virtual Vana',
-  description: 'Explore our curated collection of medicinal plants.',
-};
+export default function PlantsPage() {
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-// Revalidate this page every hour to fetch new data
-export const revalidate = 3600;
-
-export default async function PlantsPage() {
-  const plants: Plant[] = await plantService.getPlants();
+  useEffect(() => {
+    async function loadPlants() {
+      try {
+        const fetchedPlants = await plantService.getPlants();
+        setPlants(fetchedPlants);
+      } catch (error) {
+        console.error("Failed to load plants:", error);
+        // In a real app, you might want to show an error message
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadPlants();
+  }, []);
 
   return (
     <AppLayout>
@@ -29,7 +41,13 @@ export default async function PlantsPage() {
             </p>
         </header>
 
-        {plants.length > 0 ? (
+        {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, index) => (
+                    <CardSkeleton key={index} />
+                ))}
+            </div>
+        ) : plants.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {plants.map((plant) => (
               <PlantCard key={plant.id} plant={plant} />
@@ -44,4 +62,23 @@ export default async function PlantsPage() {
       </div>
     </AppLayout>
   );
+}
+
+function CardSkeleton() {
+    return (
+        <div className="flex flex-col h-full overflow-hidden shadow-lg rounded-lg border bg-card">
+            <Skeleton className="aspect-video w-full" />
+            <div className="p-4 flex-grow">
+                <Skeleton className="h-6 w-2/3 mb-2" />
+                <Skeleton className="h-4 w-1/2 mb-4" />
+                <div className="flex flex-wrap gap-1">
+                    <Skeleton className="h-5 w-16" />
+                    <Skeleton className="h-5 w-20" />
+                </div>
+            </div>
+            <div className="p-4 pt-0">
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </div>
+    );
 }
