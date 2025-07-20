@@ -1,8 +1,4 @@
 // src/lib/firebase.ts
-// This file is simplified to prevent authentication/database logic from running.
-// If you want to re-enable Firebase, you will need to restore the previous content
-// and ensure your .env file is correctly configured.
-
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { 
   getAuth, 
@@ -10,6 +6,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -19,26 +16,32 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Mock Firebase when credentials are not available
-const areFirebaseCredsAvailable = firebaseConfig.apiKey && firebaseConfig.projectId;
+// Check if all necessary Firebase credentials are provided in the environment.
+const areFirebaseCredsAvailable = 
+    firebaseConfig.apiKey && 
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId;
 
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
 let db: ReturnType<typeof getFirestore>;
 
 if (areFirebaseCredsAvailable) {
+  // Initialize Firebase only if it hasn't been initialized yet
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
 } else {
-  // Provide mock objects for server-side rendering or when creds are missing
-  console.warn("Firebase credentials not found. Using mock Firebase services.");
-  app = {} as any;
+  // If credentials are not available, use mock objects and log a warning.
+  // This prevents the application from crashing, especially during build or on the server.
+  console.warn("Firebase credentials are not fully configured. Using mock services.");
+  app = {} as any; // Using `any` to mock the FirebaseApp type
   auth = {} as any;
   db = {} as any;
 }
 
-// Mock functions to prevent errors
+// These are mock functions to be used when Firebase is not configured.
+// They prevent runtime errors if these functions are called without a proper Firebase setup.
 const firebaseSignIn = () => Promise.reject(new Error("Firebase is not configured."));
 const firebaseSignInWithGoogle = () => Promise.reject(new Error("Firebase is not configured."));
 const firebaseSendPasswordReset = () => Promise.reject(new Error("Firebase is not configured."));
