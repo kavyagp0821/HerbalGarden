@@ -42,13 +42,15 @@ export async function GET() {
     const plantsCollection = collection(db, 'plants');
 
     for (const plant of treflePlants) {
-      if (!plant.common_name || !plant.slug) {
-        // Skip plants without a common name or slug to ensure data quality
+      if (!plant.common_name) {
+        // Skip plants without a common name to ensure data quality
         continue;
       }
-      const docRef = doc(plantsCollection, plant.slug); // Use slug as document ID
+      // Let Firestore generate a new unique ID for the document
+      const docRef = doc(plantsCollection);
       
-      const newPlant: Omit<Plant, 'id'> = {
+      const newPlant: Omit<Plant, 'id'> & { id: string } = {
+        id: docRef.id, // Set the ID field within the document itself
         commonName: plant.common_name,
         latinName: plant.scientific_name,
         description: `Data for ${plant.common_name} fetched from Trefle. More details can be added here.`,
@@ -60,7 +62,7 @@ export async function GET() {
         ayushUses: 'Known for general medicinal properties as per Trefle data.',
         source: 'Trefle',
         sourceId: plant.id.toString(),
-        createdAt: serverTimestamp() as any, // Using as any to bypass strict type checking for serverTimestamp
+        createdAt: serverTimestamp() as any,
         updatedAt: serverTimestamp() as any,
       };
 
