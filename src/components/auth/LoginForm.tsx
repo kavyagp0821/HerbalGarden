@@ -1,3 +1,4 @@
+
 // src/components/auth/LoginForm.tsx
 'use client';
 
@@ -20,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { firebaseSignIn, firebaseSignInWithGoogle, firebaseSendPasswordReset } from '@/lib/firebase';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 
@@ -36,6 +37,7 @@ const resetFormSchema = z.object({
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -184,7 +186,19 @@ export default function LoginForm() {
                         </AlertDialog>
                     </div>
                 <FormControl>
-                    <Input type="password" {...field} disabled={isLoading} />
+                    <div className="relative">
+                        <Input type={showPassword ? "text" : "password"} {...field} disabled={isLoading} className="pr-10" />
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute inset-y-0 right-0 h-full px-3 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                            onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                    </div>
                 </FormControl>
                 <FormMessage />
                 </FormItem>

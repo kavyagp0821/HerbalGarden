@@ -1,3 +1,4 @@
+
 // src/components/auth/RegisterForm.tsx
 'use client';
 
@@ -19,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { firebaseSignUp, firebaseSignInWithGoogle } from '@/lib/firebase';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
     email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -104,7 +106,19 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" {...field} disabled={isLoading} />
+                <div className="relative">
+                    <Input type={showPassword ? "text" : "password"} {...field} disabled={isLoading} className="pr-10" />
+                     <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute inset-y-0 right-0 h-full px-3 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
