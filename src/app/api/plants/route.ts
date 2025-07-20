@@ -1,7 +1,7 @@
 // src/app/api/plants/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, query, where, doc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, serverTimestamp, doc, setDoc } from 'firebase/firestore';
 import type { Plant } from '@/types';
 
 export async function GET() {
@@ -37,14 +37,19 @@ export async function POST(request: Request) {
             return NextResponse.json({ message: 'Missing required fields: commonName and latinName are required.' }, { status: 400 });
         }
         
-        // Generate a URL-friendly ID from the latin name
-        const generatedId = plantData.latinName.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '');
-        const plantDocRef = doc(db, 'plants', generatedId);
+        const plantWithMetadata = {
+            ...plantData,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+        };
 
-        // We explicitly set the document with the generated ID
-        await setDoc(plantDocRef, plantData);
+        const docRef = await addDoc(collection(db, 'plants'), plantWithMetadata);
         
-        return NextResponse.json({ message: "Plant stored successfully", id: generatedId }, { status: 201 });
+        // Return the original data along with the new ID, but without non-serializable fields
+        return NextResponse.json({
+            id: docRef.id,
+            ...plantData
+        }, { status: 201 });
 
     } catch (e) {
         const errorDetails = e instanceof Error ? e.message : String(e);

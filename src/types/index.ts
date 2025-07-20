@@ -14,6 +14,8 @@ export interface Plant {
   audioSrc?: string; 
   threeDModelSrc?: string;
   ayushUses?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TreflePlant {

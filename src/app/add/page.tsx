@@ -12,22 +12,7 @@ import { trefleService } from '@/services/trefle.service';
 import type { TreflePlant, Plant } from '@/types';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-
-// Helper to convert a Trefle plant to our Plant format
-const adaptTrefleToPlant = (treflePlant: TreflePlant): Omit<Plant, 'id'> => {
-    return {
-        commonName: treflePlant.common_name || treflePlant.scientific_name,
-        latinName: treflePlant.scientific_name,
-        description: `A plant from the family ${treflePlant.family || 'Unknown'}, genus ${treflePlant.genus || 'Unknown'}. Further details can be researched.`,
-        therapeuticUses: [], // Needs to be populated manually or via another AI call
-        region: 'Varies',
-        classification: `${treflePlant.family || 'N/A'} / ${treflePlant.genus || 'N/A'}`,
-        imageSrc: treflePlant.image_url || 'https://placehold.co/600x400.png',
-        imageHint: treflePlant.common_name || treflePlant.scientific_name,
-        ayushUses: 'To be determined.',
-    };
-};
-
+import { adaptTrefleToPlant } from '@/lib/plantAdapter';
 
 export default function AddPlantPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,25 +24,35 @@ export default function AddPlantPage() {
     const { toast } = useToast();
 
     const handleSearch = async () => {
-        if (!searchTerm) return;
+        if (!searchTerm.trim()) {
+            toast({
+                title: 'Search term required',
+                description: 'Please enter a plant name to search',
+                variant: 'destructive'
+            });
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         setSearchResults([]);
+        
         try {
-            const results = await trefleService.search(searchTerm);
+            const results = await trefleService.search(searchTerm.trim());
             setSearchResults(results);
+            
             if (results.length === 0) {
                 toast({
-                    title: "No Results Found",
+                    title: 'No Results Found',
                     description: `No plants matching "${searchTerm}" were found in the Trefle database.`,
                 });
             }
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
-            setError(errorMessage);
+            const message = err instanceof Error ? err.message : 'Search failed';
+            setError(message);
             toast({
-                title: "Search Error",
-                description: errorMessage,
+                title: 'Search Error',
+                description: message,
                 variant: 'destructive',
             });
         } finally {
@@ -67,37 +62,42 @@ export default function AddPlantPage() {
     
     const handleAddPlant = async (treflePlant: TreflePlant) => {
         setIsAdding(treflePlant.id);
+        
         try {
-            const newPlantData = adaptTrefleToPlant(treflePlant);
+            // Convert Trefle format to our Plant format
+            const plantData = adaptTrefleToPlant(treflePlant);
+            
             const response = await fetch('/api/plants', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newPlantData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(plantData),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to add plant to database.');
+                throw new Error(errorData.message || 'Failed to save plant');
             }
 
             const result = await response.json();
             setAddedPlants(prev => new Set(prev).add(treflePlant.id));
+            
             toast({
-                title: "Plant Added!",
-                description: `${newPlantData.commonName} has been added to your collection.`,
+                title: 'Success!',
+                description: `${treflePlant.common_name || treflePlant.scientific_name} added to your collection.`,
             });
-
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+            const message = err instanceof Error ? err.message : 'Failed to add plant';
             toast({
-                title: "Error Adding Plant",
-                description: errorMessage,
-                variant: 'destructive',
+                title: 'Error adding plant',
+                description: message,
+                variant: 'destructive'
             });
         } finally {
             setIsAdding(null);
         }
-    }
+    };
 
     return (
         <AppLayout>
