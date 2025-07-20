@@ -1,7 +1,7 @@
 // src/app/plants/[id]/page.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { notFound } from 'next/navigation';
 import type { Plant } from '@/types';
 import PlantInteractions from '@/components/plants/PlantInteractions';
@@ -15,10 +15,20 @@ import { useToast } from '@/hooks/use-toast';
 import { plantService } from '@/services/plant.service';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+import { useLanguage } from '@/context/LanguageContext';
+import { translateContent } from '@/ai/flows/translate-content-flow';
 
 
 interface PlantPageProps {
   params: { id: string };
+}
+
+interface TranslatedContent {
+    description: string;
+    ayushUses: string;
+    therapeuticUses: string[];
+    region: string;
+    classification: string;
 }
 
 export default function PlantOverviewPage({ params }: PlantPageProps) {
@@ -26,6 +36,10 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
   const { toast } = useToast();
+  const { targetLanguage } = useLanguage();
+
+  const [translatedContent, setTranslatedContent] = useState<TranslatedContent | null>(null);
+  const [isTranslating, setIsTranslating] = useState(false);
   
   useEffect(() => {
     async function fetchPlant() {
@@ -51,17 +65,91 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
     fetchPlant();
   }, [params.id]);
 
+  useEffect(() => {
+    if (!plant) return;
+
+    const translate = async () => {
+        if (targetLanguage === 'English') {
+            setTranslatedContent({
+                description: plant.description,
+                ayushUses: plant.ayushUses || '',
+                therapeuticUses: plant.therapeuticUses,
+                region: plant.region,
+                classification: plant.classification,
+            });
+            return;
+        }
+
+        setIsTranslating(true);
+        try {
+            const contentToTranslate = [
+                plant.description,
+                plant.ayushUses || 'Not applicable.',
+                plant.region,
+                plant.classification,
+                ...plant.therapeuticUses
+            ].join(' || ');
+
+            const result = await translateContent({
+                content: contentToTranslate,
+                targetLanguage: targetLanguage,
+            });
+
+            const parts = result.translatedText.split(' || ');
+            const numStaticParts = 4; // description, ayushUses, region, classification
+            setTranslatedContent({
+                description: parts[0] || plant.description,
+                ayushUses: parts[1] !== 'Not applicable.' ? (parts[1] || plant.ayushUses || '') : '',
+                region: parts[2] || plant.region,
+                classification: parts[3] || plant.classification,
+                therapeuticUses: parts.slice(numStaticParts).length > 0 ? parts.slice(numStaticParts) : plant.therapeuticUses,
+            });
+        } catch (error) {
+            console.error('Translation failed', error);
+            // Fallback to original content
+            setTranslatedContent({
+                description: plant.description,
+                ayushUses: plant.ayushUses || '',
+                therapeuticUses: plant.therapeuticUses,
+                region: plant.region,
+                classification: plant.classification,
+            });
+             toast({
+                title: "Translation Failed",
+                description: "Could not translate content. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsTranslating(false);
+        }
+    };
+    translate();
+  }, [plant, targetLanguage, toast]);
+
 
   if (!plant) {
     return <PlantOverviewSkeleton />;
   }
+  
+  const displayedContent = useMemo(() => {
+    const content = translatedContent || plant;
+    const isLoading = isTranslating || !translatedContent;
+    
+    return {
+        description: isLoading ? <Skeleton className="h-24 w-full" /> : <p className="text-foreground/80 leading-relaxed mt-2">{content.description}</p>,
+        ayushUses: isLoading ? <Skeleton className="h-16 w-full" /> : <p className="text-foreground/80 leading-relaxed">{content.ayushUses}</p>,
+        therapeuticUses: isLoading ? Array.from({length: 3}).map((_, i) => <Skeleton key={i} className="h-8 w-20" />) : content.therapeuticUses.map((use, index) => <Badge key={index} variant="secondary" className="text-sm">{use}</Badge>),
+        region: isLoading ? <Skeleton className="h-5 w-3/4" /> : <p className="text-sm text-foreground/80">{content.region}</p>,
+        classification: isLoading ? <Skeleton className="h-5 w-3/4" /> : <p className="text-sm text-foreground/80">{content.classification}</p>,
+    }
+  }, [isTranslating, translatedContent, plant]);
 
   const handleListen = async () => {
     setIsGeneratingAudio(true);
     setAudioSrc(null);
     try {
-        const fullText = `${plant.commonName}. ${plant.latinName}. ${plant.description} ${plant.ayushUses ? `Traditional AYUSH Uses: ${plant.ayushUses}` : ''}`;
-        const result = await textToSpeech(fullText);
+        const textToListen = translatedContent ? `${plant.commonName}. ${translatedContent.description}` : `${plant.commonName}. ${plant.description}`;
+        const result = await textToSpeech(textToListen);
         setAudioSrc(result.audioDataUri);
     } catch (error) {
         console.error("TTS Generation Error:", error);
@@ -102,9 +190,8 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
           <CardHeader className="flex flex-row justify-between items-start">
             <div>
                 <CardTitle className="text-2xl font-headline">Description</CardTitle>
-                 <p className="text-foreground/80 leading-relaxed mt-2">{plant.description}</p>
             </div>
-              <Button onClick={handleListen} variant="outline" size="icon" className="flex-shrink-0" disabled={isGeneratingAudio}>
+              <Button onClick={handleListen} variant="outline" size="icon" className="flex-shrink-0" disabled={isGeneratingAudio || isTranslating}>
                   {isGeneratingAudio ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
@@ -122,11 +209,13 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
               </div>
               )}
             
-            {plant.ayushUses && (
+            {displayedContent.description}
+
+            {(translatedContent?.ayushUses || plant.ayushUses) && (
               <>
               <Separator className="my-4" />
               <h3 className="font-semibold mb-2 text-primary">Traditional AYUSH Uses</h3>
-              <p className="text-foreground/80 leading-relaxed">{plant.ayushUses}</p>
+              {displayedContent.ayushUses}
               </>
             )}
           </CardContent>
@@ -141,9 +230,7 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {plant.therapeuticUses.map((use, index) => (
-                <Badge key={index} variant="secondary" className="text-sm">{use}</Badge>
-              ))}
+              {displayedContent.therapeuticUses}
             </div>
           </CardContent>
         </Card>
@@ -157,7 +244,7 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-foreground/80">{plant.region}</p>
+              {displayedContent.region}
             </CardContent>
           </Card>
 
@@ -169,7 +256,7 @@ export default function PlantOverviewPage({ params }: PlantPageProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-foreground/80">{plant.classification}</p>
+              {displayedContent.classification}
             </CardContent>
           </Card>
         </div>
