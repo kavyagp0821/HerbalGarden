@@ -36,7 +36,12 @@ export const plantService = {
         console.warn("Firebase not configured, falling back to local data.");
         return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
     }
-    return fetchFromApi<Plant[]>('/api/plants');
+    try {
+        return await fetchFromApi<Plant[]>('/api/plants');
+    } catch (error) {
+        console.error("API fetch failed, falling back to local data:", error);
+        return [...initialPlants].sort((a, b) => a.commonName.localeCompare(b.commonName));
+    }
   },
 
   async getPlant(id: string): Promise<Plant | null> {
@@ -47,11 +52,11 @@ export const plantService = {
     try {
         return await fetchFromApi<Plant>(`/api/plants/${id}`);
     } catch(e) {
+        console.warn(`API fetch for plant ${id} failed, falling back to local data:`, e);
         if (e instanceof Error && e.message.includes('404')) {
             return null;
         }
-        console.error(`Failed to fetch plant ${id}`, e);
-        return null;
+        return initialPlants.find(p => p.id === id) || null;
     }
   },
   
