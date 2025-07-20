@@ -2,7 +2,7 @@
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 
-const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY;
 
 if (process.env.NODE_ENV !== 'test') {
   // Enhanced logging for debugging purposes
@@ -29,5 +29,6 @@ export const ai = genkit({
       apiKey: apiKey, // Explicitly pass the API key
     }),
   ],
+  logLevel: 'debug',
   model: 'googleai/gemini-2.0-flash',
 });
