@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
 import SidebarNav from './SidebarNav';
 import Link from 'next/link';
 import { Leaf } from 'lucide-react';
