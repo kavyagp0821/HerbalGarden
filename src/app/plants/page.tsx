@@ -6,7 +6,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import PlantCard from '@/components/plants/PlantCard';
 import { plantService } from '@/services/plant.service';
 import type { Plant } from '@/types';
-import { Leaf, AlertTriangle, RotateCw, Search, Filter, Languages } from 'lucide-react';
+import { Leaf, AlertTriangle, RotateCw, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -29,7 +29,6 @@ export default function PlantsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [selectedUse, setSelectedUse] = useState('all');
-  const [targetLanguage, setTargetLanguage] = useState('English');
 
 
   const loadPlants = useCallback(async () => {
@@ -112,7 +111,7 @@ export default function PlantsPage() {
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPlants.map((plant) => (
-            <PlantCard key={`${plant.id}-${targetLanguage}`} plant={plant} targetLanguage={targetLanguage} />
+            <PlantCard key={plant.id} plant={plant} />
           ))}
         </div>
       );
@@ -157,8 +156,8 @@ export default function PlantsPage() {
         </header>
 
         <Card className="p-4 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
-                <div className="md:col-span-3 lg:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
+                <div className="lg:col-span-1">
                     <label htmlFor="search-plant" className="text-sm font-medium text-muted-foreground">Search by Name</label>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -192,21 +191,6 @@ export default function PlantsPage() {
                         <SelectContent>
                             <SelectItem value="all">All Uses</SelectItem>
                             {uniqueUses.map(use => <SelectItem key={use} value={use}>{use}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div>
-                    <label htmlFor="language-select" className="text-sm font-medium text-muted-foreground">Language</label>
-                    <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                        <SelectTrigger id="language-select">
-                             <SelectValue placeholder="Language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="English">English</SelectItem>
-                            <SelectItem value="Spanish">Spanish</SelectItem>
-                            <SelectItem value="Hindi">Hindi</SelectItem>
-                            <SelectItem value="French">French</SelectItem>
-                            <SelectItem value="German">German</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
