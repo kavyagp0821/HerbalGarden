@@ -1,7 +1,7 @@
 
 import type { Plant } from '@/types';
 
-export const initialPlants: Plant[] = [
+export const initialPlants: Omit<Plant, 'createdAt' | 'updatedAt'>[] = [
   {
     id: 'tulsi',
     commonName: 'Tulsi (Holy Basil)',
@@ -153,7 +153,7 @@ export const initialPlants: Plant[] = [
     therapeuticUses: ['Aromatic', 'Cooling', 'Antiseptic'],
     region: 'Southern India, Southeast Asia',
     classification: 'Santalaceae / Santalum',
-    imageSrc: 'https://images.unsplash.com/photo-1622398934812-34336b135546?q=80&w=600&auto=format&fit=crop',
+    imageSrc: 'https://images.unsplash.com/photo-1622398934812-34335b29314?q=80&w=600&auto=format&fit=crop',
     imageHint: 'sandalwood powder',
     threeDModelSrc: '/models/sandalwood.glb',
     ayushUses: 'Highly prized for its cooling properties and fragrance. Used in Ayurveda for skin disorders, urinary tract infections, and as a meditative aid.'

@@ -1,8 +1,48 @@
 // src/app/api/plants/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, serverTimestamp, doc, setDoc, writeBatch, getDoc } from 'firebase/firestore';
 import type { Plant } from '@/types';
+import { initialPlants } from '@/lib/initial-plant-data';
+
+// --- Seeding Logic ---
+async function seedDatabase() {
+    const batch = writeBatch(db);
+    const plantsCollection = collection(db, 'plants');
+
+    console.log(`Starting to seed ${initialPlants.length} plants...`);
+
+    initialPlants.forEach((plant) => {
+        const docRef = doc(db, 'plants', plant.id);
+        const plantWithTimestamp = {
+            ...plant,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+        };
+        batch.set(docRef, plantWithTimestamp);
+    });
+
+    // Add a flag to indicate seeding is complete
+    const seededRef = doc(db, 'meta', 'seeded');
+    batch.set(seededRef, { status: true, seededAt: serverTimestamp() });
+
+    await batch.commit();
+    console.log("Database seeded successfully!");
+}
+
+async function checkAndSeed() {
+    const seededRef = doc(db, 'meta', 'seeded');
+    const seededSnap = await getDoc(seededRef);
+    if (!seededSnap.exists()) {
+        console.log("Seeding flag not found. Initializing database seeding.");
+        await seedDatabase();
+        return true; // Indicates seeding was performed
+    }
+    console.log("Database has already been seeded.");
+    return false; // Indicates seeding was not needed
+}
+// --- End of Seeding Logic ---
+
 
 export async function GET() {
   if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
@@ -10,6 +50,8 @@ export async function GET() {
   }
 
   try {
+    await checkAndSeed();
+    
     const plantsCollection = collection(db, 'plants');
     const plantSnapshot = await getDocs(plantsCollection);
     const plantsList = plantSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Plant));
