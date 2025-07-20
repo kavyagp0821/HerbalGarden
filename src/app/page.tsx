@@ -3,9 +3,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LoginForm from '@/components/auth/LoginForm';
-import RegisterForm from '@/components/auth/RegisterForm';
 import { Leaf } from 'lucide-react';
 
 export default function AuthenticationPage() {
@@ -31,38 +29,17 @@ export default function AuthenticationPage() {
       </div>
       <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto grid w-[380px] gap-6">
-          <Tabs defaultValue="sign-in" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="sign-in">Sign In</TabsTrigger>
-              <TabsTrigger value="sign-up">Sign Up</TabsTrigger>
-            </TabsList>
-            <TabsContent value="sign-in">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Welcome Back</CardTitle>
-                  <CardDescription>
-                    Enter your email below to login to your account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <LoginForm />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="sign-up">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Create an Account</CardTitle>
-                  <CardDescription>
-                    Enter your details to start your journey with Virtual Vana.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <RegisterForm />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">Welcome Back</CardTitle>
+                <CardDescription>
+                  Enter your email below to login to your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LoginForm />
+              </CardContent>
+            </Card>
         </div>
       </div>
     </div>
