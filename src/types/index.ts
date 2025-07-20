@@ -57,8 +57,10 @@ export interface QuizResult {
 }
 
 export interface UserProgress {
-    viewedPlants?: Record<string, string>;
+    viewedPlants?: Record<string, string>; // { plantId: 'Plant Name' }
     quizHistory?: QuizResult[];
+    bookmarks?: Record<string, boolean>; // { plantId: true }
+    notes?: Record<string, string>; // { plantId: 'User notes...' }
 }
 
 export interface ChatMessage {
