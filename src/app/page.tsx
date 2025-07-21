@@ -33,16 +33,16 @@ export default function LandingPage() {
               src="https://images.unsplash.com/photo-1445823223521-c42b109f5835?q=80&w=1974&auto=format&fit=crop"
               alt="Lush green plants background"
               fill
-              className="object-cover z-0 brightness-[0.4]"
+              className="object-cover z-0 brightness-[0.8]"
               priority
               data-ai-hint="lush green plants"
             />
-          <div className="relative z-10 container px-4 md:px-6 text-center text-white animate-fade-in-up">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
+          <div className="relative z-10 container px-4 md:px-6 text-center animate-fade-in-up">
+            <div className="space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline text-foreground">
                 Welcome to Virtual Vana
               </h1>
-              <p className="mx-auto max-w-[700px] text-gray-200 md:text-xl">
+              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
                 Your digital gateway to the world of AYUSH. Explore, learn, and identify medicinal plants with our interactive tools.
               </p>
               <div className="space-x-4">
