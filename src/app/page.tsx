@@ -51,97 +51,112 @@ export default async function LandingPage() {
         </Link>
         <nav className="ml-auto flex items-center gap-4 sm:gap-6">
           <Link href="/login">
-            <Button>
+            <Button className="group">
               Enter the Garden
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </nav>
       </header>
 
       <main className="flex-1 relative">
-        <Image
+        {/* Background with overlay */}
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
             src="https://wallpaperaccess.com/full/735812.jpg"
             alt="Lush green foliage background"
             fill
-            className="absolute inset-0 z-0 object-cover"
-            data-ai-hint="lush green foliage"
+            className="object-cover"
             priority
-        />
-        <div className="absolute inset-0 bg-black/60 z-10"></div>
+            data-ai-hint="lush green foliage"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        </div>
         
-        <div className="relative z-20">
-            {/* Hero Section */}
-            <section className="w-full py-20 md:py-24 lg:py-32 flex items-center justify-center text-center">
-              <div className="container px-4 md:px-6 animate-fade-in">
-                <div className="space-y-4 max-w-3xl mx-auto">
-                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
-                    Unlock the Secrets of Medicinal Plants
-                  </h1>
-                  <p className="mx-auto text-lg md:text-xl text-white/90">
-                    Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
-                  </p>
-                  <div className="pt-4">
-                    <Link href="/login">
-                      <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg px-8 py-6">
-                        Start Exploring Now
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
-                    </Link>
-                  </div>
+        <div className="relative z-10">
+          {/* Hero Section */}
+          <section className="w-full py-24 md:py-32 lg:py-40 flex items-center justify-center text-center">
+            <div className="container px-4 md:px-6 max-w-4xl">
+              <div className="space-y-6">
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
+                  Unlock the Secrets of <span className="text-primary">Medicinal Plants</span>
+                </h1>
+                <p className="mx-auto text-lg md:text-xl text-white/90">
+                  Discover the ancient wisdom of AYUSH. Explore, identify, and learn about medicinal plants in our immersive digital garden.
+                </p>
+                <div className="pt-4">
+                  <Link href="/login">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg px-8 py-6 shadow-lg hover:shadow-primary/30 transition-all">
+                      Start Exploring Now
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            {/* Why Explore Section */}
-            <section className="w-full py-12 md:py-16">
-              <div className="container px-4 md:px-6 animate-fade-in-up">
-                <div className="text-center space-y-3 mb-12">
-                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">Why Explore Virtual Vana?</h2>
-                  <p className="max-w-2xl mx-auto text-lg text-white/90">
-                    Our platform is meticulously designed for students, herbalists, and nature lovers to dive deep into the world of medicinal plants.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {features.map((feature, index) => (
-                    <Card key={index} className="flex flex-col text-center items-center p-6 bg-background shadow-lg animate-fade-in-up border-border/20" style={{ animationDelay: `${index * 150}ms` }}>
-                      <CardHeader className="p-0">
-                        <div className="bg-secondary px-6 py-3 rounded-full mb-4 inline-block">
-                          <feature.icon className="h-8 w-8 text-primary" />
-                        </div>
-                        <CardTitle className="text-card-foreground">{feature.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-0 mt-2 flex-grow">
-                        <p className="text-muted-foreground">{feature.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+          {/* Why Explore Section */}
+          <section className="w-full py-12 md:py-24 bg-background">
+            <div className="container px-4 md:px-6">
+              <div className="text-center space-y-4 mb-12">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
+                  Why Explore <span className="text-primary">Virtual Vana?</span>
+                </h2>
+                <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
+                  Our platform is meticulously designed for students, herbalists, and nature lovers to dive deep into the world of medicinal plants.
+                </p>
               </div>
-            </section>
-
-            {/* How It Works Section */}
-            <section className="w-full py-16 md:py-20">
-              <div className="container px-4 md:px-6 animate-fade-in-up">
-                <div className="text-center space-y-3 mb-12">
-                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">How It Works</h2>
-                  <p className="max-w-xl mx-auto text-lg text-white/90">
-                    Getting started is as easy as a walk in the garden.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-white">
-                  {steps.map((step) => (
-                    <div key={step.step} className="flex flex-col items-center text-center p-4">
-                      <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl mb-4">
-                        {step.step}
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                      <p className="text-white/80">{step.description}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {features.map((feature, index) => (
+                  <Card 
+                    key={index} 
+                    className="flex flex-col text-center items-center p-8 bg-card shadow-sm hover:shadow-md transition-all border-border/50 hover:border-primary/30"
+                  >
+                    <div className="bg-primary/10 p-4 rounded-full mb-4">
+                      <feature.icon className="h-8 w-8 text-primary" />
                     </div>
-                  ))}
-                </div>
+                    <CardHeader className="p-0">
+                      <CardTitle className="text-xl font-bold text-foreground">
+                        {feature.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0 mt-4">
+                      <p className="text-muted-foreground">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </section>
+            </div>
+          </section>
+
+          {/* How It Works Section */}
+          <section className="w-full py-12 md:py-24 bg-background">
+            <div className="container px-4 md:px-6">
+              <div className="text-center space-y-4 mb-12">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
+                  How It <span className="text-primary">Works</span>
+                </h2>
+                <p className="max-w-xl mx-auto text-lg text-muted-foreground">
+                  Getting started is as easy as a walk in the garden.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {steps.map((step) => (
+                  <div 
+                    key={step.step} 
+                    className="flex flex-col items-center text-center p-8 bg-card rounded-lg border border-border/50 hover:border-primary/30 transition-all"
+                  >
+                    <div className="flex items-center justify-center h-14 w-14 rounded-full bg-primary text-primary-foreground font-bold text-xl mb-4">
+                      {step.step}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-foreground">{step.title}</h3>
+                    <p className="text-muted-foreground">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 
@@ -153,9 +168,11 @@ export default async function LandingPage() {
               Built for the modern herbalist.
             </p>
           </div>
-          <p className="text-sm text-muted-foreground">
-            <Link href="#" className="underline-offset-4 hover:underline">About</Link>
-          </p>
+          <nav className="flex gap-4 text-sm text-muted-foreground">
+            <Link href="#" className="hover:text-foreground transition-colors">About</Link>
+            <Link href="#" className="hover:text-foreground transition-colors">Contact</Link>
+            <Link href="#" className="hover:text-foreground transition-colors">Privacy</Link>
+          </nav>
         </div>
       </footer>
     </div>
