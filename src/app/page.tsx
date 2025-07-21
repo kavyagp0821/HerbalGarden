@@ -76,10 +76,10 @@ export default async function LandingPage() {
 
           <div className="relative z-10 container px-4 md:px-6 animate-fade-in-up">
             <div className="space-y-4 max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary-foreground">
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-primary/90">
+              <p className="mx-auto text-lg md:text-xl text-primary-foreground/90">
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
@@ -99,7 +99,7 @@ export default async function LandingPage() {
           <div className="container px-4 md:px-6 animate-fade-in-up">
             <div className="text-center space-y-3 mb-12">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">Why Explore Virtual Vana?</h2>
-              <p className="max-w-2xl mx-auto text-lg text-primary/90">
+              <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
                 Our platform is meticulously designed for students, herbalists, and nature lovers to dive deep into the world of medicinal plants.
               </p>
             </div>
@@ -126,7 +126,7 @@ export default async function LandingPage() {
           <div className="container px-4 md:px-6 animate-fade-in-up">
             <div className="text-center space-y-3 mb-12">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">How It Works</h2>
-               <p className="max-w-xl mx-auto text-lg text-primary/90">
+               <p className="max-w-xl mx-auto text-lg text-muted-foreground">
                 Getting started is as easy as a walk in the garden.
               </p>
             </div>
