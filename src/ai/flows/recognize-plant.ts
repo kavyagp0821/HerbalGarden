@@ -38,6 +38,7 @@ export async function recognizePlant(input: RecognizePlantInput): Promise<Recogn
 
 const plantRecognitionPrompt = ai.definePrompt({
   name: 'plantRecognitionPrompt',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: RecognizePlantInputSchema},
   output: {schema: RecognizePlantOutputSchema},
   prompt: `You are an expert in identifying plants and their uses in AYUSH (Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy).
