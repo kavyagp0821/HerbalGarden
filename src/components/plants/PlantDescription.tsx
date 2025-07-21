@@ -1,12 +1,10 @@
 // src/components/plants/PlantDescription.tsx
 'use client';
 
-import { useState } from 'react';
 import type { Plant } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
-import { useToast } from '@/hooks/use-toast';
+import { useAudioPlayer } from '@/hooks/use-audio-player';
 import { Volume2, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
@@ -15,28 +13,16 @@ interface PlantDescriptionProps {
 }
 
 export default function PlantDescription({ plant }: PlantDescriptionProps) {
-  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
-  const [audioSrc, setAudioSrc] = useState<string | null>(null);
-  const { toast } = useToast();
+  const textToListen = `${plant.commonName}. ${plant.description}`;
+  const { isPlaying, isLoading, playAudio, stopAudio } = useAudioPlayer(plant.id, textToListen);
 
-  const handleListen = async () => {
-    setIsGeneratingAudio(true);
-    setAudioSrc(null);
-    try {
-        const textToListen = `${plant.commonName}. ${plant.description}`;
-        const result = await textToSpeech(textToListen);
-        setAudioSrc(result.audioDataUri);
-    } catch (error) {
-        console.error("TTS Generation Error:", error);
-        toast({
-            title: "Audio Generation Failed",
-            description: "Could not generate audio for this plant. Please try again later.",
-            variant: "destructive"
-        });
-    } finally {
-        setIsGeneratingAudio(false);
+  const handleListenClick = () => {
+    if (isPlaying) {
+      stopAudio();
+    } else {
+      playAudio();
     }
-  }
+  };
   
   return (
     <Card>
@@ -44,25 +30,17 @@ export default function PlantDescription({ plant }: PlantDescriptionProps) {
         <div>
             <CardTitle className="text-2xl font-headline">Description</CardTitle>
         </div>
-          <Button onClick={handleListen} variant="outline" size="icon" className="flex-shrink-0" disabled={isGeneratingAudio}>
-              {isGeneratingAudio ? (
+          <Button onClick={handleListenClick} variant="outline" size="icon" className="flex-shrink-0" disabled={isLoading}>
+              {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                  <Volume2 className="h-5 w-5" />
+                  <Volume2 className={`h-5 w-5 ${isPlaying ? 'text-primary' : ''}`} />
               )}
               <span className="sr-only">Listen to description</span>
           </Button>
       </CardHeader>
       <CardContent>
-         {audioSrc && (
-          <div className="mb-4">
-              <audio controls autoPlay src={audioSrc} className="w-full h-10">
-                  Your browser does not support the audio element.
-              </audio>
-          </div>
-          )}
-        
-        <p className="text-foreground/80 leading-relaxed mt-2">{plant.description}</p>
+        <p className="text-foreground/80 leading-relaxed">{plant.description}</p>
 
         {plant.ayushUses && (
           <>
