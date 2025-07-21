@@ -1,4 +1,3 @@
-
 // src/app/dashboard/page.tsx
 'use client';
 
@@ -51,7 +50,7 @@ export default function DashboardPage() {
           />
           <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center p-8">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-down">
-              Welcome to Your Dashboard
+              Welcome to the Herbal Garden
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-6 max-w-3xl animate-fade-in-up">
               Discover the ancient wisdom of AYUSH medicinal plants through an immersive, interactive experience.
@@ -116,7 +115,7 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 space-y-8">
             <section className="animate-fade-in-up" style={{ animationDelay: '100ms' }}>
               <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Discover Our Features</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-6">
                 <FeatureCard
                   icon={<Leaf />}
                   title="Explore Plants"
