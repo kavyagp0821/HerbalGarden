@@ -1,8 +1,8 @@
+
 // src/hooks/use-audio-player.ts
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { cardAudioFlow } from '@/ai/flows/card-audio-flow';
 import { useToast } from '@/hooks/use-toast';
 
 // This will hold the single audio element for the entire app
@@ -88,7 +88,20 @@ export const useAudioPlayer = (id: string, textToSpeak: string) => {
     };
 
     try {
-      const result = await cardAudioFlow({ plantId: id, textToSpeak });
+      const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ plantId: id, textToSpeak }),
+      });
+
+      if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch audio from API.');
+      }
+      
+      const result = await response.json();
       
       // If a new request started or this one was cancelled, stop.
       if (isCancelled.current || currentAudioId !== id) {
@@ -115,13 +128,13 @@ export const useAudioPlayer = (id: string, textToSpeak: string) => {
         }
       };
       
-      audio.play();
+      await audio.play();
 
     } catch (error) {
       console.error("TTS Generation Error:", error);
       toast({
         title: "Audio Generation Failed",
-        description: "Could not generate audio. Please add your GEMINI_API_KEY to the .env file and try again.",
+        description: error instanceof Error ? error.message : "Could not generate audio. Please add your GEMINI_API_KEY to the .env file and try again.",
         variant: "destructive"
       });
       // Use the stop callback for cleanup

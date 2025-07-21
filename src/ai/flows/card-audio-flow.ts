@@ -45,6 +45,7 @@ async function toWav(pcmData: Buffer, channels = 1, rate = 24000, sampleWidth = 
   });
 }
 
+// This flow is now only called from the server-side API route.
 export const cardAudioFlow = ai.defineFlow(
   {
     name: 'cardAudioFlow',
