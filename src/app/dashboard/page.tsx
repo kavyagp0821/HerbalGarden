@@ -140,6 +140,12 @@ export default function DashboardPage() {
                   description="Identify plants instantly with your camera."
                   link="/recognize"
                 />
+                 <FeatureCard
+                  icon={<User />}
+                  title="Your Progress"
+                  description="Track your journey, complete quizzes, and earn badges."
+                  link="/profile"
+                />
               </div>
             </section>
 
@@ -154,15 +160,6 @@ export default function DashboardPage() {
                   </p>
                 </CardContent>
               </Card>
-            </section>
-
-             <section className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-               <FeatureCard
-                  icon={<User />}
-                  title="Your Progress"
-                  description="Track your journey, complete quizzes, and earn badges."
-                  link="/profile"
-                />
             </section>
           </div>
         </div>
