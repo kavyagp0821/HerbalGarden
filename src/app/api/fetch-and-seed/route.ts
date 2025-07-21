@@ -59,7 +59,7 @@ export async function GET() {
       const docRef = doc(plantsCollection);
       
       const newPlant: Omit<Plant, 'id'> = {
-        commonName: treflePlant.common_name,
+        commonName: treflePlant.common_name.toLowerCase(), // Store common name in lowercase for consistent matching
         latinName: treflePlant.scientific_name,
         description: `Data for ${treflePlant.common_name} fetched from Trefle. More details can be added here.`,
         therapeuticUses: ['Medicinal'], // Default category

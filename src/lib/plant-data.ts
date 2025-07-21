@@ -1,4 +1,3 @@
-
 // IMPORTANT: This file is the source of truth for all plant-related data in the application.
 // When moving to a database, this data would be migrated.
 

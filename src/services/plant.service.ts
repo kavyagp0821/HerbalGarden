@@ -1,8 +1,7 @@
-
 // src/services/plant.service.ts
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
-import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // Helper to decide whether to use Firestore.
@@ -23,6 +22,12 @@ export const plantService = {
             return [];
         }
         const plantsList = plantSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Plant));
+        // Capitalize common name for display
+        plantsList.forEach(p => {
+          if (p.commonName) {
+            p.commonName = p.commonName.charAt(0).toUpperCase() + p.commonName.slice(1);
+          }
+        });
         plantsList.sort((a, b) => a.commonName.localeCompare(b.commonName));
         return plantsList;
     } catch (error) {
@@ -41,7 +46,12 @@ export const plantService = {
         const plantRef = doc(db, 'plants', id);
         const plantSnap = await getDoc(plantRef);
         if (plantSnap.exists()) {
-          return { id: plantSnap.id, ...plantSnap.data() } as Plant;
+          const plantData = { id: plantSnap.id, ...plantSnap.data() } as Plant;
+          // Capitalize common name for display
+          if (plantData.commonName) {
+            plantData.commonName = plantData.commonName.charAt(0).toUpperCase() + plantData.commonName.slice(1);
+          }
+          return plantData;
         }
         console.warn(`Plant with id "${id}" not found in Firestore.`);
         return null;
@@ -62,10 +72,13 @@ export const plantService = {
     return Promise.resolve({...tourData, icon: tourData.icon as any });
   },
 
-  async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
-    if (!plantIds || plantIds.length === 0) return Promise.resolve([]);
-    const allPlants = await this.getPlants(); // Use getPlants to respect DB
-    const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
+  async getPlantsForTour(plantNames: string[]): Promise<Plant[]> {
+    if (!shouldUseFirestore() || !plantNames || plantNames.length === 0) {
+      return Promise.resolve([]);
+    }
+    const allPlants = await this.getPlants(); // Use getPlants to respect DB and transformations
+    // Filter plants whose common name (in lowercase) is in the plantNames array
+    const plantsInTour = allPlants.filter(plant => plantNames.includes(plant.commonName.toLowerCase()));
     return Promise.resolve(plantsInTour);
   },
   
@@ -73,4 +86,20 @@ export const plantService = {
     // Quiz questions are static, so we return local data.
     return Promise.resolve(quizQuestions);
   },
+
+  async findPlantByCommonName(commonName: string): Promise<Plant | null> {
+    if (!shouldUseFirestore()) return null;
+    try {
+        const q = query(collection(db, "plants"), where("commonName", "==", commonName.toLowerCase()), limit(1));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            const doc = querySnapshot.docs[0];
+            return { id: doc.id, ...doc.data() } as Plant;
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error finding plant by name ${commonName}:`, error);
+        return null;
+    }
+  }
 };
