@@ -2,8 +2,8 @@
 // IMPORTANT: This file is the source of truth for all plant-related data in the application.
 // When moving to a database, this data would be migrated.
 
-import type { Plant, TourCategory, QuizQuestion } from '@/types';
-import { Leaf, ShieldHalf, Activity, Brain, Users, Sparkles, Filter, Wind, Sun, HeartPulse, Soup, Waves } from 'lucide-react';
+import type { TourCategory, QuizQuestion } from '@/types';
+import { ShieldHalf, Brain, Soup, Waves } from 'lucide-react';
 
 // We keep this static data here because Lucide icons (functions) cannot be stored in Firestore.
 // The tour data will be fetched from Firestore, and then the icon will be mapped from this list.

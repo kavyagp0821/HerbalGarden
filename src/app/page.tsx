@@ -118,12 +118,19 @@ export default function DashboardPage() {
         ) : (
              <section>
                  <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
-                <Card className="text-center p-8 shadow-lg">
-                    <CardTitle>The Garden is being planted!</CardTitle>
-                    <CardDescription className="mt-2">
-                        Real plant data is being fetched from our sources.
-                        Visit <Link href="/api/fetch-and-seed" className="text-primary underline" target="_blank">the seeding route</Link> to start the process, then come back here.
+                <Card className="text-center p-8 shadow-lg bg-primary/5 border-primary/20">
+                    <CardTitle>The Garden is Ready to Be Planted!</CardTitle>
+                    <CardDescription className="mt-2 max-w-lg mx-auto">
+                        Your database is waiting for plant data. To populate it, simply visit the seeding route. 
+                        This is a one-time action.
                     </CardDescription>
+                    <CardFooter className="justify-center pt-6">
+                         <Link href="/api/fetch-and-seed" target="_blank">
+                            <Button>
+                                Seed Plant Data from Trefle
+                            </Button>
+                        </Link>
+                    </CardFooter>
                 </Card>
             </section>
         )}
