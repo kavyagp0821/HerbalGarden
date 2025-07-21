@@ -63,9 +63,8 @@ export default async function LandingPage() {
         <Image
             src="https://wallpaperaccess.com/full/735812.jpg"
             alt="Lush green foliage background"
-            layout="fill"
-            objectFit="cover"
-            className="absolute inset-0 z-0"
+            fill
+            className="absolute inset-0 z-0 object-cover"
             data-ai-hint="lush green foliage"
             priority
         />
@@ -105,15 +104,15 @@ export default async function LandingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {features.map((feature, index) => (
-                    <Card key={index} className="flex flex-col text-center items-center p-6 bg-card/80 backdrop-blur-sm shadow-lg animate-fade-in-up border-white/20" style={{ animationDelay: `${index * 150}ms` }}>
+                    <Card key={index} className="flex flex-col text-center items-center p-6 bg-card shadow-lg animate-fade-in-up border-border/20" style={{ animationDelay: `${index * 150}ms` }}>
                       <CardHeader className="p-0">
-                        <div className="bg-primary/20 p-3 rounded-full mb-4">
-                          <feature.icon className="h-8 w-8 text-white" />
+                        <div className="bg-primary/20 px-6 py-3 rounded-full mb-4 inline-block">
+                          <feature.icon className="h-8 w-8 text-primary" />
                         </div>
-                        <CardTitle className="text-white">{feature.title}</CardTitle>
+                        <CardTitle className="text-card-foreground">{feature.title}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-0 mt-2 flex-grow">
-                        <p className="text-white/80">{feature.description}</p>
+                        <p className="text-muted-foreground">{feature.description}</p>
                       </CardContent>
                     </Card>
                   ))}
