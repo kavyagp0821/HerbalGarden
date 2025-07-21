@@ -51,6 +51,7 @@ const recommendPlantsFlow = ai.defineFlow(
 
     const recommendationPrompt = ai.definePrompt({
       name: 'plantRecommendationPrompt',
+      model: 'googleai/gemini-2.0-flash',
       input: {schema: RecommendPlantsInputSchema},
       output: {schema: RecommendPlantsOutputSchema},
       prompt: `You are an expert in AYUSH medicinal plants. A user is looking for plants related to a specific health interest.
