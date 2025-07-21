@@ -14,7 +14,6 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Leaf, Loader2, Eye, EyeOff } from 'lucide-react';
 import { authService } from '@/services/auth.service';
-import Image from 'next/image';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -40,7 +39,7 @@ export default function LoginPage() {
     try {
       await authService.signIn(values.email, values.password);
       toast({ title: 'Login Successful', description: "Welcome back!" });
-      router.push('/dashboard');
+      router.push('/');
       router.refresh();
     } catch (error: any) {
       toast({
@@ -54,24 +53,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background p-4 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-         <Image
-          src="https://images.unsplash.com/photo-1491841573634-28140fc7b634?q=80&w=2070&auto=format&fit=crop"
-          alt="Lush herbal garden background"
-          fill
-          className="object-cover"
-          priority
-          data-ai-hint="lush herbal garden"
-        />
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-      </div>
-      
-      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up z-10 bg-background/80 backdrop-blur-lg border-white/20 text-foreground">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
         <CardHeader className="text-center">
-          <Link href="/" className="mx-auto">
-             <Leaf className="h-12 w-12 text-primary" />
-          </Link>
+          <Leaf className="mx-auto h-12 w-12 text-primary" />
           <CardTitle className="mt-4 text-3xl font-headline">Welcome Back</CardTitle>
           <CardDescription>Sign in to continue to your herbal garden</CardDescription>
         </CardHeader>
@@ -85,7 +70,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="name@example.com" {...field} className="bg-background/50 border-white/30" />
+                      <Input placeholder="name@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,7 +93,6 @@ export default function LoginPage() {
                           type={showPassword ? 'text' : 'password'}
                           placeholder="••••••••"
                           {...field}
-                          className="bg-background/50 border-white/30"
                         />
                         <button
                           type="button"
@@ -131,6 +115,12 @@ export default function LoginPage() {
             </form>
           </Form>
 
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{' '}
+            <Link href="#" className="font-medium text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>
