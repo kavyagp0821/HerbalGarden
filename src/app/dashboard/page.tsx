@@ -191,7 +191,7 @@ interface FeatureCardProps {
 function FeatureCard({ icon, title, description, link }: FeatureCardProps) {
   return (
     <Link href={link} className="group">
-        <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col p-6">
+        <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col p-6 animate-fade-in">
         <CardHeader className="p-0 mb-4">
             <div className="mb-3">{icon}</div>
             <CardTitle className="font-headline text-xl group-hover:text-primary transition-colors">{title}</CardTitle>
