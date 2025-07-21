@@ -2,7 +2,7 @@
 // When moving to a database, this data would be migrated.
 
 import type { TourCategory, QuizQuestion } from '@/types';
-import { ShieldHalf, Brain, Soup, Waves } from 'lucide-react';
+import { ShieldHalf, Brain, Soup, Waves, Sparkles, Sun } from 'lucide-react';
 
 // We keep this static data here because Lucide icons (functions) cannot be stored in Firestore.
 // The tour data will be fetched from Firestore, and then the icon will be mapped from this list.
@@ -43,6 +43,24 @@ export const tourCategories: Omit<TourCategory, 'icon'> & { icon: string }[] = [
     imageSrc: 'https://images.unsplash.com/photo-1544558000-85c8a41755da?q=80&w=400&auto=format&fit=crop',
     imageHint: 'herbal tea'
   },
+  {
+    id: 'skin-health',
+    name: 'Skin Health Wonders',
+    description: 'A tour of plants celebrated for their skin-purifying and healing properties.',
+    icon: 'Sun',
+    plantIds: ['neem', 'turmeric', 'amla'],
+    imageSrc: 'https://images.unsplash.com/photo-1563804447971-6e1534156b20?q=80&w=400&auto=format&fit=crop',
+    imageHint: 'healthy skin'
+  },
+  {
+    id: 'antioxidant-collection',
+    name: 'The Antioxidant Collection',
+    description: 'Meet the plants that are powerhouses of antioxidants to protect your body.',
+    icon: 'Sparkles',
+    plantIds: ['turmeric', 'amla', 'moringa'],
+    imageSrc: 'https://images.unsplash.com/photo-1627820484739-c9b558572e42?q=80&w=400&auto=format&fit=crop',
+    imageHint: 'colorful berries'
+  }
 ];
 
 
