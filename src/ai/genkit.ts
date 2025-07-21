@@ -29,6 +29,4 @@ export const ai = genkit({
       apiKey: apiKey, // Explicitly pass the API key
     }),
   ],
-  logLevel: 'debug',
-  model: 'googleai/gemini-2.0-flash',
 });
