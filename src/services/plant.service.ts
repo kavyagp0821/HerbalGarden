@@ -1,101 +1,44 @@
 // src/services/plant.service.ts
 import type { Plant, TourCategory, QuizQuestion } from '@/types';
-import { initialPlants } from '@/lib/initial-plant-data';
 import { tourCategories, quizQuestions } from '@/lib/plant-data';
-import { lucideIconMapping } from '@/lib/icon-mapping';
-import { collection, getDocs, getDoc, doc, query, where, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-
-// This flag prevents re-seeding on every hot reload in development
-let isSeeding = false;
-let hasSeeded = false;
-
-// --- Seeding Logic for Firestore ---
-async function seedDatabase() {
-    if (isSeeding || hasSeeded) return;
-    if (!db.app) { // Check if db is a valid Firestore instance
-        console.log("Firestore not configured, skipping database seeding.");
-        return;
-    }
-    isSeeding = true;
-    console.log("Checking if database needs seeding...");
-
-    try {
-        const metaRef = doc(db, 'meta', 'seeded');
-        const metaSnap = await getDoc(metaRef);
-        
-        if (metaSnap.exists()) {
-            console.log("Database has already been seeded.");
-            hasSeeded = true;
-            isSeeding = false;
-            return;
-        }
-
-        console.log("Seeding database with initial plant data...");
-        const batch = writeBatch(db);
-        
-        initialPlants.forEach((plant) => {
-            const plantRef = doc(db, 'plants', plant.id);
-            const plantWithTimestamp = {
-                ...plant,
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp(),
-            };
-            batch.set(plantRef, plantWithTimestamp);
-        });
-
-        // Set the seeding flag in Firestore
-        batch.set(metaRef, { status: true, seededAt: serverTimestamp() });
-        
-        await batch.commit();
-        console.log("Database seeded successfully!");
-        hasSeeded = true;
-    } catch (error) {
-        console.error("Error seeding database:", error);
-    } finally {
-        isSeeding = false;
-    }
-}
-
-// Automatically try to seed the database when the service is initialized
-seedDatabase();
-
 
 export const plantService = {
   async getPlants(): Promise<Plant[]> {
     if (!db.app) {
-        console.warn("Firestore not configured. Returning local data.");
-        return Promise.resolve(initialPlants as Plant[]);
+        console.warn("Firestore not configured. No plants can be fetched.");
+        return Promise.resolve([]);
     }
     
     try {
         const plantsCollection = collection(db, 'plants');
         const plantSnapshot = await getDocs(plantsCollection);
         if (plantSnapshot.empty) {
-            console.log("No plants found in Firestore, returning local fallback.");
-            return initialPlants as Plant[];
+            console.log("No plants found in Firestore. The database might be empty.");
+            return [];
         }
         const plantsList = plantSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Plant));
         plantsList.sort((a, b) => a.commonName.localeCompare(b.commonName));
         return plantsList;
     } catch (error) {
-        console.error("Error fetching plants from Firestore, returning local data:", error);
-        return initialPlants as Plant[];
+        console.error("Error fetching plants from Firestore:", error);
+        return [];
     }
   },
 
   async getPlant(id: string): Promise<Plant | null> {
      if (!db.app) {
-        console.warn("Firestore not configured. Returning local data.");
-        return Promise.resolve(initialPlants.find(p => p.id === id) as Plant || null);
+        console.warn("Firestore not configured. Cannot fetch plant.");
+        return Promise.resolve(null);
     }
      try {
         const plantRef = doc(db, 'plants', id);
         const plantSnap = await getDoc(plantRef);
         return plantSnap.exists() ? { id: plantSnap.id, ...plantSnap.data() } as Plant : null;
     } catch (error) {
-        console.error(`Error fetching plant ${id} from Firestore, returning local data:`, error);
-        return initialPlants.find(p => p.id === id) as Plant || null;
+        console.error(`Error fetching plant ${id} from Firestore:`, error);
+        return null;
     }
   },
   
@@ -112,6 +55,10 @@ export const plantService = {
   async getPlantsForTour(plantIds: string[]): Promise<Plant[]> {
     if (!plantIds || plantIds.length === 0) return Promise.resolve([]);
     const allPlants = await this.getPlants(); // Use getPlants to respect DB or local data
+    
+    // Find plants from Firestore that match the IDs for the tour.
+    // The `plantIds` in `plant-data.ts` should be the common name slugs (e.g., 'tulsi')
+    // after the seeding script has run. We match by `id`.
     const plantsInTour = allPlants.filter(plant => plantIds.includes(plant.id));
     return Promise.resolve(plantsInTour);
   },

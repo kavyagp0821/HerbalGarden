@@ -11,13 +11,14 @@ import { plantService } from '@/services/plant.service';
 import { useEffect, useState } from 'react';
 import type { Plant } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import { initialPlants } from '@/lib/initial-plant-data';
 
 export default function DashboardPage() {
   const [plantOfTheDay, setPlantOfTheDay] = useState<Plant | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPlant() {
+      setIsLoading(true);
       try {
         const plants = await plantService.getPlants();
         if (plants.length > 0) {
@@ -26,12 +27,9 @@ export default function DashboardPage() {
           setPlantOfTheDay(plants[dayOfYear % plants.length]);
         }
       } catch (error) {
-        console.warn("Could not fetch plants for Plant of the Day, falling back to local data.", error);
-        // Fallback to local data if API fails
-        if (initialPlants.length > 0) {
-          const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-          setPlantOfTheDay(initialPlants[dayOfYear % initialPlants.length] as Plant);
-        }
+        console.error("Could not fetch plants for Plant of the Day.", error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchPlant();
@@ -66,7 +64,27 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {plantOfTheDay ? (
+        {isLoading ? (
+            <section>
+                <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
+                <Card className="grid md:grid-cols-2 overflow-hidden shadow-lg">
+                    <Skeleton className="h-full w-full aspect-video md:aspect-auto" />
+                    <div className="p-6 flex flex-col justify-center">
+                         <CardHeader className="p-0 mb-4">
+                            <Skeleton className="h-9 w-48 mb-2" />
+                            <Skeleton className="h-6 w-32" />
+                        </CardHeader>
+                        <CardContent className="p-0 flex-grow mb-4 space-y-2">
+                             <Skeleton className="h-4 w-full" />
+                             <Skeleton className="h-4 w-5/6" />
+                        </CardContent>
+                        <CardFooter className="p-0">
+                           <Skeleton className="h-10 w-36" />
+                        </CardFooter>
+                    </div>
+                </Card>
+            </section>
+        ) : plantOfTheDay ? (
             <section>
                  <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
                 <Card className="grid md:grid-cols-2 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -98,23 +116,14 @@ export default function DashboardPage() {
                 </Card>
             </section>
         ) : (
-            <section>
-                <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
-                <Card className="grid md:grid-cols-2 overflow-hidden shadow-lg">
-                    <Skeleton className="h-full w-full aspect-video md:aspect-auto" />
-                    <div className="p-6 flex flex-col justify-center">
-                         <CardHeader className="p-0 mb-4">
-                            <Skeleton className="h-9 w-48 mb-2" />
-                            <Skeleton className="h-6 w-32" />
-                        </CardHeader>
-                        <CardContent className="p-0 flex-grow mb-4 space-y-2">
-                             <Skeleton className="h-4 w-full" />
-                             <Skeleton className="h-4 w-5/6" />
-                        </CardContent>
-                        <CardFooter className="p-0">
-                           <Skeleton className="h-10 w-36" />
-                        </CardFooter>
-                    </div>
+             <section>
+                 <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
+                <Card className="text-center p-8 shadow-lg">
+                    <CardTitle>The Garden is being planted!</CardTitle>
+                    <CardDescription className="mt-2">
+                        Real plant data is being fetched from our sources.
+                        Visit <Link href="/api/fetch-and-seed" className="text-primary underline" target="_blank">the seeding route</Link> to start the process, then come back here.
+                    </CardDescription>
                 </Card>
             </section>
         )}
