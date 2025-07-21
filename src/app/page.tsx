@@ -7,7 +7,7 @@ import { Leaf, ArrowRight } from 'lucide-react';
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <header className="px-4 lg:px-6 h-14 flex items-center">
         <Link href="/" className="flex items-center justify-center">
           <Leaf className="h-6 w-6 text-primary" />
@@ -16,7 +16,7 @@ export default function LandingPage() {
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
             href="/login"
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-medium hover:underline underline-offset-4 text-muted-foreground hover:text-foreground"
           >
             Login
           </Link>
@@ -33,7 +33,7 @@ export default function LandingPage() {
               data-ai-hint="garden path"
             />
           <div className="relative z-10 container px-4 md:px-6 text-center animate-fade-in-up">
-            <div className="space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg shadow-lg">
+            <div className="space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg shadow-xl">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary">
                 A Journey into Nature's Wisdom
               </h1>

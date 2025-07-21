@@ -41,7 +41,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-12">
         <section className="relative rounded-lg overflow-hidden shadow-2xl h-[400px]">
           <Image
-            src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=1200&h=400&fit=crop"
+            src="https://images.unsplash.com/photo-1466096115517-eceec1de73df?q=80&w=1200&h=400&fit=crop"
             alt="Herbal Garden Banner"
             width={1200}
             height={400}
