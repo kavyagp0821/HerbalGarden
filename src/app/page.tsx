@@ -20,32 +20,27 @@ export default function LandingPage() {
           >
             Login
           </Link>
-           <Link
-            href="/login"
-          >
-          <Button>Get Started</Button>
-          </Link>
         </nav>
       </header>
       <main className="flex-1">
         <section className="relative w-full h-[calc(100vh-3.5rem)] flex items-center justify-center">
            <Image
-              src="https://images.unsplash.com/photo-1445823223521-c42b109f5835?q=80&w=1974&auto=format&fit=crop"
-              alt="Lush green plants background"
+              src="https://images.unsplash.com/photo-1524807409243-519a74a1a677?q=80&w=1974&auto=format&fit=crop"
+              alt="A sunlit path through a lush garden"
               fill
-              className="object-cover z-0 brightness-[0.8]"
+              className="object-cover z-0 brightness-[0.9]"
               priority
-              data-ai-hint="lush green plants"
+              data-ai-hint="garden path"
             />
           <div className="relative z-10 container px-4 md:px-6 text-center animate-fade-in-up">
-            <div className="space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline text-foreground">
-                Welcome to Virtual Vana
+            <div className="space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg shadow-lg">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary">
+                A Journey into Nature's Wisdom
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Your digital gateway to the world of AYUSH. Explore, learn, and identify medicinal plants with our interactive tools.
+                Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants through an immersive digital experience.
               </p>
-              <div className="space-x-4">
+              <div className="space-x-4 pt-4">
                 <Link
                   href="/login"
                 >
