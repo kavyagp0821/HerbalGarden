@@ -3,9 +3,6 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Leaf, BookOpen, Globe, HeartPulse } from 'lucide-react';
-import { plantService } from '@/services/plant.service';
-import PlantCard from '@/components/plants/PlantCard';
-import { Separator } from '@/components/ui/separator';
 
 export default async function LandingPage() {
 
