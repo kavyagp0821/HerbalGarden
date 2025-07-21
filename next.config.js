@@ -31,6 +31,12 @@ const nextConfig = {
         hostname: 'bs.floristic.org',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'wallpaperaccess.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

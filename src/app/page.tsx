@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Globe, HeartPulse, ArrowRight, Leaf } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function LandingPage() {
@@ -60,13 +61,23 @@ export default async function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-24 md:py-32 lg:py-40 bg-card">
-          <div className="container px-4 md:px-6 animate-fade-in">
-            <div className="space-y-4 max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary">
+        <section className="relative w-full py-24 md:py-32 lg:py-40 flex items-center justify-center text-center overflow-hidden">
+          <Image
+            src="https://wallpaperaccess.com/full/735812.jpg"
+            alt="Lush green foliage background"
+            layout="fill"
+            objectFit="cover"
+            className="absolute inset-0 z-0"
+            data-ai-hint="lush green foliage"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/50 z-10"></div>
+          <div className="relative z-20 container px-4 md:px-6 animate-fade-in">
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-muted-foreground">
+              <p className="mx-auto text-lg md:text-xl text-white/90">
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
