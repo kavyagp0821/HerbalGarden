@@ -12,8 +12,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Leaf, LogIn, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Leaf, Loader2, Eye, EyeOff } from 'lucide-react';
 import { authService } from '@/services/auth.service';
+import Image from 'next/image';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -39,7 +40,7 @@ export default function LoginPage() {
     try {
       await authService.signIn(values.email, values.password);
       toast({ title: 'Login Successful', description: "Welcome back!" });
-      router.push('/');
+      router.push('/dashboard');
       router.refresh();
     } catch (error: any) {
       toast({
@@ -53,11 +54,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background p-4 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+         <Image
+          src="https://images.unsplash.com/photo-1491841573634-28140fc7b634?q=80&w=2070&auto=format&fit=crop"
+          alt="Lush herbal garden background"
+          fill
+          className="object-cover"
+          priority
+          data-ai-hint="lush herbal garden"
+        />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      </div>
+      
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up z-10 bg-background/80 backdrop-blur-lg border-white/20 text-foreground">
         <CardHeader className="text-center">
-          <Leaf className="mx-auto h-12 w-12 text-primary" />
-          <CardTitle className="mt-4 text-3xl font-headline">Welcome to Virtual Vana</CardTitle>
+          <Link href="/" className="mx-auto">
+             <Leaf className="h-12 w-12 text-primary" />
+          </Link>
+          <CardTitle className="mt-4 text-3xl font-headline">Welcome Back</CardTitle>
           <CardDescription>Sign in to continue to your herbal garden</CardDescription>
         </CardHeader>
         <CardContent>
@@ -70,7 +85,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="name@example.com" {...field} />
+                      <Input placeholder="name@example.com" {...field} className="bg-background/50 border-white/30" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -93,6 +108,7 @@ export default function LoginPage() {
                           type={showPassword ? 'text' : 'password'}
                           placeholder="••••••••"
                           {...field}
+                          className="bg-background/50 border-white/30"
                         />
                         <button
                           type="button"

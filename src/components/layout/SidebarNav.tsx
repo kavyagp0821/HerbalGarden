@@ -23,7 +23,7 @@ import { authService } from '@/services/auth.service';
 import { useToast } from '@/hooks/use-toast';
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
   { href: '/tours', label: 'Virtual Tours', icon: Route },
   { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
@@ -54,7 +54,7 @@ export default function SidebarNav() {
         <SidebarMenuItem key={item.label}>
           <SidebarMenuButton
             href={item.href}
-            isActive={pathname === item.href || (item.href !=='/' && pathname.startsWith(item.href))}
+            isActive={pathname === item.href || (item.href !=='/dashboard' && pathname.startsWith(item.href))}
             tooltip={item.label}
             aria-disabled={item.disabled}
             className={item.disabled ? "cursor-not-allowed opacity-50" : ""}

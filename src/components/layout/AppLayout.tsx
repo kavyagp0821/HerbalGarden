@@ -58,7 +58,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <div className="flex min-h-screen">
         <Sidebar collapsible="icon" className="shadow-lg">
           <SidebarHeader className="p-4">
-            <Link href="/" className="flex items-center gap-2 text-lg font-headline text-sidebar-primary hover:text-sidebar-primary-foreground transition-colors">
+            <Link href="/dashboard" className="flex items-center gap-2 text-lg font-headline text-sidebar-primary hover:text-sidebar-primary-foreground transition-colors">
               <Leaf className="w-7 h-7" />
               <span className="group-data-[collapsible=icon]:hidden">Virtual Vana</span>
             </Link>
