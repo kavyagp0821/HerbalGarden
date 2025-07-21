@@ -49,11 +49,11 @@ export default function DashboardPage() {
             data-ai-hint="lush herbal garden"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col items-center justify-center text-center p-8">
-            <h1 className="text-4xl md:text-5xl font-headline font-bold text-white mb-4 animate-fade-in-down">
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent flex flex-col items-center justify-center text-center p-8">
+            <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary mb-4 animate-fade-in-down">
               Welcome to Your Dashboard
             </h1>
-            <p className="text-lg md:text-xl text-gray-200 mb-6 max-w-3xl animate-fade-in-up">
+            <p className="text-lg md:text-xl text-foreground/90 mb-6 max-w-3xl animate-fade-in-up">
               Discover the ancient wisdom of AYUSH medicinal plants through an immersive, interactive experience.
             </p>
             <Link href="/plants">
