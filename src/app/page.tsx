@@ -41,7 +41,7 @@ export default async function LandingPage() {
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary-foreground font-headline">
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-gray-200">
+              <p className="mx-auto text-lg md:text-xl text-primary-foreground/90">
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
@@ -69,17 +69,17 @@ export default async function LandingPage() {
             <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
               <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in">
                 <BookOpen className="h-8 w-8 mx-auto text-primary" />
-                <h3 className="text-lg font-bold">Authentic Knowledge</h3>
+                <h3 className="text-xl font-bold font-headline">Authentic Knowledge</h3>
                 <p className="text-sm text-muted-foreground flex-grow">Learn the medicinal uses, cultural significance, and history of each plant based on AYUSH principles.</p>
               </div>
               <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '200ms'}}>
                 <Globe className="h-8 w-8 mx-auto text-primary" />
-                <h3 className="text-lg font-bold">Interactive Exploration</h3>
+                <h3 className="text-xl font-bold font-headline">Interactive Exploration</h3>
                 <p className="text-sm text-muted-foreground flex-grow">Utilize our AI tools for plant recognition, get personalized recommendations, and take guided tours.</p>
               </div>
               <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '400ms'}}>
                 <HeartPulse className="h-8 w-8 mx-auto text-primary" />
-                <h3 className="text-lg font-bold">For Everyone</h3>
+                <h3 className="text-xl font-bold font-headline">For Everyone</h3>
                 <p className="text-sm text-muted-foreground flex-grow">Whether you're a curious beginner or a seasoned herbalist, Virtual Vana offers a rich learning experience.</p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default async function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary/30">
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline text-primary">How It Works</h2>
@@ -101,21 +101,21 @@ export default async function LandingPage() {
                   <div className="p-3 rounded-full bg-primary text-primary-foreground mb-2">
                     <span className="font-bold text-lg">1</span>
                   </div>
-                  <h3 className="font-bold text-xl">Explore</h3>
+                  <h3 className="font-bold text-xl font-headline">Explore</h3>
                   <p className="text-sm text-muted-foreground">Navigate our extensive collection of plants through the gallery, tours, or search.</p>
                 </div>
                 <div className="flex flex-col items-center space-y-2">
                    <div className="p-3 rounded-full bg-primary text-primary-foreground mb-2">
                     <span className="font-bold text-lg">2</span>
                   </div>
-                  <h3 className="font-bold text-xl">Learn</h3>
+                  <h3 className="font-bold text-xl font-headline">Learn</h3>
                   <p className="text-sm text-muted-foreground">Select any plant to view its detailed profile, including uses, cultivation, and 3D models.</p>
                 </div>
                 <div className="flex flex-col items-center space-y-2">
                    <div className="p-3 rounded-full bg-primary text-primary-foreground mb-2">
                     <span className="font-bold text-lg">3</span>
                   </div>
-                  <h3 className="font-bold text-xl">Interact</h3>
+                  <h3 className="font-bold text-xl font-headline">Interact</h3>
                   <p className="text-sm text-muted-foreground">Save your favorite plants, take notes, and test your knowledge with quizzes.</p>
                 </div>
               </div>
