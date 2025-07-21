@@ -66,21 +66,21 @@ export default async function LandingPage() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
-              <div className="grid gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in">
+            <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
+              <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in">
                 <BookOpen className="h-8 w-8 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">Authentic Knowledge</h3>
-                <p className="text-sm text-muted-foreground">Learn the medicinal uses, cultural significance, and history of each plant based on AYUSH principles.</p>
+                <p className="text-sm text-muted-foreground flex-grow">Learn the medicinal uses, cultural significance, and history of each plant based on AYUSH principles.</p>
               </div>
-              <div className="grid gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '200ms'}}>
+              <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '200ms'}}>
                 <Globe className="h-8 w-8 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">Interactive Exploration</h3>
-                <p className="text-sm text-muted-foreground">Utilize our AI tools for plant recognition, get personalized recommendations, and take guided tours.</p>
+                <p className="text-sm text-muted-foreground flex-grow">Utilize our AI tools for plant recognition, get personalized recommendations, and take guided tours.</p>
               </div>
-              <div className="grid gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '400ms'}}>
+              <div className="flex flex-col gap-1 text-center p-6 rounded-lg bg-card shadow-md animate-fade-in" style={{animationDelay: '400ms'}}>
                 <HeartPulse className="h-8 w-8 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">For Everyone</h3>
-                <p className="text-sm text-muted-foreground">Whether you're a curious beginner or a seasoned herbalist, Virtual Vana offers a rich learning experience.</p>
+                <p className="text-sm text-muted-foreground flex-grow">Whether you're a curious beginner or a seasoned herbalist, Virtual Vana offers a rich learning experience.</p>
               </div>
             </div>
           </div>
