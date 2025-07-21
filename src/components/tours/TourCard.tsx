@@ -57,7 +57,7 @@ export default function TourCard({ tour }: TourCardProps) {
                 </CardTitle>
             </div>
              <Button variant="ghost" size="icon" onClick={handleListenClick} className="flex-shrink-0 text-muted-foreground hover:text-primary" aria-label="Listen to tour summary">
-                {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Volume2 className={`h-5 w-5 ${isPlaying ? 'text-primary' : ''}`} />}
+                {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Volume2 className={`h-5 w-5 ${isPlaying ? 'text-primary' : ''}`} />}
             </Button>
         </div>
         <CardDescription className="text-sm text-muted-foreground">
