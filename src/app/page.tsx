@@ -1,4 +1,3 @@
-
 // src/app/page.tsx
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -77,10 +76,10 @@ export default async function LandingPage() {
 
           <div className="relative z-10 container px-4 md:px-6 animate-fade-in-up">
             <div className="space-y-4 max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary font-headline" style={{textShadow: '2px 2px 8px rgba(0,0,0,0.6)'}}>
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary">
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-primary/90 font-semibold" style={{textShadow: '1px 1px 4px rgba(0,0,0,0.7)'}}>
+              <p className="mx-auto text-lg md:text-xl text-primary/90">
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
@@ -97,7 +96,7 @@ export default async function LandingPage() {
 
         {/* Why Explore Section */}
         <section className="w-full py-16 md:py-24 bg-secondary/30">
-          <div className="container px-4 md:px-6 animate-fade-in">
+          <div className="container px-4 md:px-6 animate-fade-in-up">
             <div className="text-center space-y-3 mb-12">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">Why Explore Virtual Vana?</h2>
               <p className="max-w-2xl mx-auto text-lg text-primary/90">
@@ -124,7 +123,7 @@ export default async function LandingPage() {
 
         {/* How It Works Section */}
         <section className="w-full py-16 md:py-24 bg-background">
-          <div className="container px-4 md:px-6 animate-fade-in">
+          <div className="container px-4 md:px-6 animate-fade-in-up">
             <div className="text-center space-y-3 mb-12">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">How It Works</h2>
                <p className="max-w-xl mx-auto text-lg text-primary/90">
