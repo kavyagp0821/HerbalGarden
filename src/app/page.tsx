@@ -94,7 +94,7 @@ export default async function LandingPage() {
             </section>
 
             {/* Why Explore Section */}
-            <section className="w-full py-16 md:py-20">
+            <section className="w-full py-12 md:py-16">
               <div className="container px-4 md:px-6 animate-fade-in-up">
                 <div className="text-center space-y-3 mb-12">
                   <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">Why Explore Virtual Vana?</h2>
@@ -106,7 +106,7 @@ export default async function LandingPage() {
                   {features.map((feature, index) => (
                     <Card key={index} className="flex flex-col text-center items-center p-6 bg-background shadow-lg animate-fade-in-up border-border/20" style={{ animationDelay: `${index * 150}ms` }}>
                       <CardHeader className="p-0">
-                        <div className="bg-primary/20 px-6 py-3 rounded-full mb-4 inline-block">
+                        <div className="bg-secondary px-6 py-3 rounded-full mb-4 inline-block">
                           <feature.icon className="h-8 w-8 text-primary" />
                         </div>
                         <CardTitle className="text-card-foreground">{feature.title}</CardTitle>
