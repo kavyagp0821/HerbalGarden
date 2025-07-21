@@ -35,10 +35,10 @@ export default async function LandingPage() {
           />
           <div className="relative z-10 container px-4 md:px-6 animate-fade-in-up">
             <div className="space-y-4 max-w-3xl mx-auto">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary-foreground font-headline">
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary font-headline" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-primary-foreground/90">
+              <p className="mx-auto text-lg md:text-xl text-primary-foreground/90" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
