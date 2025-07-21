@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Globe, HeartPulse, ArrowRight, Leaf } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function LandingPage() {
@@ -61,25 +60,13 @@ export default async function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full py-24 md:py-32 lg:py-40 bg-card">
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1466096115517-eceec1de73df?q=80&w=1800&auto=format&fit=crop"
-              alt="A lush herbal garden"
-              fill
-              className="object-cover brightness-[0.6]"
-              priority
-              data-ai-hint="lush herbal garden"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
-          </div>
-
-          <div className="relative z-10 container px-4 md:px-6 animate-fade-in-up">
+        <section className="w-full py-24 md:py-32 lg:py-40 bg-card">
+          <div className="container px-4 md:px-6 animate-fade-in">
             <div className="space-y-4 max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary-foreground">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-primary">
                 Unlock the Secrets of Medicinal Plants
               </h1>
-              <p className="mx-auto text-lg md:text-xl text-primary-foreground/90">
+              <p className="mx-auto text-lg md:text-xl text-muted-foreground">
                 Discover the ancient secrets of AYUSH. Explore, identify, and learn about medicinal plants in an immersive digital garden.
               </p>
               <div className="pt-4">
