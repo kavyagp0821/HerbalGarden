@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { textToSpeech } from '@/ai/flows/text-to-speech-flow';
+import { cardAudioFlow } from '@/ai/flows/card-audio-flow';
 import { useToast } from '@/hooks/use-toast';
 
 // This will hold the single audio element for the entire app
@@ -88,7 +88,7 @@ export const useAudioPlayer = (id: string, textToSpeak: string) => {
     };
 
     try {
-      const result = await textToSpeech(textToSpeak);
+      const result = await cardAudioFlow({ plantId: id, textToSpeak });
       
       // If a new request started or this one was cancelled, stop.
       if (isCancelled.current || currentAudioId !== id) {
