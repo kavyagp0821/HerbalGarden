@@ -38,22 +38,21 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="flex flex-col gap-12">
-        <section className="relative rounded-lg overflow-hidden shadow-2xl h-[400px]">
+      <div className="flex flex-col gap-8">
+        <section className="relative rounded-xl overflow-hidden shadow-2xl h-[350px] animate-fade-in">
           <Image
-            src="https://images.unsplash.com/photo-1466096115517-eceec1de73df?q=80&w=1200&h=400&fit=crop"
+            src="https://wallpaperaccess.com/full/735812.jpg"
             alt="Herbal Garden Banner"
-            width={1200}
-            height={400}
+            fill
             className="w-full h-full object-cover"
-            data-ai-hint="lush herbal garden"
+            data-ai-hint="lush green foliage"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent flex flex-col items-center justify-center text-center p-8">
-            <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary mb-4 animate-fade-in-down">
+          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center p-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-down">
               Welcome to Your Dashboard
             </h1>
-            <p className="text-lg md:text-xl text-foreground/90 mb-6 max-w-3xl animate-fade-in-up">
+            <p className="text-lg md:text-xl text-white/90 mb-6 max-w-3xl animate-fade-in-up">
               Discover the ancient wisdom of AYUSH medicinal plants through an immersive, interactive experience.
             </p>
             <Link href="/plants">
@@ -65,117 +64,109 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {isLoading ? (
-            <section>
-                <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
-                <Card className="grid md:grid-cols-2 overflow-hidden shadow-lg">
-                    <Skeleton className="h-full w-full aspect-video md:aspect-auto" />
-                    <div className="p-6 flex flex-col justify-center">
-                         <CardHeader className="p-0 mb-4">
-                            <Skeleton className="h-9 w-48 mb-2" />
-                            <Skeleton className="h-6 w-32" />
-                        </CardHeader>
-                        <CardContent className="p-0 flex-grow mb-4 space-y-2">
-                             <Skeleton className="h-4 w-full" />
-                             <Skeleton className="h-4 w-5/6" />
-                        </CardContent>
-                        <CardFooter className="p-0">
-                           <Skeleton className="h-10 w-36" />
-                        </CardFooter>
-                    </div>
-                </Card>
-            </section>
-        ) : plantOfTheDay ? (
-            <section>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+              <section className="animate-fade-in-up">
+                <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Discover Our Features</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <FeatureCard
+                    icon={<Leaf />}
+                    title="Explore Plants"
+                    description="Browse our extensive collection of medicinal plants."
+                    link="/plants"
+                  />
+                  <FeatureCard
+                    icon={<Route />}
+                    title="Virtual Tours"
+                    description="Take guided tours through curated collections."
+                    link="/tours"
+                  />
+                  <FeatureCard
+                    icon={<Sparkles />}
+                    title="AI Recommendations"
+                    description="Get personalized plant suggestions from our AI."
+                    link="/recommendations"
+                  />
+                  <FeatureCard
+                    icon={<ScanSearch />}
+                    title="Plant Recognition"
+                    description="Identify plants instantly with your camera."
+                    link="/recognize"
+                  />
+                </div>
+              </section>
+
+               <section className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                  <Card className="bg-primary/10 border-primary/20 shadow-lg">
+                      <CardHeader>
+                          <CardTitle className="text-2xl font-headline text-primary">About AYUSH</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                          <p className="text-foreground/80 leading-relaxed max-w-4xl">
+                              AYUSH stands for Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy. These are traditional and complementary systems of medicine practiced in India. This platform aims to bridge this ancient knowledge with modern technology.
+                          </p>
+                      </CardContent>
+                  </Card>
+              </section>
+          </div>
+          
+          <div className="space-y-8">
+              <section className="animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                  <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
-                <Card className="grid md:grid-cols-2 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div className="relative aspect-video md:aspect-auto">
-                        <Image 
-                            src={plantOfTheDay.imageSrc}
-                            alt={plantOfTheDay.commonName}
-                            fill
-                            className="object-cover"
-                             data-ai-hint={plantOfTheDay.imageHint || plantOfTheDay.commonName}
-                        />
-                    </div>
-                    <div className="p-6 flex flex-col justify-center">
-                        <CardHeader className="p-0 mb-4">
-                            <CardTitle className="text-3xl font-headline">{plantOfTheDay.commonName}</CardTitle>
-                            <CardDescription className="italic text-md">{plantOfTheDay.latinName}</CardDescription>
+                {isLoading ? (
+                    <Card className="overflow-hidden shadow-lg">
+                        <Skeleton className="h-48 w-full" />
+                        <div className="p-6">
+                            <Skeleton className="h-8 w-4/5 mb-2" />
+                            <Skeleton className="h-5 w-1/2 mb-4" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                    </Card>
+                ) : plantOfTheDay ? (
+                    <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div className="relative h-48 w-full">
+                            <Image 
+                                src={plantOfTheDay.imageSrc}
+                                alt={plantOfTheDay.commonName}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={plantOfTheDay.imageHint || plantOfTheDay.commonName}
+                            />
+                        </div>
+                        <CardHeader>
+                            <CardTitle className="font-headline">{plantOfTheDay.commonName}</CardTitle>
+                            <CardDescription className="italic">{plantOfTheDay.latinName}</CardDescription>
                         </CardHeader>
-                        <CardContent className="p-0 text-foreground/80 flex-grow mb-4">
-                            <p>{plantOfTheDay.description}</p>
+                        <CardContent className="p-6 pt-0">
+                            <p className="text-foreground/80 text-sm line-clamp-3">{plantOfTheDay.description}</p>
                         </CardContent>
-                        <CardFooter className="p-0">
-                             <Link href={`/plants/${plantOfTheDay.id}`}>
-                                <Button variant="default">
+                        <CardFooter>
+                             <Link href={`/plants/${plantOfTheDay.id}`} className="w-full">
+                                <Button variant="default" className="w-full">
                                     Learn More <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
                             </Link>
                         </CardFooter>
-                    </div>
-                </Card>
+                    </Card>
+                ) : (
+                    <Card className="text-center p-8 shadow-lg bg-primary/5 border-primary/20">
+                        <CardTitle>Welcome to the Garden!</CardTitle>
+                        <CardDescription className="mt-2 max-w-lg mx-auto">
+                            It seems our garden is currently empty. Please check back later.
+                        </CardDescription>
+                    </Card>
+                )}
             </section>
-        ) : (
-             <section>
-                 <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Plant of the Day</h2>
-                <Card className="text-center p-8 shadow-lg bg-primary/5 border-primary/20">
-                    <CardTitle>Welcome to the Garden!</CardTitle>
-                    <CardDescription className="mt-2 max-w-lg mx-auto">
-                        It seems our garden is currently empty. Please check back later as we cultivate our collection.
-                    </CardDescription>
-                </Card>
+            <section className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+               <FeatureCard
+                  icon={<User />}
+                  title="Your Progress"
+                  description="Track your journey, complete quizzes, and earn badges."
+                  link="/profile"
+                />
             </section>
-        )}
-
-        <section>
-          <h2 className="text-3xl font-headline font-semibold mb-6 text-primary">Discover Our Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={<Leaf className="w-8 h-8 text-primary" />}
-              title="Explore Plants"
-              description="Browse detailed information and 3D models of medicinal plants in our extensive collection."
-              link="/plants"
-            />
-            <FeatureCard
-              icon={<Route className="w-8 h-8 text-primary" />}
-              title="Virtual Tours"
-              description="Take guided tours through curated collections of plants based on themes like immunity."
-              link="/tours"
-            />
-             <FeatureCard
-              icon={<Sparkles className="w-8 h-8 text-primary" />}
-              title="AI Recommendations"
-              description="Get personalized plant suggestions from our AI based on your health and wellness goals."
-              link="/recommendations"
-            />
-            <FeatureCard
-              icon={<ScanSearch className="w-8 h-8 text-primary" />}
-              title="Plant Recognition"
-              description="Have a plant you can't identify? Use your camera to get instant information."
-              link="/recognize"
-            />
-             <FeatureCard
-              icon={<User className="w-8 h-8 text-primary" />}
-              title="Your Progress"
-              description="Track your learning journey, complete quizzes, and earn badges for your achievements."
-              link="/profile"
-            />
           </div>
-        </section>
-
-        <section>
-            <Card className="bg-primary/10 border-primary/20 shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-headline text-primary">About AYUSH</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-foreground/80 leading-relaxed max-w-4xl">
-                        AYUSH stands for Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy. These are traditional and complementary systems of medicine practiced in India and other parts of the world. This platform aims to bridge this ancient knowledge with modern technology, making learning about these medicinal systems accessible, engaging, and interactive for everyone.
-                    </p>
-                </CardContent>
-            </Card>
-        </section>
+        </div>
       </div>
     </AppLayout>
   );
@@ -191,14 +182,14 @@ interface FeatureCardProps {
 function FeatureCard({ icon, title, description, link }: FeatureCardProps) {
   return (
     <Link href={link} className="group">
-        <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col p-6 animate-fade-in-up">
-        <CardHeader className="p-0 mb-4">
-            <div className="mb-3">{icon}</div>
-            <CardTitle className="font-headline text-xl group-hover:text-primary transition-colors">{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 flex-grow">
-            <CardDescription>{description}</CardDescription>
-        </CardContent>
+        <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex items-start gap-4 p-4">
+          <div className="bg-primary/10 text-primary p-3 rounded-lg">
+            {React.cloneElement(icon as React.ReactElement, { className: "w-6 h-6" })}
+          </div>
+          <div className="flex-1">
+            <h3 className="font-headline text-lg font-semibold group-hover:text-primary transition-colors">{title}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+          </div>
         </Card>
     </Link>
   );
