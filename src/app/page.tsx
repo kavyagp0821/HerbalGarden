@@ -8,7 +8,6 @@ import PlantCard from '@/components/plants/PlantCard';
 import { Separator } from '@/components/ui/separator';
 
 export default async function LandingPage() {
-  const featuredPlants = (await plantService.getPlants()).slice(0, 3);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -83,18 +82,6 @@ export default async function LandingPage() {
                 <h3 className="text-lg font-bold">For Everyone</h3>
                 <p className="text-sm text-muted-foreground">Whether you're a curious beginner or a seasoned herbalist, Virtual Vana offers a rich learning experience.</p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Plants Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline text-primary text-center mb-12">Featured Plants</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredPlants.map((plant) => (
-                <PlantCard key={plant.id} plant={plant} />
-              ))}
             </div>
           </div>
         </section>
