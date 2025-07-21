@@ -72,7 +72,7 @@ export default async function LandingPage() {
         
         <div className="relative z-20">
             {/* Hero Section */}
-            <section className="w-full py-24 md:py-32 lg:py-40 flex items-center justify-center text-center">
+            <section className="w-full py-20 md:py-24 lg:py-32 flex items-center justify-center text-center">
               <div className="container px-4 md:px-6 animate-fade-in">
                 <div className="space-y-4 max-w-3xl mx-auto">
                   <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-white">
@@ -94,7 +94,7 @@ export default async function LandingPage() {
             </section>
 
             {/* Why Explore Section */}
-            <section className="w-full py-16 md:py-24">
+            <section className="w-full py-16 md:py-20">
               <div className="container px-4 md:px-6 animate-fade-in-up">
                 <div className="text-center space-y-3 mb-12">
                   <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">Why Explore Virtual Vana?</h2>
@@ -104,7 +104,7 @@ export default async function LandingPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {features.map((feature, index) => (
-                    <Card key={index} className="flex flex-col text-center items-center p-6 bg-card shadow-lg animate-fade-in-up border-border/20" style={{ animationDelay: `${index * 150}ms` }}>
+                    <Card key={index} className="flex flex-col text-center items-center p-6 bg-background shadow-lg animate-fade-in-up border-border/20" style={{ animationDelay: `${index * 150}ms` }}>
                       <CardHeader className="p-0">
                         <div className="bg-primary/20 px-6 py-3 rounded-full mb-4 inline-block">
                           <feature.icon className="h-8 w-8 text-primary" />
@@ -121,7 +121,7 @@ export default async function LandingPage() {
             </section>
 
             {/* How It Works Section */}
-            <section className="w-full py-16 md:py-24">
+            <section className="w-full py-16 md:py-20">
               <div className="container px-4 md:px-6 animate-fade-in-up">
                 <div className="text-center space-y-3 mb-12">
                   <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">How It Works</h2>
