@@ -1,7 +1,7 @@
-
 // src/app/dashboard/page.tsx
 'use client';
 
+import React from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
