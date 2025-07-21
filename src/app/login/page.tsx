@@ -54,7 +54,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm shadow-2xl">
+      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
         <CardHeader className="text-center">
           <Leaf className="mx-auto h-12 w-12 text-primary" />
           <CardTitle className="mt-4 text-3xl font-headline">Welcome to Virtual Vana</CardTitle>

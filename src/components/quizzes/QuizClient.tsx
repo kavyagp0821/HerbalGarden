@@ -93,7 +93,7 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
     const finalScore = score;
     const percentage = (finalScore / currentQuizQuestions.length) * 100;
     return (
-      <Card className="max-w-xl mx-auto shadow-xl">
+      <Card className="max-w-xl mx-auto shadow-xl animate-fade-in-up">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Quiz Completed!</CardTitle>
           <CardDescription className="text-lg">
@@ -102,11 +102,11 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
         </CardHeader>
         <CardContent className="text-center">
           {percentage >= 70 ? (
-            <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4 animate-pop-in" />
           ) : (
-            <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4" />
+            <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4 animate-pop-in" />
           )}
-          <p className="text-xl mb-6">
+          <p className="text-xl mb-6 animate-fade-in" style={{ animationDelay: '200ms'}}>
             {percentage >= 70 ? "Excellent work!" : "Keep learning and try again!"}
           </p>
           <Link href="/profile">
@@ -138,7 +138,7 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
   const progressValue = ((currentQuestionIndex + 1) / currentQuizQuestions.length) * 100;
 
   return (
-    <Card className="max-w-xl mx-auto shadow-xl">
+    <Card className="max-w-xl mx-auto shadow-xl animate-fade-in">
       <CardHeader>
         <div className="flex justify-between items-center mb-2">
             <CardTitle className="text-2xl font-headline">AYUSH Plant Quiz</CardTitle>
@@ -173,7 +173,7 @@ export default function QuizClient({ questions: allQuestions }: QuizClientProps)
         </RadioGroup>
 
         {showResult && (
-          <Alert variant={selectedAnswer === currentQuestion.correctAnswer ? "default" : "destructive"} className={selectedAnswer === currentQuestion.correctAnswer ? "bg-green-500/10 border-green-500/30" : "bg-red-500/10 border-red-500/30"}>
+          <Alert variant={selectedAnswer === currentQuestion.correctAnswer ? "default" : "destructive"} className={`animate-fade-in ${selectedAnswer === currentQuestion.correctAnswer ? "bg-green-500/10 border-green-500/30" : "bg-red-500/10 border-red-500/30"}`}>
             {selectedAnswer === currentQuestion.correctAnswer ? <CheckCircle className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
             <AlertTitle>{selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect'}</AlertTitle>
             <AlertDescription>

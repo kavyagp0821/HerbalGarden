@@ -59,7 +59,7 @@ export default function RecommendationsPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
         <Card className="shadow-xl">
           <CardHeader>
             <CardTitle className="text-2xl font-headline flex items-center">
@@ -100,13 +100,13 @@ export default function RecommendationsPage() {
         </Card>
 
         {result && result.recommendations.length > 0 && (
-          <Card>
+          <Card className="animate-fade-in">
             <CardHeader>
               <CardTitle>Recommended Plants</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {result.recommendations.map((plant, index) => (
-                <Card key={index} className="bg-muted/50">
+                <Card key={index} className="bg-muted/50 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms`}}>
                   <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center">
                       <Leaf className="w-5 h-5 mr-2 text-primary" />

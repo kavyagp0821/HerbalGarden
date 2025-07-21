@@ -31,7 +31,7 @@ export default function TourCard({ tour }: TourCardProps) {
 
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group">
+    <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group animate-fade-in">
       <CardHeader className="p-0 relative">
         <Link href={`/tours/${tour.id}`} aria-label={`Start the ${tour.name} tour`}>
             <div className="aspect-video relative w-full bg-muted">

@@ -113,7 +113,7 @@ export default function PlantRecognitionForm() {
           >
             <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[200px]">
               {previewUrl ? (
-                <div className="relative w-full max-w-xs aspect-square rounded-md overflow-hidden">
+                <div className="relative w-full max-w-xs aspect-square rounded-md overflow-hidden animate-fade-in">
                   <Image src={previewUrl} alt="Preview" fill className="object-cover" />
                 </div>
               ) : (
@@ -153,7 +153,7 @@ export default function PlantRecognitionForm() {
         </form>
 
         {result && (
-          <Card className="mt-8 bg-primary/5 border-primary/20">
+          <Card className="mt-8 bg-primary/5 border-primary/20 animate-fade-in">
             <CardHeader>
               <CardTitle className="text-xl font-headline flex items-center text-primary">
                 <CheckCircle className="w-6 h-6 mr-2" />
