@@ -38,7 +38,7 @@ export default async function LandingPage() {
           />
           <div className="relative z-10 container px-4 md:px-6 animate-fade-in-up">
             <div className="space-y-4 max-w-3xl mx-auto">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-white font-headline">
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary-foreground font-headline">
                 Unlock the Secrets of Medicinal Plants
               </h1>
               <p className="mx-auto text-lg md:text-xl text-gray-200">
@@ -134,8 +134,6 @@ export default async function LandingPage() {
           </div>
           <nav className="flex gap-4 sm:gap-6 text-sm text-muted-foreground">
               <Link href="#" className="hover:text-foreground">About</Link>
-              <Link href="#" className="hover:text-foreground">Contact</Link>
-              <Link href="#" className="hover:text-foreground">Credits</Link>
           </nav>
         </div>
       </footer>
