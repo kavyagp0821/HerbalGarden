@@ -64,7 +64,7 @@ export default function RecommendationsPage() {
           <CardHeader>
             <CardTitle className="text-2xl font-headline flex items-center">
               <Sparkles className="w-7 h-7 mr-2 text-primary" />
-              AI Plant Recommendations
+              Get Plant Recommendations
             </CardTitle>
             <CardDescription>
               Tell us a health interest (e.g., "better sleep", "digestion", "skin health"), and our AI expert will suggest relevant AYUSH plants for you to explore.

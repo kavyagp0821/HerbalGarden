@@ -135,7 +135,7 @@ export default function DashboardPage() {
             />
             <FeatureCard
               icon={<Sparkles />}
-              title="AI Recommendations"
+              title="Get Recommendation"
               description="Get personalized plant suggestions from our AI."
               link="/recommendations"
             />

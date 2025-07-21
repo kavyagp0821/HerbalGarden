@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/plants', label: 'Explore Plants', icon: Leaf },
   { href: '/tours', label: 'Virtual Tours', icon: Route },
-  { href: '/recommendations', label: 'AI Recommendations', icon: Sparkles },
+  { href: '/recommendations', label: 'Get Recommendation', icon: Sparkles },
   { href: '/recognize', label: 'Plant Recognition', icon: ScanSearch },
   { href: '/quizzes', label: 'Quizzes', icon: ClipboardCheck },
   { href: '/profile', label: 'My Progress', icon: User },
