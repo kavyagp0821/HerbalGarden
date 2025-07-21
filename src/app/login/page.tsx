@@ -1,3 +1,4 @@
+
 // src/app/login/page.tsx
 'use client';
 
@@ -7,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -53,76 +55,90 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm shadow-2xl animate-fade-in-up">
-        <CardHeader className="text-center">
-          <Leaf className="mx-auto h-12 w-12 text-primary" />
-          <CardTitle className="mt-4 text-3xl font-headline">Welcome Back</CardTitle>
-          <CardDescription>Sign in to continue to your herbal garden</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="name@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
-                      <Link href="#" className="text-sm font-medium text-primary hover:underline">
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder="••••••••"
-                          {...field}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                          aria-label={showPassword ? 'Hide password' : 'Show password'}
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
+      <div className="flex items-center justify-center py-12 animate-fade-in">
+        <div className="mx-auto grid w-[350px] gap-6">
+            <div className="grid gap-2 text-center">
+                <Leaf className="mx-auto h-12 w-12 text-primary" />
+                <h1 className="text-3xl font-bold font-headline">Welcome to Virtual Vana</h1>
+                <p className="text-balance text-muted-foreground">
+                    Enter your credentials to access your herbal garden
+                </p>
+            </div>
+             <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                        <Input placeholder="name@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                    <FormItem>
+                        <div className="flex items-center">
+                        <FormLabel>Password</FormLabel>
+                        <Link
+                            href="#"
+                            className="ml-auto inline-block text-sm underline"
                         >
-                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Sign In
-              </Button>
-            </form>
-          </Form>
-
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="#" className="font-medium text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+                            Forgot your password?
+                        </Link>
+                        </div>
+                         <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="••••••••"
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
+                              aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            >
+                              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Login
+                </Button>
+                </form>
+            </Form>
+             <div className="mt-4 text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <Link href="#" className="underline">
+                Sign up
+                </Link>
+            </div>
+        </div>
+      </div>
+      <div className="hidden bg-muted lg:block animate-fade-in">
+        <Image
+          src="https://images.unsplash.com/photo-1445823223521-c42b109f5835?q=80&w=1974&auto=format&fit=crop"
+          alt="Lush green plants in a garden"
+          data-ai-hint="lush green plants"
+          width="1920"
+          height="1080"
+          className="h-full w-full object-cover dark:brightness-[0.3]"
+        />
+      </div>
     </div>
   );
 }
