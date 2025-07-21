@@ -41,7 +41,7 @@ export default function LoginPage() {
     try {
       await authService.signIn(values.email, values.password);
       toast({ title: 'Login Successful', description: "Welcome back!" });
-      router.push('/');
+      router.push('/dashboard');
       router.refresh();
     } catch (error: any) {
       toast({
@@ -127,13 +127,18 @@ export default function LoginPage() {
                 Sign up
                 </Link>
             </div>
+             <div className="mt-4 text-center text-sm">
+                <Link href="/" className="underline text-muted-foreground">
+                Back to Home
+                </Link>
+            </div>
         </div>
       </div>
       <div className="hidden bg-muted lg:block animate-fade-in">
         <Image
-          src="https://images.unsplash.com/photo-1445823223521-c42b109f5835?q=80&w=1974&auto=format&fit=crop"
-          alt="Lush green plants in a garden"
-          data-ai-hint="lush green plants"
+          src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=1974&auto=format&fit=crop"
+          data-ai-hint="lush herbal garden"
+          alt="A lush collection of various green plants"
           width="1920"
           height="1080"
           className="h-full w-full object-cover dark:brightness-[0.3]"

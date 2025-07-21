@@ -1,3 +1,4 @@
+
 import AppLayout from '@/components/layout/AppLayout';
 import PlantRecognitionForm from '@/components/plants/PlantRecognitionForm';
 import Link from 'next/link';
@@ -12,7 +13,7 @@ export default function RecognizePage() {
   return (
     <AppLayout>
       <div className="space-y-6 animate-fade-in-up">
-        <Link href="/" className="inline-flex items-center text-sm text-primary hover:underline">
+        <Link href="/dashboard" className="inline-flex items-center text-sm text-primary hover:underline">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dashboard
         </Link>
